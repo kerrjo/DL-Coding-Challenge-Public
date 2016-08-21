@@ -14,6 +14,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     var weatherInfo = WAWeatherInfo()
 
     @IBOutlet weak var headerImageView: UIImageView!
+    @IBOutlet weak var locationLabel: UILabel!
 
     var primaryTitle = ""
 
@@ -102,8 +103,24 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
             self.imageFor(icon, imageURLString: iconURLString)
 
         
-            //print(currentConditionsDict!)
+            if let displayLocationDict = currentConditionsDict?["display_location"] as? [String:AnyObject],
+            let cityName = displayLocationDict["city"],
+            let stateName = displayLocationDict["state_name"],
+            let zipCode = displayLocationDict["zip"]
+                {
+                    let displayString = "\(cityName), \(stateName) \(zipCode)"
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.locationLabel.text = displayString
+                    }
+                    
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.locationLabel.text = ""
+                }
+            }
             
+            //                let fullName = displayLocationDict["full"],
+
         }
         
         refreshInProgress = false
@@ -135,13 +152,11 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
         // Empty impl
     }
+    
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
         // Empty impl
-        
     }
 
-
-    
 
     // MARK: - Table view delegate
 
