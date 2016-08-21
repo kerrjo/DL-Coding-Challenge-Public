@@ -64,8 +64,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
             let conditionItemsUnsorted = Array(conditions.keys)
             
-//            conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }
-
             conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
                 
                 // Remove undesireables
@@ -85,6 +83,8 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                     || item == "feelslike_string"
                     || item == "station_id"
                     || item == "wind_string"
+                    || item == "dewpoint_string"
+
 
                 {
                     return false
@@ -93,19 +93,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                 return true
             })
 
-            
-            primaryTitle = currentConditionsDict?["weather"] as! String
-            
-            primaryConditionsDict = [String : AnyObject]()
-            primaryItems = []
-            
-            primaryItems += ["Temperature"]
-            primaryConditionsDict!["Temperature"] = currentConditionsDict?["temperature_string"] as! String
-            primaryItems += ["Feels Like"]
-            primaryConditionsDict!["Feels Like"] = currentConditionsDict?["feelslike_string"] as! String
-            primaryItems += ["Wind"]
-            primaryConditionsDict!["Wind"] = currentConditionsDict?["wind_string"] as! String
-            
+            setupPrimaryItems()
             
             dispatch_async(dispatch_get_main_queue()) {
                 self.tableView.reloadData()
@@ -116,10 +104,31 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
             
             self.imageFor(icon, imageURLString: iconURLString)
 
+        
+            //print(currentConditionsDict!)
 
         }
+        
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
+    }
+    
+    func setupPrimaryItems() {
+        
+        primaryTitle = currentConditionsDict?["weather"] as! String
+        
+        primaryConditionsDict = [String : AnyObject]()
+        primaryItems = []
+        
+        primaryItems += ["Temperature"]
+        primaryConditionsDict!["Temperature"] = currentConditionsDict?["temperature_string"] as! String
+        primaryItems += ["Feels Like"]
+        primaryConditionsDict!["Feels Like"] = currentConditionsDict?["feelslike_string"] as! String
+        primaryItems += ["Wind"]
+        primaryConditionsDict!["Wind"] = currentConditionsDict?["wind_string"] as! String
+        primaryItems += ["Dewpoint"]
+        primaryConditionsDict!["Dewpoint"] = currentConditionsDict?["dewpoint_string"] as! String
+        
     }
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
