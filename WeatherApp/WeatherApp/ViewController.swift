@@ -25,15 +25,20 @@ class ViewController: UIViewController, WAWeatherInfoDelegate {
 
     
     override func viewDidAppear(animated: Bool) {
-        weatherInfo.getInfo()
+        weatherInfo.getCurrentConditions()
         
     }
     
-    func WAWeatherInfoDidReceiveData(controller: WAWeatherInfo) {
+    func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
         
         print (controller.currentConditions)
         
     }
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+        
+    }
+
 
 
 }

@@ -35,11 +35,13 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     
     
     override func viewDidAppear(animated: Bool) {
-        weatherInfo.getInfo()
-        
+        weatherInfo.getCurrentConditions()
     }
     
-    func WAWeatherInfoDidReceiveData(controller: WAWeatherInfo) {
+    
+    // MARK: - WAWeatherInfoDelegate
+    
+    func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
         
         print (controller.currentConditions)
         
@@ -51,6 +53,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
         
     }
     
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+        
+    }
     
 
     // MARK: - Table view delegate
