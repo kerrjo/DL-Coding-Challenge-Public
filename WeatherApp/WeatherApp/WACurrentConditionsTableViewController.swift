@@ -67,8 +67,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 //            conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }
 
             conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
-                if item == "icon" ||
-                    item == "icon_url" {
+                
+                // Remove undesireables
+                if item == "icon" || item == "icon_url" {
                     return false
                 }
                 
@@ -77,17 +78,33 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                         return false
                     }
                 }
-                
+
+                // Remove undesireable primary items
+
+                if item == "temperature_string" || item == "weather"
+                    || item == "feelslike_string"
+                    || item == "station_id"
+                    || item == "wind_string"
+
+                {
+                    return false
+                }
+
                 return true
             })
 
             
+            primaryTitle = currentConditionsDict?["weather"] as! String
+            
             primaryConditionsDict = [String : AnyObject]()
             primaryItems = []
+            
             primaryItems += ["Temperature"]
             primaryConditionsDict!["Temperature"] = currentConditionsDict?["temperature_string"] as! String
-            
-            primaryTitle = currentConditionsDict?["weather"] as! String
+            primaryItems += ["Feels Like"]
+            primaryConditionsDict!["Feels Like"] = currentConditionsDict?["feelslike_string"] as! String
+            primaryItems += ["Wind"]
+            primaryConditionsDict!["Wind"] = currentConditionsDict?["wind_string"] as! String
             
             
             dispatch_async(dispatch_get_main_queue()) {
