@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 protocol WAWeatherInfoDelegate : class {
     func WeatherInfoDidReceiveData(controller: WAWeatherInfo)
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
@@ -44,15 +43,11 @@ class WAWeatherInfo {
                         do {
                             let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                             
-                            //print (responseData)
-                            
                             if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
                                 self.currentConditions = currentConditionsDict
                             }
                             
                             self.delegate?.WeatherInfoDidReceiveData(self)
-                            
-                            //print (self.currentConditions)
                             
                         } catch {
                             return
@@ -63,7 +58,6 @@ class WAWeatherInfo {
             }
             
             task.resume()
-            
         }
         
     }
@@ -107,7 +101,6 @@ class WAWeatherInfo {
             }
             
             task.resume()
-            
         }
         
     }

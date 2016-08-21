@@ -83,8 +83,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                     || item == "station_id"
                     || item == "wind_string"
                     || item == "dewpoint_string"
-
-
                 {
                     return false
                 }
@@ -138,12 +136,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
     // MARK: - Table view delegate
 
-    
-
-    override func tableView(tableView: UITableView,
-                              willDisplayCell cell: UITableViewCell,
-                                              forRowAtIndexPath indexPath: NSIndexPath)
-    {
+    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if indexPath.section == 0 {
             let conditionItem = primaryItems[indexPath.row]
@@ -175,15 +168,12 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     
     // MARK: - Table view data source
 
-    override func tableView(tableView: UITableView,
-                            titleForHeaderInSection section: Int) -> String?
-    {
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
             return primaryTitle
         } else {
             return "Other items"
         }
-        
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

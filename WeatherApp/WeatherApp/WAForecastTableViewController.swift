@@ -122,7 +122,6 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
    
     // MARK: Helper
     
-    
     func imageFor(iconName:String) -> UIImage? {
         
         var result: UIImage?
@@ -167,7 +166,6 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
                     }
                 }
             }
-            
         }  // let visible
     }
 
