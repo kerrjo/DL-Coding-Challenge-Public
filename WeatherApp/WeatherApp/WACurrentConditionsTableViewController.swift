@@ -15,6 +15,11 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
 
     @IBOutlet weak var headerImageView: UIImageView!
+
+    var primaryItems:[String] = []
+    var primaryConditionsDict:[String : AnyObject]?
+
+    var primaryTitle = ""
     
     var conditionItems:[String] = []
     var currentConditionsDict:[String : AnyObject]?
@@ -73,10 +78,16 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                     }
                 }
                 
-                
                 return true
             })
 
+            
+            primaryConditionsDict = [String : AnyObject]()
+            primaryItems = []
+            primaryItems += ["Temperature"]
+            primaryConditionsDict!["Temperature"] = currentConditionsDict?["temperature_string"] as! String
+            
+            primaryTitle = currentConditionsDict?["weather"] as! String
             
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -102,27 +113,59 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
     // MARK: - Table view delegate
 
+    
+
     override func tableView(tableView: UITableView,
                               willDisplayCell cell: UITableViewCell,
                                               forRowAtIndexPath indexPath: NSIndexPath)
     {
-        let conditionItem = conditionItems[indexPath.row]
-        cell.textLabel!.text = conditionItem
         
-        if let detailText = currentConditionsDict?[conditionItem] as? String {
-            cell.detailTextLabel!.text = detailText
+        if indexPath.section == 0 {
+            let conditionItem = primaryItems[indexPath.row]
+            cell.textLabel!.text = conditionItem
+            
+            if let detailText = primaryConditionsDict?[conditionItem] as? String {
+                cell.detailTextLabel!.text = detailText
+            }
+
+            
+        } else {
+            let conditionItem = conditionItems[indexPath.row]
+            cell.textLabel!.text = conditionItem
+            
+            if let detailText = currentConditionsDict?[conditionItem] as? String {
+                cell.detailTextLabel!.text = detailText
+            }
         }
         
     }
     
     // MARK: - Table view data source
 
+    override func tableView(tableView: UITableView,
+                            titleForHeaderInSection section: Int) -> String?
+    {
+        if section == 0 {
+            return primaryTitle
+        } else {
+            return "Other items"
+        }
+        
+    }
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        
+        return 2
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return conditionItems.count
+        if section == 0 {
+            return primaryItems.count
+        } else if section == 1 {
+            return conditionItems.count
+        }
+
+        return 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
