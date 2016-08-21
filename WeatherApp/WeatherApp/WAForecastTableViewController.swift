@@ -9,7 +9,6 @@
 import UIKit
 
 
-
 class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegate {
 
     var weatherInfo = WAWeatherInfo()
@@ -18,16 +17,32 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
     private var imageCache: NSCache = NSCache()
     
+    var refreshInProgress = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
          weatherInfo.delegate = self
+        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl!.addTarget(self, action:#selector(refreshTable(_:)), forControlEvents:[.ValueChanged])
     }
 
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         weatherInfo.getForecast()
+        refreshInProgress = true
     }
     
+    
+    func refreshTable(control:AnyObject) {
+        if !refreshInProgress {
+            refreshInProgress = true
+            weatherInfo.getForecast()
+
+        }
+    }
+
     
     // MARK: - WAWeatherInfoDelegate
 
@@ -51,6 +66,9 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
 
             self.imageFor(icon, imageURLString: iconURLString)
         }
+        
+        refreshInProgress = false
+        self.refreshControl?.endRefreshing()
     }
 
     

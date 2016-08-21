@@ -17,20 +17,17 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     
     var refreshInProgress = false
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         weatherInfo.delegate = self
         
-        
         self.refreshControl = UIRefreshControl()
         self.refreshControl!.addTarget(self, action:#selector(refreshTable(_:)), forControlEvents:[.ValueChanged])
-        
-
     }
 
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         weatherInfo.getCurrentConditions()
         refreshInProgress = true
     }
@@ -60,8 +57,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
         }
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
-
-        
     }
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
