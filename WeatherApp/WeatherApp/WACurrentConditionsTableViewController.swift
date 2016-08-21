@@ -13,13 +13,12 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
     var weatherInfo = WAWeatherInfo()
 
-
     @IBOutlet weak var headerImageView: UIImageView!
+
+    var primaryTitle = ""
 
     var primaryItems:[String] = []
     var primaryConditionsDict:[String : AnyObject]?
-
-    var primaryTitle = ""
     
     var conditionItems:[String] = []
     var currentConditionsDict:[String : AnyObject]?
@@ -106,7 +105,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
         
             //print(currentConditionsDict!)
-
+            
         }
         
         refreshInProgress = false
@@ -152,6 +151,8 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
             
             if let detailText = primaryConditionsDict?[conditionItem] as? String {
                 cell.detailTextLabel!.text = detailText
+            } else {
+                cell.detailTextLabel!.text = nil
             }
 
             
@@ -161,6 +162,12 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
             
             if let detailText = currentConditionsDict?[conditionItem] as? String {
                 cell.detailTextLabel!.text = detailText
+            } else {
+                if let detailValue = currentConditionsDict?[conditionItem] as? Double {
+                    cell.detailTextLabel!.text = "\(detailValue)"
+                } else {
+                    cell.detailTextLabel!.text = nil
+                }
             }
         }
         
