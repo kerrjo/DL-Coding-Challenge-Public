@@ -55,8 +55,12 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     }
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
-        
-        forecastPeriods = dayPeriods
+
+        forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
+            let v1 = item1["period"] as! Int
+            let v2 = item2["period"] as! Int
+            return v1 < v2
+        })
 
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
