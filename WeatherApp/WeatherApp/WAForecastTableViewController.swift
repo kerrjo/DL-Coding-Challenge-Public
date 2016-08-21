@@ -13,11 +13,6 @@ import UIKit
 class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegate {
 
     var weatherInfo = WAWeatherInfo()
-    
-    var conditionItems:[String] = []
-    var currentConditionsDict:[String : AnyObject]?
-    
-
     var forecastPeriods:[[String : AnyObject]] = []
 
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
@@ -26,18 +21,7 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
          weatherInfo.delegate = self
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -48,14 +32,8 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     // MARK: - WAWeatherInfoDelegate
 
     func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
-        
-        print (controller.currentConditions)
-        
-        if let conditions = controller.currentConditions {
-            conditionItems = Array(conditions.keys)
-            currentConditionsDict = controller.currentConditions
-            self.tableView.reloadData()
-        }
+
+        // Empty impl
         
     }
     
@@ -63,7 +41,9 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
         
         forecastPeriods = dayPeriods
 
-        self.tableView.reloadData()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
 
         for result in forecastPeriods {
             let icon = result["icon"] as! String
@@ -74,42 +54,12 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     }
 
     
-    
-    //    "forecast": {
-    //    "txt_forecast": {
-    //    "date": "2:00 PM PDT",
-    
-    //    "forecastday": [{
-    //    "period": 0,
-    //    "icon": "partlycloudy",
-    //    "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
-    //    "title": "Tuesday",
-    //    "fcttext": "Partly cloudy in the morning, then clear. High of 68F. Breezy. Winds from the West at 10 to 25 mph.",
-    //    "fcttext_metric": "Partly cloudy in the morning, then clear. High of 20C. Windy. Winds from the West at 20 to 35 km/h.",
-    //    "pop": "0"
-    //    }, {
-    //    "period": 1,
-    //    "icon": "partlycloudy",
-    //    "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
-    //    "title": "Tuesday Night",
-    //    "fcttext": "Mostly cloudy. Fog overnight. Low of 50F. Winds from the WSW at 5 to 15 mph.",
-    //    "fcttext_metric": "Mostly cloudy. Fog overnight. Low of 10C. Breezy. Winds from the WSW at 10 to 20 km/h.",
-    //    "pop": "0"
-    //    }, {
-    //    "period": 2,
-    //    "icon": "partlycloudy
-    //
-    
-
-    
-    
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView,
                             willDisplayCell cell: UITableViewCell,
                                             forRowAtIndexPath indexPath: NSIndexPath)
     {
-        
         let forecastPeriod = forecastPeriods[indexPath.row]
 
         if let titleText = forecastPeriod["title"] as? String {
@@ -126,8 +76,6 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
         cell.imageView!.image = self.imageFor(icon)
         
     }
-    
-    
     
     // MARK: - Table view data source
 
@@ -162,7 +110,6 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
         return result
     }
     
-
     func imageFor(iconName:String, imageURLString:String) -> Void {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
@@ -176,7 +123,6 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
             }
         }
     }
-    
     
     func updateFor(iconName:String) -> Void {
         
@@ -201,9 +147,9 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
         }  // let visible
     }
 
-    
-    
-    
-
 
 }
+
+
+
+

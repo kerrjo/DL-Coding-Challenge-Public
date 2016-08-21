@@ -11,11 +11,8 @@ import Foundation
 
 protocol WAWeatherInfoDelegate : class {
     func WeatherInfoDidReceiveData(controller: WAWeatherInfo)
-    
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
-
 }
-
 
 class WAWeatherInfo {
     
@@ -51,7 +48,6 @@ class WAWeatherInfo {
                             
                             if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
                                 self.currentConditions = currentConditionsDict
-                                
                             }
                             
                             self.delegate?.WeatherInfoDidReceiveData(self)
@@ -93,13 +89,10 @@ class WAWeatherInfo {
                         do {
                             let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                             
-                            //print (responseData)
-                            
                             if let forecastDict = responseData["forecast"] as? [String : AnyObject],
                             txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
                                 forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
                             {
-
                                 self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
                             }
                             
@@ -117,35 +110,34 @@ class WAWeatherInfo {
             
         }
         
-        
-        //    "forecast": {
-        //    "txt_forecast": {
-        //    "date": "2:00 PM PDT",
-        //    "forecastday": [{
-        //    "period": 0,
-        //    "icon": "partlycloudy",
-        //    "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
-        //    "title": "Tuesday",
-        //    "fcttext": "Partly cloudy in the morning, then clear. High of 68F. Breezy. Winds from the West at 10 to 25 mph.",
-        //    "fcttext_metric": "Partly cloudy in the morning, then clear. High of 20C. Windy. Winds from the West at 20 to 35 km/h.",
-        //    "pop": "0"
-        //    }, {
-        //    "period": 1,
-        //    "icon": "partlycloudy",
-        //    "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
-        //    "title": "Tuesday Night",
-        //    "fcttext": "Mostly cloudy. Fog overnight. Low of 50F. Winds from the WSW at 5 to 15 mph.",
-        //    "fcttext_metric": "Mostly cloudy. Fog overnight. Low of 10C. Breezy. Winds from the WSW at 10 to 20 km/h.",
-        //    "pop": "0"
-        //    }, {
-        //    "period": 2,
-        //    "icon": "partlycloudy
-        //
-        
-
-        
     }
 
     
-    
 }
+
+
+//    "forecast": {
+//    "txt_forecast": {
+//    "date": "2:00 PM PDT",
+//    "forecastday": [{
+//    "period": 0,
+//    "icon": "partlycloudy",
+//    "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
+//    "title": "Tuesday",
+//    "fcttext": "Partly cloudy in the morning, then clear. High of 68F. Breezy. Winds from the West at 10 to 25 mph.",
+//    "fcttext_metric": "Partly cloudy in the morning, then clear. High of 20C. Windy. Winds from the West at 20 to 35 km/h.",
+//    "pop": "0"
+//    }, {
+//    "period": 1,
+//    "icon": "partlycloudy",
+//    "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
+//    "title": "Tuesday Night",
+//    "fcttext": "Mostly cloudy. Fog overnight. Low of 50F. Winds from the WSW at 5 to 15 mph.",
+//    "fcttext_metric": "Mostly cloudy. Fog overnight. Low of 10C. Breezy. Winds from the WSW at 10 to 20 km/h.",
+//    "pop": "0"
+//    }, {
+//    "period": 2,
+//    "icon": "partlycloudy
+//
+
+
