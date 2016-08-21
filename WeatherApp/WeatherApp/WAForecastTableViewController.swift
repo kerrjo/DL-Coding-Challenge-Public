@@ -30,10 +30,10 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        weatherInfo.getForecast()
+
         refreshInProgress = true
+        weatherInfo.getForecast()
     }
-    
     
     func refreshTable(control:AnyObject) {
         if !refreshInProgress {

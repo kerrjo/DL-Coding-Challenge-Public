@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class WACurrentConditionsTableViewController: UITableViewController, WAWeatherInfoDelegate {
 
     var weatherInfo = WAWeatherInfo()
@@ -28,8 +29,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        weatherInfo.getCurrentConditions()
+
         refreshInProgress = true
+        weatherInfo.getCurrentConditions()
     }
     
     func refreshTable(control:AnyObject) {
