@@ -23,7 +23,7 @@
             </objects>
             <point key="canvasLocation" x="2433" y="967"/>
         </scene>
-        <!--CurrentConditions-->
+        <!--Current Conditions-->
         <scene sceneID="Ty1-nT-36M">
             <objects>
                 <tableViewController id="1cm-B4-2R7" customClass="WACurrentConditionsTableViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -94,7 +94,7 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" title="CurrentConditions" id="4t2-G6-Age"/>
+                    <navigationItem key="navigationItem" title="Current Conditions" id="4t2-G6-Age"/>
                     <connections>
                         <outlet property="headerImageView" destination="KVL-qi-WDx" id="aSV-rL-z3H"/>
                         <outlet property="locationLabel" destination="hwI-WI-6Og" id="ay1-57-ptv"/>
