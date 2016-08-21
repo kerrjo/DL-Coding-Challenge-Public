@@ -67,6 +67,12 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                     return false
                 }
                 
+                if let valueText = self.currentConditionsDict?[item] as? String {
+                    if valueText == "NA" {
+                        return false
+                    }
+                }
+                
                 
                 return true
             })
