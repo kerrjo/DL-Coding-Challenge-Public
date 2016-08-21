@@ -30,15 +30,13 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        refreshInProgress = true
-        weatherInfo.getCurrentConditions()
+        refreshTable(nil)
     }
     
-    func refreshTable(control:AnyObject) {
+    func refreshTable(control:AnyObject?) {
         if !refreshInProgress {
             refreshInProgress = true
             weatherInfo.getCurrentConditions()
-
         }
     }
     
@@ -73,7 +71,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                               willDisplayCell cell: UITableViewCell,
                                               forRowAtIndexPath indexPath: NSIndexPath)
     {
-        
         let conditionItem = conditionItems[indexPath.row]
         cell.textLabel!.text = conditionItem
         
@@ -91,7 +88,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return conditionItems.count
-        //return 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
