@@ -28,12 +28,16 @@
             <objects>
                 <tableViewController id="1cm-B4-2R7" customClass="WACurrentConditionsTableViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3UJ-UN-Hcz">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <imageView key="tableHeaderView" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="KVL-qi-WDx">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="120"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="WAConditionCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAConditionCell" textLabel="sod-5f-4Oa" detailTextLabel="6YS-QH-7ny" style="IBUITableViewCellStyleValue1" id="kPh-Ke-2gZ">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="148" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kPh-Ke-2gZ" id="iAV-8W-3ie">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -62,7 +66,11 @@
                             <outlet property="delegate" destination="1cm-B4-2R7" id="hdD-wZ-3WD"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="CurrentConditions" id="4t2-G6-Age"/>
+                    <connections>
+                        <outlet property="headerImageView" destination="KVL-qi-WDx" id="aSV-rL-z3H"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ugn-EO-qib" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -13,6 +13,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
     var weatherInfo = WAWeatherInfo()
 
+
+    @IBOutlet weak var headerImageView: UIImageView!
+    
     var conditionItems:[String] = []
     var currentConditionsDict:[String : AnyObject]?
     
@@ -61,6 +64,12 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
             dispatch_async(dispatch_get_main_queue()) {
                 self.tableView.reloadData()
             }
+            
+            let icon = currentConditionsDict?["icon"] as! String
+            let iconURLString = currentConditionsDict?["icon_url"] as! String
+            
+            self.imageFor(icon, imageURLString: iconURLString)
+
 
         }
         refreshInProgress = false
@@ -105,5 +114,27 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
         return cell
     }
+    
+    
+    
+    
+    // MARK: Helper
+    
+    func imageFor(iconName:String, imageURLString:String) -> Void {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            if let imageURL = NSURL(string: imageURLString),
+                imageData = NSData(contentsOfURL:imageURL),
+                iconImage = UIImage(data: imageData) {
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.headerImageView.image = iconImage
+                }
+
+                
+            }
+        }
+    }
+
 
 }
