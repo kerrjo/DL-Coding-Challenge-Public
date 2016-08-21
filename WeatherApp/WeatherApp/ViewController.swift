@@ -8,13 +8,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, WAWeatherInfoDelegate {
 
     var weatherInfo = WAWeatherInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        weatherInfo.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,6 +28,13 @@ class ViewController: UIViewController {
         weatherInfo.getInfo()
         
     }
+    
+    func WAWeatherInfoDidReceiveData(controller: WAWeatherInfo) {
+        
+        print (controller.currentConditions)
+        
+    }
+
 
 }
 
