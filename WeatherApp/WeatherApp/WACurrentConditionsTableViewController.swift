@@ -54,12 +54,24 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
         // print (controller.currentConditions)
         
         if let conditions = controller.currentConditions {
-            
+
+            currentConditionsDict = controller.currentConditions
+
             let conditionItemsUnsorted = Array(conditions.keys)
             
-            conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }
+//            conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }
+
+            conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
+                if item == "icon" ||
+                    item == "icon_url" {
+                    return false
+                }
+                
+                
+                return true
+            })
+
             
-            currentConditionsDict = controller.currentConditions
             
             dispatch_async(dispatch_get_main_queue()) {
                 self.tableView.reloadData()
@@ -116,8 +128,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     }
     
     
-    
-    
     // MARK: Helper
     
     func imageFor(iconName:String, imageURLString:String) -> Void {
@@ -130,8 +140,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                 dispatch_async(dispatch_get_main_queue()) {
                     self.headerImageView.image = iconImage
                 }
-
-                
             }
         }
     }
