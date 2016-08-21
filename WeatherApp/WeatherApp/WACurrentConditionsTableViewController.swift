@@ -51,7 +51,11 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
         // print (controller.currentConditions)
         
         if let conditions = controller.currentConditions {
-            conditionItems = Array(conditions.keys)
+            
+            let conditionItemsUnsorted = Array(conditions.keys)
+            
+            conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }
+            
             currentConditionsDict = controller.currentConditions
             
             dispatch_async(dispatch_get_main_queue()) {
