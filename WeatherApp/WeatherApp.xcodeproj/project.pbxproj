@@ -92,9 +92,9 @@
 				55D720A31D6A17D80056FC62 /* Media.xcassets */,
 				55D720861D6A173C0056FC62 /* LaunchScreen.storyboard */,
 				55D720891D6A173C0056FC62 /* Info.plist */,
+				55D7209F1D6A17CC0056FC62 /* WAWeatherInfo.swift */,
 				55D7209D1D6A17CC0056FC62 /* WACurrentConditionsTableViewController.swift */,
 				55D7209E1D6A17CC0056FC62 /* WAForecastTableViewController.swift */,
-				55D7209F1D6A17CC0056FC62 /* WAWeatherInfo.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
