@@ -30,6 +30,10 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
+        dispatch_async(dispatch_get_main_queue()) {
+            self.refreshControl?.beginRefreshing()
+        }
+
         refreshTable(nil)
     }
     
