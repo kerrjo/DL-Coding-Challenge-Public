@@ -7,10 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 protocol WAWeatherInfoDelegate : class {
     func WeatherInfoDidReceiveData(controller: WAWeatherInfo)
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
+
 }
 
 class WAWeatherInfo {
@@ -104,6 +108,81 @@ class WAWeatherInfo {
         }
         
     }
+    
+    
+    func getSattelite () {
+        
+        let urlString = "http://api.wunderground.com/api/1dc7e22fb723f500/satellite/q/\(currentState)/\(currentCity).json"
+        
+        if let wiURL = NSURL(string: urlString) {
+            
+            let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+            let session = NSURLSession(configuration: sessionConfiguration)
+            let task = session.dataTaskWithURL(wiURL) { data, response, error in
+                
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    
+                    print("HTTP Status Code = \(httpResponse.statusCode)")
+                    
+                    if let jsonResponse = data {
+                        
+                        do {
+                            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                           
+                            //print(responseData)
+                            
+                            if let satteliteDict = responseData["satellite"] as? [String : AnyObject]
+                            {
+                                self.delegate?.WeatherInfo(self, didReceiveSattelite: satteliteDict)
+                            }
+                            
+                            
+                        } catch {
+                            return
+                        }
+                    }
+                }
+                
+            }
+            
+            task.resume()
+        }
+        
+    }
+    
+    
+    
+    func getSatteliteImageAtURL (urlString: String) {
+        
+        //let urlString = "http://api.wunderground.com/api/1dc7e22fb723f500/satellite/q/\(currentState)/\(currentCity).json"
+        
+        if let wiURL = NSURL(string: urlString) {
+            
+            let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+            let session = NSURLSession(configuration: sessionConfiguration)
+            let task = session.dataTaskWithURL(wiURL) { data, response, error in
+                
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    
+                    print("HTTP Status Code = \(httpResponse.statusCode)")
+                    
+                    if let imageData = data,
+                    let satImage = UIImage(data: imageData) {
+                        
+                        self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
+                    }
+                    
+                    
+                }
+                
+            }
+            
+            task.resume()
+        }
+        
+    }
+
+
 
     
 }

@@ -21,7 +21,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1601" y="987"/>
+            <point key="canvasLocation" x="2433" y="967"/>
         </scene>
         <!--CurrentConditions-->
         <scene sceneID="Ty1-nT-36M">
@@ -133,11 +133,12 @@
                     <connections>
                         <segue destination="Sh7-m9-bbr" kind="relationship" relationship="viewControllers" id="0W0-ef-3Zc"/>
                         <segue destination="68K-ak-zcD" kind="relationship" relationship="viewControllers" id="EeF-kE-iMY"/>
+                        <segue destination="ehf-xK-hYR" kind="relationship" relationship="viewControllers" id="qfm-VF-SBA"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ape-DK-iLi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="533" y="987"/>
+            <point key="canvasLocation" x="961" y="779"/>
         </scene>
         <!--Current-->
         <scene sceneID="jAD-LX-8so">
@@ -176,6 +177,58 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sk5-Do-ua2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="954" y="1855"/>
+        </scene>
+        <!--Satellite-->
+        <scene sceneID="XxQ-5b-4VH">
+            <objects>
+                <viewController id="aGX-mJ-iPa" customClass="WASatteliteViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kc1-r6-ybZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="oF2-v4-0GZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nAM-E4-Ng4">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IO8-AI-ysc">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="IO8-AI-ysc" firstAttribute="height" secondItem="nAM-E4-Ng4" secondAttribute="height" id="5ib-Ez-iYh"/>
+                            <constraint firstItem="IO8-AI-ysc" firstAttribute="width" secondItem="nAM-E4-Ng4" secondAttribute="width" id="ANa-Il-KfJ"/>
+                            <constraint firstItem="IO8-AI-ysc" firstAttribute="centerY" secondItem="nAM-E4-Ng4" secondAttribute="centerY" id="PMy-8o-WaS"/>
+                            <constraint firstItem="IO8-AI-ysc" firstAttribute="centerX" secondItem="nAM-E4-Ng4" secondAttribute="centerX" id="V5z-sz-uoa"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Satellite" id="kgg-bd-ek8"/>
+                    <connections>
+                        <outlet property="imageView" destination="IO8-AI-ysc" id="Bov-i7-ik6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XAw-vF-nsx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1685" y="2601"/>
+        </scene>
+        <!--Satellite-->
+        <scene sceneID="kia-qg-Gxp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ehf-xK-hYR" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Satellite" id="0Q4-nK-jO0"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="GBh-69-cYF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="aGX-mJ-iPa" kind="relationship" relationship="rootViewController" id="UxO-a5-FUk"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0JW-Aj-R4Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1685" y="1844"/>
         </scene>
     </scenes>
 </document>

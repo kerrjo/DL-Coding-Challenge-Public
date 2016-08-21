@@ -12,6 +12,7 @@ import UIKit
 class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegate {
 
     var weatherInfo = WAWeatherInfo()
+    
     var forecastPeriods:[[String : AnyObject]] = []
 
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
@@ -49,10 +50,16 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     // MARK: - WAWeatherInfoDelegate
 
     func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
-
         // Empty impl
-        
     }
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
+        // Empty impl
+    }
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
+        // Empty impl
+    }
+
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
 

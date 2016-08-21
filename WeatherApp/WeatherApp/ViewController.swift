@@ -38,6 +38,16 @@ class ViewController: UIViewController, WAWeatherInfoDelegate {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
         
     }
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
+        // Empty impl
+    }
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
+        // Empty impl
+    }
+
+
 
 
 

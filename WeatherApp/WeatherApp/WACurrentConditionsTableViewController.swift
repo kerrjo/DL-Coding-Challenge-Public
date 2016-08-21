@@ -129,9 +129,18 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     }
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
-        
         // Empty impl
     }
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
+        // Empty impl
+    }
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
+        // Empty impl
+        
+    }
+
+
     
 
     // MARK: - Table view delegate
