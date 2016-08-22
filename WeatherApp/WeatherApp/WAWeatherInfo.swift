@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol WAWeatherInfoDelegate : class {
-    func WeatherInfoDidReceiveData(controller: WAWeatherInfo)
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject])
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
@@ -25,7 +25,6 @@ class WAWeatherInfo {
     var currentCity = "Detroit"
     var currentState = "MI"
     
-    var currentConditions : [String:AnyObject]?
     
     func getCurrentConditions () {
         
@@ -53,10 +52,8 @@ class WAWeatherInfo {
                         let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                         
                         if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
-                            self.currentConditions = currentConditionsDict
+                            self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
                         }
-                        
-                        self.delegate?.WeatherInfoDidReceiveData(self)
                         
                     } catch {
                         print("Error processing JSON \(error)")

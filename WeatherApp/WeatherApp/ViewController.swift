@@ -20,7 +20,6 @@ class ViewController: UIViewController, WAWeatherInfoDelegate {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     
@@ -29,14 +28,15 @@ class ViewController: UIViewController, WAWeatherInfoDelegate {
         
     }
     
-    func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
-        
-        print (controller.currentConditions)
-        
+
+    // MARK: WAWeatherInfoDelegate
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
+        // Empty impl
     }
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
-        
+        // Empty impl
     }
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
@@ -46,10 +46,6 @@ class ViewController: UIViewController, WAWeatherInfoDelegate {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
         // Empty impl
     }
-
-
-
-
 
 }
 

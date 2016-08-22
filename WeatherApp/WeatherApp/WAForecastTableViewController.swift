@@ -50,13 +50,14 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     
     // MARK: - WAWeatherInfoDelegate
 
-    func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
         // Empty impl
     }
-    
+
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
         // Empty impl
     }
+    
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
         // Empty impl
     }

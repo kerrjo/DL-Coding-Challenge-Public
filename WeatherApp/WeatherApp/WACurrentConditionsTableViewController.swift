@@ -55,74 +55,68 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     
     // MARK: - WAWeatherInfoDelegate
     
-    func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
         
-        // print (controller.currentConditions)
+        currentConditionsDict = conditions
         
-        if let conditions = controller.currentConditions {
-
-            currentConditionsDict = controller.currentConditions
-
-            let conditionItemsUnsorted = Array(conditions.keys)
+        let conditionItemsUnsorted = Array(conditions.keys)
+        
+        conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
             
-            conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
-                
-                // Remove undesireables
-                if item == "icon" || item == "icon_url" {
-                    return false
-                }
-                
-                if let valueText = self.currentConditionsDict?[item] as? String {
-                    if valueText == "NA" {
-                        return false
-                    }
-                }
-
-                // Remove undesireable primary items
-
-                if item == "temperature_string" || item == "weather"
-                    || item == "feelslike_string"
-                    || item == "station_id"
-                    || item == "wind_string"
-                    || item == "dewpoint_string"
-                {
-                    return false
-                }
-
-                return true
-            })
-
-            setupPrimaryItems()
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                self.tableView.reloadData()
+            // Remove undesireables
+            if item == "icon" || item == "icon_url" {
+                return false
             }
             
-            let icon = currentConditionsDict?["icon"] as! String
-            let iconURLString = currentConditionsDict?["icon_url"] as! String
+            if let valueText = self.currentConditionsDict?[item] as? String {
+                if valueText == "NA" {
+                    return false
+                }
+            }
             
-            self.imageFor(icon, imageURLString: iconURLString)
-
+            // Remove undesireable primary items
+            
+            if item == "temperature_string" || item == "weather"
+                || item == "feelslike_string"
+                || item == "station_id"
+                || item == "wind_string"
+                || item == "dewpoint_string"
+            {
+                return false
+            }
+            
+            return true
+        })
         
-            if let displayLocationDict = currentConditionsDict?["display_location"] as? [String:AnyObject],
+        setupPrimaryItems()
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
+        
+        let icon = currentConditionsDict?["icon"] as! String
+        let iconURLString = currentConditionsDict?["icon_url"] as! String
+        
+        self.imageFor(icon, imageURLString: iconURLString)
+        
+        
+        if let displayLocationDict = currentConditionsDict?["display_location"] as? [String:AnyObject],
             let cityName = displayLocationDict["city"],
             let stateName = displayLocationDict["state_name"],
             let zipCode = displayLocationDict["zip"]
-                {
-                    let displayString = "\(cityName), \(stateName) \(zipCode)"
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.locationLabel.text = displayString
-                    }
-                    
-            } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.locationLabel.text = ""
-                }
+        {
+            let displayString = "\(cityName), \(stateName) \(zipCode)"
+            dispatch_async(dispatch_get_main_queue()) {
+                self.locationLabel.text = displayString
             }
             
-            //                let fullName = displayLocationDict["full"],
-
+        } else {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.locationLabel.text = ""
+            }
         }
+        
+        //                let fullName = displayLocationDict["full"],
         
         refreshInProgress = false
         self.refreshControl?.endRefreshing()

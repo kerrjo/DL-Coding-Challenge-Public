@@ -41,7 +41,7 @@ class WASatteliteViewController: UIViewController, WAWeatherInfoDelegate {
     
     // MARK: - WAWeatherInfoDelegate
     
-    func WeatherInfoDidReceiveData(controller: WAWeatherInfo) {
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
         // Empty impl
     }
     
