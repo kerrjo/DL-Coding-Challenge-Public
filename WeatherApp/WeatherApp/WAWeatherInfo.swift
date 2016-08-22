@@ -28,7 +28,7 @@ class WAWeatherInfo {
     
     func getCurrentConditions () {
         
-        let urlString = "http://api.wunderground.com/api/1dc7e22fb723f500/conditions/q/\(currentState)/\(currentCity).json"
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/conditions/q/\(currentState)/\(currentCity).json"
         guard let wiURL = NSURL(string: urlString)
             else {
                 print("Error Invalid URL \(urlString)")
@@ -70,7 +70,7 @@ class WAWeatherInfo {
     
     func getForecast () {
         
-        let urlString = "http://api.wunderground.com/api/1dc7e22fb723f500/forecast/q/\(currentState)/\(currentCity).json"
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/forecast/q/\(currentState)/\(currentCity).json"
         guard let wiURL = NSURL(string: urlString)
             else {
                 print("Error Invalid URL \(urlString)")
@@ -117,7 +117,7 @@ class WAWeatherInfo {
     
     func getForecastTen () {
         
-        let urlString = "http://api.wunderground.com/api/1dc7e22fb723f500/forecast10day/q/\(currentState)/\(currentCity).json"
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/forecast10day/q/\(currentState)/\(currentCity).json"
         guard let wiURL = NSURL(string: urlString)
             else {
                 print("Error Invalid URL \(urlString)")
@@ -165,7 +165,7 @@ class WAWeatherInfo {
     
     func getSattelite () {
         
-        let urlString = "http://api.wunderground.com/api/1dc7e22fb723f500/satellite/q/\(currentState)/\(currentCity).json"
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/satellite/q/\(currentState)/\(currentCity).json"
         guard let wiURL = NSURL(string: urlString)
             else {
                 print("Error Invalid URL \(urlString)")
