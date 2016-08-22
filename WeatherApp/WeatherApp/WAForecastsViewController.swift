@@ -17,6 +17,7 @@ class WAForecastsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         segmentedControl.selectedSegmentIndex = 0
+        segmentValueChanged(segmentedControl)
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,9 +28,11 @@ class WAForecastsViewController: UIViewController {
     @IBAction func segmentValueChanged(sender: UISegmentedControl) {
         
         if sender.selectedSegmentIndex == 0 {
-            self.view.sendSubviewToBack(forecastTenContainerView)
+            forecastTenContainerView.hidden = true
+            forecastSomeContainerView.hidden = false
         } else if sender.selectedSegmentIndex == 1 {
-            self.view.sendSubviewToBack(forecastSomeContainerView)
+            forecastTenContainerView.hidden = false
+            forecastSomeContainerView.hidden = true
         }
     }
 

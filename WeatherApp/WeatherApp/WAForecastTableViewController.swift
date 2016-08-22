@@ -109,6 +109,14 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
         
     }
     
+    override func tableView(tableView: UITableView,
+                            viewForFooterInSection section: Int) -> UIView? {
+        let result = UITableViewHeaderFooterView()
+        result.contentView.backgroundColor = UIColor.clearColor()
+        return result
+    }
+
+    
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

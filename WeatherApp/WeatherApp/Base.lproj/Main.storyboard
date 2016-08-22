@@ -95,27 +95,28 @@
                         <viewControllerLayoutGuide type="bottom" id="DrQ-UB-kdk"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ml9-Wp-P34">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f2d-YU-S1d" userLabel="ForecastTen Container View">
-                                <rect key="frame" x="0.0" y="104" width="600" height="447"/>
+                                <rect key="frame" x="0.0" y="40" width="600" height="447"/>
                                 <connections>
                                     <segue destination="VDq-Qf-vj6" kind="embed" identifier="WAEmbedForecastTen" id="Uvv-pa-i7T"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6GN-5H-rYY" userLabel="ForecastSome Container View">
-                                <rect key="frame" x="0.0" y="104" width="600" height="447"/>
+                                <rect key="frame" x="0.0" y="40" width="600" height="447"/>
                                 <connections>
                                     <segue destination="yCJ-Zr-pPo" kind="embed" identifier="WAEmbedForecastSome" id="JAt-2H-fbp"/>
                                 </connections>
                             </containerView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="A0s-dI-XzN">
-                                <rect key="frame" x="0.0" y="72" width="600" height="29"/>
+                                <rect key="frame" x="10" y="8" width="580" height="29"/>
                                 <segments>
                                     <segment title="5 Day"/>
                                     <segment title="10 Day"/>
                                 </segments>
+                                <color key="tintColor" red="0.26666666666666666" green="0.65490196078431373" blue="0.85490196078431369" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="segmentValueChanged:" destination="HOF-I0-eU6" eventType="valueChanged" id="DTm-Zd-Nz3"/>
                                 </connections>
@@ -129,22 +130,15 @@
                             <constraint firstItem="6GN-5H-rYY" firstAttribute="centerX" secondItem="Ml9-Wp-P34" secondAttribute="centerX" id="MWQ-Yc-T4D"/>
                             <constraint firstItem="6GN-5H-rYY" firstAttribute="width" secondItem="Ml9-Wp-P34" secondAttribute="width" id="NeE-RP-Wgm"/>
                             <constraint firstItem="DrQ-UB-kdk" firstAttribute="top" secondItem="6GN-5H-rYY" secondAttribute="bottom" id="b3G-kL-eGb"/>
-                            <constraint firstItem="6GN-5H-rYY" firstAttribute="centerY" secondItem="Ml9-Wp-P34" secondAttribute="centerY" id="gvJ-bd-nRF"/>
-                            <constraint firstItem="f2d-YU-S1d" firstAttribute="centerY" secondItem="Ml9-Wp-P34" secondAttribute="centerY" id="jS0-rr-0Hz"/>
-                            <constraint firstItem="A0s-dI-XzN" firstAttribute="width" secondItem="Ml9-Wp-P34" secondAttribute="width" id="oKC-fJ-ARV"/>
+                            <constraint firstItem="A0s-dI-XzN" firstAttribute="width" secondItem="Ml9-Wp-P34" secondAttribute="width" constant="-20" id="oKC-fJ-ARV"/>
                             <constraint firstItem="f2d-YU-S1d" firstAttribute="top" secondItem="c9d-AO-btv" secondAttribute="bottom" constant="40" id="oPj-gy-52f"/>
                             <constraint firstItem="A0s-dI-XzN" firstAttribute="top" secondItem="c9d-AO-btv" secondAttribute="bottom" constant="8" symbolic="YES" id="psw-NR-tvY"/>
                             <constraint firstItem="f2d-YU-S1d" firstAttribute="centerX" secondItem="Ml9-Wp-P34" secondAttribute="centerX" id="qeD-vZ-Yey"/>
                             <constraint firstItem="6GN-5H-rYY" firstAttribute="top" secondItem="c9d-AO-btv" secondAttribute="bottom" constant="40" id="r5u-mQ-D8M"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="gvJ-bd-nRF"/>
-                                <exclude reference="jS0-rr-0Hz"/>
-                            </mask>
-                        </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="C8y-8B-3XJ"/>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Forecasts" id="C8y-8B-3XJ"/>
                     <connections>
                         <outlet property="forecastSomeContainerView" destination="6GN-5H-rYY" id="eKO-cZ-ED3"/>
                         <outlet property="forecastTenContainerView" destination="f2d-YU-S1d" id="kZ0-Ur-fI5"/>
@@ -159,27 +153,27 @@
         <scene sceneID="NYe-ue-6M8">
             <objects>
                 <tableViewController id="yCJ-Zr-pPo" customClass="WAForecastTableViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ycu-Gz-0JU">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="2" id="ycu-Gz-0JU">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="447"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAForecastPeriodCell" textLabel="p1H-Wf-ojT" detailTextLabel="b6O-Fd-x4N" style="IBUITableViewCellStyleSubtitle" id="qyp-w0-uVJ">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qyp-w0-uVJ" id="ozb-06-fpF">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="51.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="p1H-Wf-ojT">
-                                            <rect key="frame" x="15" y="6" width="31.5" height="19.5"/>
+                                            <rect key="frame" x="15" y="10" width="31.5" height="19.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="b6O-Fd-x4N">
-                                            <rect key="frame" x="15" y="25.5" width="40.5" height="13.5"/>
+                                            <rect key="frame" x="15" y="29.5" width="40.5" height="13.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -203,27 +197,27 @@
         <scene sceneID="Brv-Jg-8T4">
             <objects>
                 <tableViewController id="VDq-Qf-vj6" customClass="WAForecastTenTableViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="IuJ-ZI-njF">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="2" id="IuJ-ZI-njF">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="447"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAForecastPeriodCell" textLabel="Raz-OZ-JD9" detailTextLabel="ugi-MW-QCo" style="IBUITableViewCellStyleSubtitle" id="0sy-Vh-fot">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0sy-Vh-fot" id="Zc5-5v-XLU">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="51.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Raz-OZ-JD9">
-                                            <rect key="frame" x="15" y="6" width="31.5" height="19.5"/>
+                                            <rect key="frame" x="15" y="10" width="31.5" height="19.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ugi-MW-QCo">
-                                            <rect key="frame" x="15" y="25.5" width="40.5" height="13.5"/>
+                                            <rect key="frame" x="15" y="29.5" width="40.5" height="13.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -281,11 +275,11 @@
             </objects>
             <point key="canvasLocation" x="173" y="1855"/>
         </scene>
-        <!--Forecast-->
+        <!--Forecasts-->
         <scene sceneID="IEm-qK-kIe">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="68K-ak-zcD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Forecast" id="5Im-VS-olL"/>
+                    <tabBarItem key="tabBarItem" title="Forecasts" id="5Im-VS-olL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="y5n-fM-M81">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

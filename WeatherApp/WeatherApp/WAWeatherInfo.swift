@@ -69,55 +69,16 @@ class WAWeatherInfo {
     
     
     func getForecast () {
-        
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/forecast/q/\(currentState)/\(currentCity).json"
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return
-        }
-        
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(wiURL) { data, response, error in
-            
-            // HTTP request assumes NSHTTPURLResponse force cast
-            
-            let httpResponse = response as! NSHTTPURLResponse
-            
-            print("HTTP Status Code = \(httpResponse.statusCode)")
-            
-            if httpResponse.statusCode == 200 {
-                
-                if let jsonResponse = data {
-                    
-                    do {
-                        let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                        
-                        if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-                            txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
-                            forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
-                        {
-                            self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
-                        }
-                        
-                        //print (self.currentConditions)
-                        
-                    } catch {
-                        print("Error processing JSON \(error)")
-                    }
-                }
-            }
-            
-        }
-        
-        task.resume()
-        
+        getForecastWith("forecast")
     }
-    
     
     func getForecastTen () {
+        getForecastWith("forecast10day")
+    }
+    
+    func getForecastWith (service: String) {
         
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/forecast10day/q/\(currentState)/\(currentCity).json"
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
         guard let wiURL = NSURL(string: urlString)
             else {
                 print("Error Invalid URL \(urlString)")
@@ -160,7 +121,6 @@ class WAWeatherInfo {
         task.resume()
         
     }
-
     
     
     func getSattelite () {
