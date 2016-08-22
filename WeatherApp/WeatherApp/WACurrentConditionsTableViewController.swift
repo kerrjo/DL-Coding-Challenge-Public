@@ -16,6 +16,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     @IBOutlet weak var headerImageView: UIImageView!
     @IBOutlet weak var locationLabel: UILabel!
 
+    var optionTitle = ""
     var primaryTitle = ""
 
     var primaryItems:[String] = []
@@ -64,7 +65,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
         conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
             
             // Remove undesireables
-            if item == "icon" || item == "icon_url" {
+            if item == "icon" || item == "icon_url"
+                || item == "estimated"
+            {
                 return false
             }
             
@@ -81,15 +84,18 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
                 || item == "station_id"
                 || item == "wind_string"
                 || item == "dewpoint_string"
+                || item == "display_location"
             {
                 return false
             }
             
             return true
         })
-        
+
+        optionTitle = "Other items"
+
         setupPrimaryItems()
-        
+
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
@@ -191,12 +197,11 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
         if section == 0 {
             return primaryTitle
         } else {
-            return "Other items"
+            return optionTitle
         }
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
         return 2
     }
 
