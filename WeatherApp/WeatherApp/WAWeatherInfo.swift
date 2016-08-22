@@ -26,9 +26,6 @@ class WAWeatherInfo {
     var currentState = "MI"
     
 
-    
-   
-    
     func getCurrentConditions () {
         
         let urlString = "http://api.wunderground.com/api/\(apiKey)/conditions/q/\(currentState)/\(currentCity).json"
