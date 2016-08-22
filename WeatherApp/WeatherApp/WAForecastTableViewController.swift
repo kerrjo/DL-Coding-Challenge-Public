@@ -162,8 +162,7 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
                     
                     let forecastPeriod = forecastPeriods[indexPath.row]
                     let icon = forecastPeriod["icon"] as! String
-
-                    //let youtubeVideo = (self.searchResults?[indexPath.row])!
+                    
                     if icon == iconName {
                         dispatch_async(dispatch_get_main_queue()) {
                             self.tableView.beginUpdates()
