@@ -25,6 +25,9 @@ class WAWeatherInfo {
     var currentCity = "Detroit"
     var currentState = "MI"
     
+
+    
+   
     
     func getCurrentConditions () {
         
@@ -35,47 +38,62 @@ class WAWeatherInfo {
                 return
         }
         
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(wiURL) { data, response, error in
-            
-            // HTTP request assumes NSHTTPURLResponse force cast
-            
-            let httpResponse = response as! NSHTTPURLResponse
-            
-            print("HTTP Status Code = \(httpResponse.statusCode)")
-            
-            if httpResponse.statusCode == 200 {
-                
-                if let jsonResponse = data {
-                    
-                    do {
-                        let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                        
-                        if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
-                            self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
-                        }
-                        
-                    } catch {
-                        print("Error processing JSON \(error)")
-                    }
-                }
+        let fileURL = cacheFileURLFromURL(wiURL)
+        
+        if let cacheResponse = readCacheFile(fileURL!) {
+            print("Cached response")
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                self.processResponseDataConditions(cacheResponse)
             }
             
-        } // dataTaskWithURL completion
-        
-        task.resume()
-        
+        } else {
+            print("Server response")
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+            let task = session.dataTaskWithURL(wiURL) { data, response, error in
+                
+                // HTTP request assumes NSHTTPURLResponse force cast
+                
+                let httpResponse = response as! NSHTTPURLResponse
+                
+                print("HTTP Status Code = \(httpResponse.statusCode)")
+                
+                if httpResponse.statusCode == 200 {
+                    
+                    if let jsonResponse = data {
+                        self.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.processResponseDataConditions(jsonResponse)
+                    }
+                }
+                
+            } // dataTaskWithURL completion
+            
+            task.resume()
+        }
     }
     
-    
+    func processResponseDataConditions (jsonResponse: NSData) {
+        
+        do {
+            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+            
+            if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
+                self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+            }
+            
+        } catch {
+            print("Error processing JSON \(error)")
+        }
+    }
+
+  
     func getForecast () {
         getForecastWith("forecast")
     }
-    
+
     func getForecastTen () {
         getForecastWith("forecast10day")
     }
-    
+
     func getForecastWith (service: String) {
         
         let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
@@ -85,41 +103,54 @@ class WAWeatherInfo {
                 return
         }
         
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(wiURL) { data, response, error in
-            
-            // HTTP request assumes NSHTTPURLResponse force cast
-            
-            let httpResponse = response as! NSHTTPURLResponse
-            
-            print("HTTP Status Code = \(httpResponse.statusCode)")
-            
-            if httpResponse.statusCode == 200 {
+        let fileURL = cacheFileURLFromURL(wiURL)
+        
+        if let cacheResponse = readCacheFile(fileURL!) {
+            print("Cached response")
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                self.processResponseDataForecast(cacheResponse)
+            }
+
+        } else {
+            print("Server response")
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+            let task = session.dataTaskWithURL(wiURL) { data, response, error in
                 
-                if let jsonResponse = data {
+                // HTTP request assumes NSHTTPURLResponse force cast
+                
+                let httpResponse = response as! NSHTTPURLResponse
+                
+                print("HTTP Status Code = \(httpResponse.statusCode)")
+                
+                if httpResponse.statusCode == 200 {
                     
-                    do {
-                        let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                        
-                        if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-                            txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
-                            forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
-                        {
-                            self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
-                        }
-                        
-                        //print (self.currentConditions)
-                        
-                    } catch {
-                        print("Error processing JSON \(error)")
+                    if let jsonResponse = data {
+                        self.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.processResponseDataForecast(jsonResponse)
                     }
                 }
             }
             
+            task.resume()
         }
-        
-        task.resume()
-        
+    }
+    
+    func processResponseDataForecast (jsonResponse: NSData) {
+     
+        do {
+            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+            
+            if let forecastDict = responseData["forecast"] as? [String : AnyObject],
+                txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
+                forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
+            {
+                self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
+            }
+            
+        } catch {
+            print("Error processing JSON \(error)")
+        }
+  
     }
     
     
@@ -132,44 +163,57 @@ class WAWeatherInfo {
                 return
         }
         
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(wiURL) { data, response, error in
+        let fileURL = cacheFileURLFromURL(wiURL)
+        
+        if let cacheResponse = readCacheFile(fileURL!) {
+            print("Cached response")
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                self.processResponseDataSatellite(cacheResponse)
+            }
             
-            // HTTP request assumes NSHTTPURLResponse force cast
-            
-            let httpResponse = response as! NSHTTPURLResponse
-            
-            print("HTTP Status Code = \(httpResponse.statusCode)")
-            
-            if httpResponse.statusCode == 200 {
+        } else {
+            print("Server response")
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+            let task = session.dataTaskWithURL(wiURL) { data, response, error in
                 
-                if let jsonResponse = data {
+                // HTTP request assumes NSHTTPURLResponse force cast
+                
+                let httpResponse = response as! NSHTTPURLResponse
+                
+                print("HTTP Status Code = \(httpResponse.statusCode)")
+                
+                if httpResponse.statusCode == 200 {
                     
-                    do {
-                        let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                        
-                        //print(responseData)
-                        
-                        if let satteliteDict = responseData["satellite"] as? [String : AnyObject] {
-                            
-                            // self.delegate?.WeatherInfo(self, didReceiveSattelite: satteliteDict)
-                            
-                            let imageURLBaseString = satteliteDict["image_url_vis"]
-                            let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
-                            self.getSatteliteImageAtURL(imageURLString)
-                        }
-                        
-                    } catch {
-                        print("Error processing JSON \(error)")
+                    if let jsonResponse = data {
+                        self.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.processResponseDataSatellite(jsonResponse)
                     }
-                }
-            } // 200
+                } // 200
+            }
             
+            task.resume()
         }
         
-        task.resume()
+    }
+    
+    func processResponseDataSatellite (jsonResponse: NSData) {
+        
+        do {
+            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+            
+            if let satteliteDict = responseData["satellite"] as? [String : AnyObject] {
+                
+                let imageURLBaseString = satteliteDict["image_url_vis"]
+                let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
+                self.getSatteliteImageAtURL(imageURLString)
+            }
+            
+        } catch {
+            print("Error processing JSON \(error)")
+        }
         
     }
+
     
     
     func getSatteliteImageAtURL (urlString: String) {
@@ -186,18 +230,161 @@ class WAWeatherInfo {
             if let httpResponse = response as? NSHTTPURLResponse {
                 
                 print("HTTP Status Code = \(httpResponse.statusCode)")
-                
-                if let imageData = data,
-                    let satImage = UIImage(data: imageData) {
-                    
-                    self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
-                }
+
+                if httpResponse.statusCode == 200 {
+                    if let imageData = data,
+                        let satImage = UIImage(data: imageData) {
+                        self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
+                    }
+
+                } // 200
             }
-            
         }
         
         task.resume()
         
+    }
+    
+    
+    
+    // MARK: Cached file workers
+    
+    private func cacheFileURLFromURL(sourceURL: NSURL) -> NSURL? {
+        
+        var resultFileURL: NSURL?
+        var relativePathComponents = [String]()
+        
+        var indexToDocuments = 0
+        if let pathComponents = sourceURL.pathComponents {
+            
+            for path in pathComponents {
+                if path == apiKey {
+                    break;
+                }
+                indexToDocuments += 1
+            }
+            
+            let indexPastDocuments = indexToDocuments + 1
+            let lastIndex = pathComponents.count
+            
+            for index in indexPastDocuments..<lastIndex {
+                relativePathComponents += [pathComponents[index]]
+            }
+        }
+        
+        resultFileURL = cacheFileURL(relativePathComponents)
+        
+        return resultFileURL
+    }
+    
+    //func cacheFileURLWithFileName(fileName: String, inPath:[String]?) -> NSURL? {
+    func cacheFileURL(inPath:[String]?) -> NSURL? {
+        
+        var resultFileURL: NSURL?
+        var urlPath: NSURL
+        
+        if let pathComponents = inPath  {
+            if pathComponents.count > 0 {
+                // Create the path with first component append remaining components
+                urlPath = NSURL(string: pathComponents[0])!
+                for index in 1..<pathComponents.count {
+                    urlPath = urlPath.URLByAppendingPathComponent(pathComponents[index])
+                }
+                if let pathString = urlPath.path {
+                    resultFileURL = cacheFileURLWithRelativePathName(pathString)
+                }
+            }
+        }
+        
+        return resultFileURL
+    }
+    
+    func cacheFileURLWithRelativePathName(pathName: String) -> NSURL? {
+        var resultFileURL: NSURL?
+        
+        let cacheDirectory = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask).first!
+        
+        if let url = NSURL(string:pathName, relativeToURL:cacheDirectory) {
+            resultFileURL = url
+        }
+        
+        return resultFileURL
+    }
+    
+    private func prepareFileWrite(fileURL : NSURL) {
+        
+        var isDir: ObjCBool = false
+        if let pathURL = fileURL.URLByDeletingLastPathComponent,
+            let path = pathURL.path {
+            if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) {
+                
+            } else {
+                do {
+                    try NSFileManager.defaultManager().createDirectoryAtURL(
+                        pathURL, withIntermediateDirectories: true, attributes: nil)
+                } catch {
+                    print("Error: \(error)")
+                }
+            }
+        }
+    }
+    
+    private func validFile(fileURL: NSURL) -> Bool {
+        var result = false
+        //var fileSize : UInt64 = 0
+        var createDate : NSDate? = nil
+        
+        if let path = fileURL.path {
+            do {
+                let attr : NSDictionary? = try NSFileManager.defaultManager().attributesOfItemAtPath(path)
+                
+                if let _attr = attr {
+                    //fileSize = _attr.fileSize()
+                    createDate = _attr.fileCreationDate()!
+                }
+            } catch {
+                print("Error: \(error)")
+            }
+            
+        }
+        
+        if let creationDate = createDate {
+            let timeSince = creationDate.timeIntervalSinceNow
+            if (-timeSince > 45) {
+                do {
+                    print("Timedout")
+                    try NSFileManager.defaultManager().removeItemAtURL(fileURL)
+                } catch {
+                    print("Error: \(error)")
+                }
+            } else {
+                // Still valid has not timed out
+                result = true
+            }
+        }
+        
+        return result
+    }
+    
+    private func readCacheFile(fileURL : NSURL) -> NSData? {
+        
+        var isDir: ObjCBool = false
+        var result : NSData?
+        
+        if let path = fileURL.path {
+            // If it exists and and is valid (not stale) read and use
+            if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) {
+                if validFile(fileURL) {
+                    result = NSData(contentsOfURL: fileURL)
+                }
+            }
+        }
+        return result
+    }
+    
+    private func writeCacheFile(fileURL : NSURL, data: NSData) {
+        prepareFileWrite(fileURL)
+        data.writeToURL(fileURL, atomically: true)
     }
 
 }
