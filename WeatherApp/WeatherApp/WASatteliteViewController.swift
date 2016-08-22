@@ -17,6 +17,7 @@ class WASatteliteViewController: UIViewController, WAWeatherInfoDelegate {
     
     var weatherInfo = WAWeatherInfo()
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,6 +30,7 @@ class WASatteliteViewController: UIViewController, WAWeatherInfoDelegate {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
         if firstLoad {
             weatherInfo.getSattelite()
         }
@@ -51,7 +53,6 @@ class WASatteliteViewController: UIViewController, WAWeatherInfoDelegate {
 //        image_url
         
         let imageURLBaseString = imageURLs["image_url_vis"]
-        
         let imageURLString = "\(imageURLBaseString!)\(controller.apiKey)"
         
         weatherInfo.getSatteliteImageAtURL(imageURLString)

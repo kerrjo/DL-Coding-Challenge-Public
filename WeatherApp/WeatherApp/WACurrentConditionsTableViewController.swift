@@ -26,6 +26,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     
     var refreshInProgress = false
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

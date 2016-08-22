@@ -131,10 +131,16 @@ class WAWeatherInfo {
                            
                             //print(responseData)
                             
-                            if let satteliteDict = responseData["satellite"] as? [String : AnyObject]
-                            {
+                            if let satteliteDict = responseData["satellite"] as? [String : AnyObject] {
+                                
                                 self.delegate?.WeatherInfo(self, didReceiveSattelite: satteliteDict)
+                                
+//                                let imageURLBaseString = satteliteDict["image_url_vis"]
+//                                let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
+//                                self.getSatteliteImageAtURL(imageURLString)
+
                             }
+                            
                             
                             
                         } catch {

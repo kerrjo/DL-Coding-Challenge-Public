@@ -20,6 +20,7 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     
     var refreshInProgress = false
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -59,7 +60,6 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
         // Empty impl
     }
-
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
 
