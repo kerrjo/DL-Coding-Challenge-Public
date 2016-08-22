@@ -100,9 +100,9 @@
 				55D720891D6A173C0056FC62 /* Info.plist */,
 				55D7209F1D6A17CC0056FC62 /* WAWeatherInfo.swift */,
 				55D7209D1D6A17CC0056FC62 /* WACurrentConditionsTableViewController.swift */,
-				55D7209E1D6A17CC0056FC62 /* WAForecastTableViewController.swift */,
 				55D720A51D6A418F0056FC62 /* WASatteliteViewController.swift */,
 				55D720A71D6B46020056FC62 /* WAForecastsViewController.swift */,
+				55D7209E1D6A17CC0056FC62 /* WAForecastTableViewController.swift */,
 				55D720A91D6B462F0056FC62 /* WAForecastTenTableViewController.swift */,
 			);
 			path = WeatherApp;

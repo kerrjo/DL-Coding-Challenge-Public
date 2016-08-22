@@ -44,7 +44,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
             self.refreshControl?.beginRefreshing()
         }
 
-        //refreshTable(nil)
+        refreshTable(nil)
     }
     
     func refreshTable(control:AnyObject?) {
