@@ -83,14 +83,11 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
         self.refreshControl?.endRefreshing()
     }
     
-    
     func dataStore(controller: WADataStore, primaryLocationTitle:String) {
-        
         dispatch_async(dispatch_get_main_queue()) {
             self.locationLabel.text = primaryLocationTitle
         }
     }
-
     
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
 
@@ -171,7 +168,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
         // Configure the cell...
         return cell
     }
-    
 
 }
 

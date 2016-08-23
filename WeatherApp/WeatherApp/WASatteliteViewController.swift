@@ -40,6 +40,12 @@ class WASatteliteViewController: UIViewController, WADataStoreDelegate {
     
     // Mark: WADataStoreDelegate
     
+    func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.imageView.image = image
+        }
+    }
+
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
                    conditionsDict:[String : AnyObject],
                    primaryItems:[String],
@@ -60,10 +66,5 @@ class WASatteliteViewController: UIViewController, WADataStoreDelegate {
         // EMPTY Impl
     }
     
-    func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage) {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.imageView.image = image
-        }
-    }
-
+   
 }

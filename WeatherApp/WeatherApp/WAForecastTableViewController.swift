@@ -52,17 +52,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
     
     // Mark: WADataStoreDelegate
     
-    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
-                   conditionsDict:[String : AnyObject],
-                   primaryItems:[String],
-                   primaryDict:[String : AnyObject]
-        ){
-        // EMPTY Impl
-    }
-    
-    func dataStore(controller: WADataStore, primaryLocationTitle:String) {
-        // EMPTY Impl
-    }
     
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
 
@@ -98,6 +87,18 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
         self.refreshControl?.endRefreshing()
     }
     
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
+                   conditionsDict:[String : AnyObject],
+                   primaryItems:[String],
+                   primaryDict:[String : AnyObject]
+        ){
+        // EMPTY Impl
+    }
+    
+    func dataStore(controller: WADataStore, primaryLocationTitle:String) {
+        // EMPTY Impl
+    }
+
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage) {
         // EMPTY Impl
     }
