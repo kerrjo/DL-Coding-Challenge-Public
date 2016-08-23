@@ -52,7 +52,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
     
     // Mark: WADataStoreDelegate
     
-    
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
 
         if let visible = self.tableView.indexPathsForVisibleRows {
@@ -73,7 +72,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
             }
         }  // let visible
     }
-    
     
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
         
@@ -152,6 +150,5 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
     }
 
 }
-
 
 
