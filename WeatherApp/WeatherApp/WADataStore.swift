@@ -50,6 +50,10 @@ class WADataStore: WAWeatherInfoDelegate {
         weatherInfo.getForecastTen()
     }
     
+    func getSatellite() {
+        weatherInfo.getSattelite()
+    }
+    
     
     // MARK: - WAWeatherInfoDelegate
     
@@ -151,7 +155,7 @@ class WADataStore: WAWeatherInfoDelegate {
     }
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
-        // Empty impl
+        delegate?.dataStore(self, didReceiveSatteliteImage:image)
     }
     
 
