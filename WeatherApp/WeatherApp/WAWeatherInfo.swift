@@ -24,8 +24,8 @@ class WAWeatherInfo {
 
     var currentCity = "Detroit"
     var currentState = "MI"
-    
 
+    
     func getCurrentConditions () {
         
         let urlString = "http://api.wunderground.com/api/\(apiKey)/conditions/q/\(currentState)/\(currentCity).json"
@@ -39,9 +39,7 @@ class WAWeatherInfo {
         
         if let cacheResponse = readCacheFile(fileURL!) {
             print("Cached response")
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                self.processResponseDataConditions(cacheResponse)
-            }
+            self.processResponseDataConditions(cacheResponse)
             
         } else {
             print("Server response")
@@ -66,6 +64,7 @@ class WAWeatherInfo {
             
             task.resume()
         }
+
     }
     
     func processResponseDataConditions (jsonResponse: NSData) {
@@ -104,9 +103,7 @@ class WAWeatherInfo {
         
         if let cacheResponse = readCacheFile(fileURL!) {
             print("Cached response")
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                self.processResponseDataForecast(cacheResponse)
-            }
+            self.processResponseDataForecast(cacheResponse)
 
         } else {
             print("Server response")
@@ -274,8 +271,7 @@ class WAWeatherInfo {
         return resultFileURL
     }
     
-    //func cacheFileURLWithFileName(fileName: String, inPath:[String]?) -> NSURL? {
-    func cacheFileURL(inPath:[String]?) -> NSURL? {
+    private func cacheFileURL(inPath:[String]?) -> NSURL? {
         
         var resultFileURL: NSURL?
         var urlPath: NSURL
@@ -296,11 +292,10 @@ class WAWeatherInfo {
         return resultFileURL
     }
     
-    func cacheFileURLWithRelativePathName(pathName: String) -> NSURL? {
+    private func cacheFileURLWithRelativePathName(pathName: String) -> NSURL? {
         var resultFileURL: NSURL?
         
-        let cacheDirectory = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask).first!
-        
+        let cacheDirectory = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory,inDomains: .UserDomainMask).first!
         if let url = NSURL(string:pathName, relativeToURL:cacheDirectory) {
             resultFileURL = url
         }
@@ -310,7 +305,7 @@ class WAWeatherInfo {
     
     private func prepareFileWrite(fileURL : NSURL) {
         
-        var isDir: ObjCBool = false
+        var isDir: ObjCBool = true
         if let pathURL = fileURL.URLByDeletingLastPathComponent,
             let path = pathURL.path {
             if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) {
@@ -349,7 +344,7 @@ class WAWeatherInfo {
             let timeSince = creationDate.timeIntervalSinceNow
             if (-timeSince > 45) {
                 do {
-                    print("Timedout")
+                    print("CacheFile Timedout")
                     try NSFileManager.defaultManager().removeItemAtURL(fileURL)
                 } catch {
                     print("Error: \(error)")

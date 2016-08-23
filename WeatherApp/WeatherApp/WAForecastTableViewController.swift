@@ -32,16 +32,18 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-
         dispatch_async(dispatch_get_main_queue()) {
-            self.refreshControl?.beginRefreshing()
+            self.refreshTable(nil)
         }
-
-        refreshTable(nil)
     }
     
     func refreshTable(control:AnyObject?) {
         if !refreshInProgress {
+            if control == nil {
+                // Programmatically started
+                self.refreshControl?.beginRefreshing()
+            }
+            
             refreshInProgress = true
             weatherInfo.getForecast()
         }

@@ -12,7 +12,13 @@ class WAForecastTenTableViewController: WAForecastTableViewController {
 
     
     override func refreshTable(control:AnyObject?) {
+        
         if !refreshInProgress {
+            if control == nil {
+                // Programmatically started
+                self.refreshControl?.beginRefreshing()
+            }
+            
             refreshInProgress = true
             weatherInfo.getForecastTen()
         }
