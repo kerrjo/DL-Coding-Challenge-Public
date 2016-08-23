@@ -25,6 +25,7 @@ class WAWeatherInfo {
     var currentCity = "Detroit"
     var currentState = "MI"
 
+    let cacheFiles = WACacheFiles()
     
     func getCurrentConditions () {
         
@@ -35,9 +36,9 @@ class WAWeatherInfo {
                 return
         }
         
-        let fileURL = cacheFileURLFromURL(wiURL)
+        let fileURL = NSURL.CacheFileURLFromURL(wiURL, delimiter: apiKey)
         
-        if let cacheResponse = readCacheFile(fileURL!) {
+        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
             print("Cached response")
             self.processResponseDataConditions(cacheResponse)
             
@@ -55,7 +56,7 @@ class WAWeatherInfo {
                 if httpResponse.statusCode == 200 {
                     
                     if let jsonResponse = data {
-                        self.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
                         self.processResponseDataConditions(jsonResponse)
                     }
                 }
@@ -99,9 +100,9 @@ class WAWeatherInfo {
                 return
         }
         
-        let fileURL = cacheFileURLFromURL(wiURL)
+        let fileURL = NSURL.CacheFileURLFromURL(wiURL, delimiter: apiKey)
         
-        if let cacheResponse = readCacheFile(fileURL!) {
+        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
             print("Cached response")
             self.processResponseDataForecast(cacheResponse)
 
@@ -119,7 +120,7 @@ class WAWeatherInfo {
                 if httpResponse.statusCode == 200 {
                     
                     if let jsonResponse = data {
-                        self.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
                         self.processResponseDataForecast(jsonResponse)
                     }
                 }
@@ -157,9 +158,9 @@ class WAWeatherInfo {
                 return
         }
         
-        let fileURL = cacheFileURLFromURL(wiURL)
+        let fileURL = NSURL.CacheFileURLFromURL(wiURL, delimiter: apiKey)
         
-        if let cacheResponse = readCacheFile(fileURL!) {
+        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
             print("Cached response")
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                 self.processResponseDataSatellite(cacheResponse)
@@ -179,7 +180,7 @@ class WAWeatherInfo {
                 if httpResponse.statusCode == 200 {
                     
                     if let jsonResponse = data {
-                        self.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
                         self.processResponseDataSatellite(jsonResponse)
                     }
                 } // 200
@@ -238,146 +239,144 @@ class WAWeatherInfo {
         task.resume()
         
     }
-    
-    
-    
-    // MARK: Cached file workers
-    
-    private func cacheFileURLFromURL(sourceURL: NSURL) -> NSURL? {
-        
-        var resultFileURL: NSURL?
-        var relativePathComponents = [String]()
-        
-        var indexToDocuments = 0
-        if let pathComponents = sourceURL.pathComponents {
-            
-            for path in pathComponents {
-                if path == apiKey {
-                    break;
-                }
-                indexToDocuments += 1
-            }
-            
-            let indexPastDocuments = indexToDocuments + 1
-            let lastIndex = pathComponents.count
-            
-            for index in indexPastDocuments..<lastIndex {
-                relativePathComponents += [pathComponents[index]]
-            }
-        }
-        
-        resultFileURL = cacheFileURL(relativePathComponents)
-        
-        return resultFileURL
-    }
-    
-    private func cacheFileURL(inPath:[String]?) -> NSURL? {
-        
-        var resultFileURL: NSURL?
-        var urlPath: NSURL
-        
-        if let pathComponents = inPath  {
-            if pathComponents.count > 0 {
-                // Create the path with first component append remaining components
-                urlPath = NSURL(string: pathComponents[0])!
-                for index in 1..<pathComponents.count {
-                    urlPath = urlPath.URLByAppendingPathComponent(pathComponents[index])
-                }
-                if let pathString = urlPath.path {
-                    resultFileURL = cacheFileURLWithRelativePathName(pathString)
-                }
-            }
-        }
-        
-        return resultFileURL
-    }
-    
-    private func cacheFileURLWithRelativePathName(pathName: String) -> NSURL? {
-        var resultFileURL: NSURL?
-        
-        let cacheDirectory = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory,inDomains: .UserDomainMask).first!
-        if let url = NSURL(string:pathName, relativeToURL:cacheDirectory) {
-            resultFileURL = url
-        }
-        
-        return resultFileURL
-    }
-    
-    private func prepareFileWrite(fileURL : NSURL) {
-        
-        var isDir: ObjCBool = true
-        if let pathURL = fileURL.URLByDeletingLastPathComponent,
-            let path = pathURL.path {
-            if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) {
-                
-            } else {
-                do {
-                    try NSFileManager.defaultManager().createDirectoryAtURL(
-                        pathURL, withIntermediateDirectories: true, attributes: nil)
-                } catch {
-                    print("Error: \(error)")
-                }
-            }
-        }
-    }
-    
-    private func validFile(fileURL: NSURL) -> Bool {
-        var result = false
-        //var fileSize : UInt64 = 0
-        var createDate : NSDate? = nil
-        
-        if let path = fileURL.path {
-            do {
-                let attr : NSDictionary? = try NSFileManager.defaultManager().attributesOfItemAtPath(path)
-                
-                if let _attr = attr {
-                    //fileSize = _attr.fileSize()
-                    createDate = _attr.fileCreationDate()!
-                }
-            } catch {
-                print("Error: \(error)")
-            }
-            
-        }
-        
-        if let creationDate = createDate {
-            let timeSince = creationDate.timeIntervalSinceNow
-            if (-timeSince > 45) {
-                do {
-                    print("CacheFile Timedout")
-                    try NSFileManager.defaultManager().removeItemAtURL(fileURL)
-                } catch {
-                    print("Error: \(error)")
-                }
-            } else {
-                // Still valid has not timed out
-                result = true
-            }
-        }
-        
-        return result
-    }
-    
-    private func readCacheFile(fileURL : NSURL) -> NSData? {
-        
-        var isDir: ObjCBool = false
-        var result : NSData?
-        
-        if let path = fileURL.path {
-            // If it exists and and is valid (not stale) read and use
-            if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) {
-                if validFile(fileURL) {
-                    result = NSData(contentsOfURL: fileURL)
-                }
-            }
-        }
-        return result
-    }
-    
-    private func writeCacheFile(fileURL : NSURL, data: NSData) {
-        prepareFileWrite(fileURL)
-        data.writeToURL(fileURL, atomically: true)
-    }
 
 }
+
+
+// MARK: Cached file workers
+//    private func cacheFileURLFromURL(sourceURL: NSURL) -> NSURL? {
+//
+//        var resultFileURL: NSURL?
+//        var relativePathComponents = [String]()
+//
+//        var indexToDocuments = 0
+//        if let pathComponents = sourceURL.pathComponents {
+//
+//            for path in pathComponents {
+//                if path == apiKey {
+//                    break;
+//                }
+//                indexToDocuments += 1
+//            }
+//
+//            let indexPastDocuments = indexToDocuments + 1
+//            let lastIndex = pathComponents.count
+//
+//            for index in indexPastDocuments..<lastIndex {
+//                relativePathComponents += [pathComponents[index]]
+//            }
+//        }
+//
+//        resultFileURL = cacheFileURL(relativePathComponents)
+//
+//        return resultFileURL
+//    }
+//
+//    private func cacheFileURL(inPath:[String]?) -> NSURL? {
+//
+//        var resultFileURL: NSURL?
+//        var urlPath: NSURL
+//
+//        if let pathComponents = inPath  {
+//            if pathComponents.count > 0 {
+//                // Create the path with first component append remaining components
+//                urlPath = NSURL(string: pathComponents[0])!
+//                for index in 1..<pathComponents.count {
+//                    urlPath = urlPath.URLByAppendingPathComponent(pathComponents[index])
+//                }
+//                if let pathString = urlPath.path {
+//                    resultFileURL = cacheFileURLWithRelativePathName(pathString)
+//                }
+//            }
+//        }
+//
+//        return resultFileURL
+//    }
+//
+//    private func cacheFileURLWithRelativePathName(pathName: String) -> NSURL? {
+//        var resultFileURL: NSURL?
+//
+//        let cacheDirectory = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory,inDomains: .UserDomainMask).first!
+//        if let url = NSURL(string:pathName, relativeToURL:cacheDirectory) {
+//            resultFileURL = url
+//        }
+//
+//        return resultFileURL
+//    }
+//
+//    private func prepareFileWrite(fileURL : NSURL) {
+//
+//        var isDir: ObjCBool = true
+//        if let pathURL = fileURL.URLByDeletingLastPathComponent,
+//            let path = pathURL.path {
+//            if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) {
+//
+//            } else {
+//                do {
+//                    try NSFileManager.defaultManager().createDirectoryAtURL(
+//                        pathURL, withIntermediateDirectories: true, attributes: nil)
+//                } catch {
+//                    print("Error: \(error)")
+//                }
+//            }
+//        }
+//    }
+//
+//    private func validFile(fileURL: NSURL) -> Bool {
+//        var result = false
+//        //var fileSize : UInt64 = 0
+//        var createDate : NSDate? = nil
+//
+//        if let path = fileURL.path {
+//            do {
+//                let attr : NSDictionary? = try NSFileManager.defaultManager().attributesOfItemAtPath(path)
+//
+//                if let _attr = attr {
+//                    //fileSize = _attr.fileSize()
+//                    createDate = _attr.fileCreationDate()!
+//                }
+//            } catch {
+//                print("Error: \(error)")
+//            }
+//
+//        }
+//
+//        if let creationDate = createDate {
+//            let timeSince = creationDate.timeIntervalSinceNow
+//            if (-timeSince > 45) {
+//                do {
+//                    print("CacheFile Timedout")
+//                    try NSFileManager.defaultManager().removeItemAtURL(fileURL)
+//                } catch {
+//                    print("Error: \(error)")
+//                }
+//            } else {
+//                // Still valid has not timed out
+//                result = true
+//            }
+//        }
+//
+//        return result
+//    }
+//
+//    private func readCacheFile(fileURL : NSURL) -> NSData? {
+//
+//        var isDir: ObjCBool = false
+//        var result : NSData?
+//
+//        if let path = fileURL.path {
+//            // If it exists and and is valid (not stale) read and use
+//            if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir) {
+//                if validFile(fileURL) {
+//                    result = NSData(contentsOfURL: fileURL)
+//                }
+//            }
+//        }
+//        return result
+//    }
+//
+//    private func writeCacheFile(fileURL : NSURL, data: NSData) {
+//        prepareFileWrite(fileURL)
+//        data.writeToURL(fileURL, atomically: true)
+//    }
 
