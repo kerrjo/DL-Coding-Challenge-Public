@@ -52,6 +52,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
     }
 
     
+    // Mark: WADataStoreDelegate
+    
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
                    conditionsDict:[String : AnyObject],
                    primaryItems:[String],
@@ -63,9 +65,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
     func dataStore(controller: WADataStore, primaryTitle:String) {
         // EMPTY Impl
     }
-//    func dataStore(controller: WADataStore, iconImage image:UIImage, iconName:String) {
-//        
-//    }
     
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
 
@@ -115,7 +114,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
         let forecastPeriod = forecastPeriods[indexPath.row]
 
         if let titleText = forecastPeriod["title"] as? String {
-
             cell.textLabel!.text = titleText
         }
         
@@ -151,104 +149,10 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate 
         let cell = tableView.dequeueReusableCellWithIdentifier("WAForecastPeriodCell", forIndexPath: indexPath)
 
         // Configure the cell...
-
         return cell
     }
 
 }
-
-
-
-
-
-//    // MARK: Helper
-//
-//    func imageFor(iconName:String) -> UIImage? {
-//
-//        var result: UIImage?
-//        if let cachedImage = imageCache.objectForKey(iconName) {
-//            result = cachedImage as? UIImage
-//        } else {
-//            result = imagePlaceholder
-//        }
-//        return result
-//    }
-//
-//    func imageFor(iconName:String, imageURLString:String) -> Void {
-//
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-//            if let imageURL = NSURL(string: imageURLString),
-//                imageData = NSData(contentsOfURL:imageURL),
-//                iconImage = UIImage(data: imageData) {
-//
-//                self.imageCache.setObject(iconImage, forKey: iconName)
-//
-//                self.updateFor(iconName)
-//            }
-//        }
-//    }
-
-//    func updateFor(iconName:String) -> Void {
-//
-//        if let visible = self.tableView.indexPathsForVisibleRows {
-//            for indexPath in visible {
-//                if indexPath.row < self.forecastPeriods.count {
-//
-//                    let forecastPeriod = forecastPeriods[indexPath.row]
-//                    let icon = forecastPeriod["icon"] as! String
-//
-//                    if icon == iconName {
-//                        dispatch_async(dispatch_get_main_queue()) {
-//                            self.tableView.beginUpdates()
-//                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-//                            self.tableView.endUpdates()
-//                        }
-//                    }
-//                }
-//            }
-//        }  // let visible
-//    }
-//
-
-
-
-//    // MARK: - WAWeatherInfoDelegate
-//
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
-//        // Empty impl
-//    }
-//
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
-//        // Empty impl
-//    }
-//
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
-//        // Empty impl
-//    }
-//
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
-//
-//        forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
-//            let v1 = item1["period"] as! Int
-//            let v2 = item2["period"] as! Int
-//            return v1 < v2
-//        })
-//
-//        dispatch_async(dispatch_get_main_queue()) {
-//            self.tableView.reloadData()
-//        }
-//
-//        for result in forecastPeriods {
-//            let icon = result["icon"] as! String
-//            let iconURLString = result["icon_url"] as! String
-//
-//            self.imageFor(icon, imageURLString: iconURLString)
-//        }
-//
-//        refreshInProgress = false
-//        self.refreshControl?.endRefreshing()
-//    }
-
 
 
 
