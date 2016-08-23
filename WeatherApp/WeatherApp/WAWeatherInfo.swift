@@ -245,7 +245,6 @@ class WAWeatherInfo {
         }
         
         task.resume()
-        
     }
 
 }
