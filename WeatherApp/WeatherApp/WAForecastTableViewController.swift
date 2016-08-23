@@ -9,10 +9,12 @@
 import UIKit
 
 
-class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegate {
+class WAForecastTableViewController: UITableViewController, WADataStoreDelegate {
 
-    var weatherInfo = WAWeatherInfo()
+    // var weatherInfo = WAWeatherInfo()
     
+    var weatherInfo = WADataStore()
+
     var forecastPeriods:[[String : AnyObject]] = []
 
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
@@ -50,41 +52,57 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
     }
 
     
-    // MARK: - WAWeatherInfoDelegate
-
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
-        // Empty impl
-    }
-
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
-        // Empty impl
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
+                   conditionsDict:[String : AnyObject],
+                   primaryItems:[String],
+                   primaryDict:[String : AnyObject]
+        ){
+        // EMPTY Impl
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
-        // Empty impl
+    func dataStore(controller: WADataStore, primaryTitle:String) {
+        // EMPTY Impl
+    }
+//    func dataStore(controller: WADataStore, iconImage image:UIImage, iconName:String) {
+//        
+//    }
+    
+    func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
+
+        if let visible = self.tableView.indexPathsForVisibleRows {
+            for indexPath in visible {
+                if indexPath.row < self.forecastPeriods.count {
+                    
+                    let forecastPeriod = forecastPeriods[indexPath.row]
+                    let icon = forecastPeriod["icon"] as! String
+                    
+                    if icon == iconName {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.tableView.beginUpdates()
+                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                            self.tableView.endUpdates()
+                        }
+                    }
+                }
+            }
+        }  // let visible
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
-
-        forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
-            let v1 = item1["period"] as! Int
-            let v2 = item2["period"] as! Int
-            return v1 < v2
-        })
-
+    
+    func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+        
+        forecastPeriods = dayPeriods
+        
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
 
-        for result in forecastPeriods {
-            let icon = result["icon"] as! String
-            let iconURLString = result["icon_url"] as! String
-
-            self.imageFor(icon, imageURLString: iconURLString)
-        }
-        
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
+    }
+    
+    func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage) {
+        // EMPTY Impl
     }
 
     
@@ -107,7 +125,7 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
         
         let icon = forecastPeriod["icon"] as! String
 
-        cell.imageView!.image = self.imageFor(icon)
+        cell.imageView!.image = self.weatherInfo.imageFor(icon)
         
     }
     
@@ -137,57 +155,99 @@ class WAForecastTableViewController: UITableViewController, WAWeatherInfoDelegat
         return cell
     }
 
-   
-    // MARK: Helper
-    
-    func imageFor(iconName:String) -> UIImage? {
-        
-        var result: UIImage?
-        if let cachedImage = imageCache.objectForKey(iconName) {
-            result = cachedImage as? UIImage
-        } else {
-            result = imagePlaceholder
-        }
-        return result
-    }
-    
-    func imageFor(iconName:String, imageURLString:String) -> Void {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let imageURL = NSURL(string: imageURLString),
-                imageData = NSData(contentsOfURL:imageURL),
-                iconImage = UIImage(data: imageData) {
-                
-                self.imageCache.setObject(iconImage, forKey: iconName)
-                
-                self.updateFor(iconName)
-            }
-        }
-    }
-    
-    func updateFor(iconName:String) -> Void {
-        
-        if let visible = self.tableView.indexPathsForVisibleRows {
-            for indexPath in visible {
-                if indexPath.row < self.forecastPeriods.count {
-                    
-                    let forecastPeriod = forecastPeriods[indexPath.row]
-                    let icon = forecastPeriod["icon"] as! String
-                    
-                    if icon == iconName {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.tableView.beginUpdates()
-                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                            self.tableView.endUpdates()
-                        }
-                    }
-                }
-            }
-        }  // let visible
-    }
-
-
 }
+
+
+
+
+
+//    // MARK: Helper
+//
+//    func imageFor(iconName:String) -> UIImage? {
+//
+//        var result: UIImage?
+//        if let cachedImage = imageCache.objectForKey(iconName) {
+//            result = cachedImage as? UIImage
+//        } else {
+//            result = imagePlaceholder
+//        }
+//        return result
+//    }
+//
+//    func imageFor(iconName:String, imageURLString:String) -> Void {
+//
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+//            if let imageURL = NSURL(string: imageURLString),
+//                imageData = NSData(contentsOfURL:imageURL),
+//                iconImage = UIImage(data: imageData) {
+//
+//                self.imageCache.setObject(iconImage, forKey: iconName)
+//
+//                self.updateFor(iconName)
+//            }
+//        }
+//    }
+
+//    func updateFor(iconName:String) -> Void {
+//
+//        if let visible = self.tableView.indexPathsForVisibleRows {
+//            for indexPath in visible {
+//                if indexPath.row < self.forecastPeriods.count {
+//
+//                    let forecastPeriod = forecastPeriods[indexPath.row]
+//                    let icon = forecastPeriod["icon"] as! String
+//
+//                    if icon == iconName {
+//                        dispatch_async(dispatch_get_main_queue()) {
+//                            self.tableView.beginUpdates()
+//                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+//                            self.tableView.endUpdates()
+//                        }
+//                    }
+//                }
+//            }
+//        }  // let visible
+//    }
+//
+
+
+
+//    // MARK: - WAWeatherInfoDelegate
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
+//        // Empty impl
+//    }
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
+//        // Empty impl
+//    }
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
+//        // Empty impl
+//    }
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+//
+//        forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
+//            let v1 = item1["period"] as! Int
+//            let v2 = item2["period"] as! Int
+//            return v1 < v2
+//        })
+//
+//        dispatch_async(dispatch_get_main_queue()) {
+//            self.tableView.reloadData()
+//        }
+//
+//        for result in forecastPeriods {
+//            let icon = result["icon"] as! String
+//            let iconURLString = result["icon_url"] as! String
+//
+//            self.imageFor(icon, imageURLString: iconURLString)
+//        }
+//
+//        refreshInProgress = false
+//        self.refreshControl?.endRefreshing()
+//    }
 
 
 

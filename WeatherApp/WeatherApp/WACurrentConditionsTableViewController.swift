@@ -9,10 +9,12 @@
 import UIKit
 
 
-class WACurrentConditionsTableViewController: UITableViewController, WAWeatherInfoDelegate {
+class WACurrentConditionsTableViewController: UITableViewController, WADataStoreDelegate {
 
-    var weatherInfo = WAWeatherInfo()
+    //var weatherInfo = WAWeatherInfo()
 
+    var weatherInfo = WADataStore()
+    
     @IBOutlet weak var headerImageView: UIImageView!
     @IBOutlet weak var locationLabel: UILabel!
 
@@ -39,9 +41,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        dispatch_async(dispatch_get_main_queue()) {
-            self.refreshTable(nil)
-        }
+//        dispatch_async(dispatch_get_main_queue()) {
+//            self.refreshTable(nil)
+//        }
     }
     
     func refreshTable(control:AnyObject?) {
@@ -57,109 +59,64 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
         }
     }
     
-    // MARK: - WAWeatherInfoDelegate
+
+    // MARK: - WADataStoreDelegate
+
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions
+        conditionItems:[String],
+        conditionsDict:[String : AnyObject],
+        primaryItems:[String],
+        primaryDict:[String : AnyObject]
+    )
+    {
+        self.currentConditionsDict = conditionsDict
+        self.conditionItems = conditionItems
+        self.primaryItems = primaryItems
+        self.primaryConditionsDict = primaryDict
         
-        currentConditionsDict = conditions
-        
-        let conditionItemsUnsorted = Array(conditions.keys)
-        
-        conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
-            
-            // Remove undesireables
-            if item == "icon" || item == "icon_url"
-                || item == "estimated"
-            {
-                return false
-            }
-            
-            if let valueText = self.currentConditionsDict?[item] as? String {
-                if valueText == "NA" {
-                    return false
-                }
-            }
-            
-            // Remove undesireable primary items
-            
-            if item == "temperature_string" || item == "weather"
-                || item == "feelslike_string"
-                || item == "station_id"
-                || item == "wind_string"
-                || item == "dewpoint_string"
-                || item == "display_location"
-            {
-                return false
-            }
-            
-            return true
-        })
-
         optionTitle = "Other items"
-
-        setupPrimaryItems()
-
+        
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
-        
-        let icon = currentConditionsDict?["icon"] as! String
-        let iconURLString = currentConditionsDict?["icon_url"] as! String
-        
-        self.imageFor(icon, imageURLString: iconURLString)
-        
-        
-        if let displayLocationDict = currentConditionsDict?["display_location"] as? [String:AnyObject],
-            let cityName = displayLocationDict["city"],
-            let stateName = displayLocationDict["state_name"],
-            let zipCode = displayLocationDict["zip"]
-        {
-            let displayString = "\(cityName), \(stateName) \(zipCode)"
-            dispatch_async(dispatch_get_main_queue()) {
-                self.locationLabel.text = displayString
-            }
-            
-        } else {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.locationLabel.text = ""
-            }
-        }
-        
-        //                let fullName = displayLocationDict["full"],
-        
+
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
     }
     
-    func setupPrimaryItems() {
+    
+    func dataStore(controller: WADataStore, primaryTitle:String) {
         
-        primaryTitle = currentConditionsDict?["weather"] as! String
-        
-        primaryConditionsDict = [String : AnyObject]()
-        primaryItems = []
-        
-        primaryItems += ["Temperature"]
-        primaryConditionsDict!["Temperature"] = currentConditionsDict?["temperature_string"] as! String
-        primaryItems += ["Feels Like"]
-        primaryConditionsDict!["Feels Like"] = currentConditionsDict?["feelslike_string"] as! String
-        primaryItems += ["Wind"]
-        primaryConditionsDict!["Wind"] = currentConditionsDict?["wind_string"] as! String
-        primaryItems += ["Dewpoint"]
-        primaryConditionsDict!["Dewpoint"] = currentConditionsDict?["dewpoint_string"] as! String
-        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.locationLabel.text = primaryTitle
+        }
+    }
+
+    
+    func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
+
+        dispatch_async(dispatch_get_main_queue()) {
+            self.headerImageView.image = controller.imageFor(iconName)
+        }
+
+    }
+
+//    func dataStore(controller: WADataStore, iconImage image:UIImage, iconName:String) {
+//        dispatch_async(dispatch_get_main_queue()) {
+//            self.headerImageView.image = image
+//        }
+//    }
+    
+    func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+        // EMPTY Impl
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
-        // Empty impl
+    func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage) {
+        // EMPTY Impl
     }
-    
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
-        // Empty impl
-    }
-    
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
-        // Empty impl
-    }
+
+
 
 
     // MARK: - Table view delegate
@@ -227,21 +184,131 @@ class WACurrentConditionsTableViewController: UITableViewController, WAWeatherIn
     }
     
     
-    // MARK: Helper
-    
-    func imageFor(iconName:String, imageURLString:String) -> Void {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let imageURL = NSURL(string: imageURLString),
-                imageData = NSData(contentsOfURL:imageURL),
-                iconImage = UIImage(data: imageData) {
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.headerImageView.image = iconImage
-                }
-            }
-        }
-    }
-
+ 
 
 }
+
+
+
+
+// MARK: Helper
+
+//    func imageFor(iconName:String, imageURLString:String) -> Void {
+//
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+//            if let imageURL = NSURL(string: imageURLString),
+//                imageData = NSData(contentsOfURL:imageURL),
+//                iconImage = UIImage(data: imageData) {
+//
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    self.headerImageView.image = iconImage
+//                }
+//            }
+//        }
+//    }
+
+
+//    // MARK: - WAWeatherInfoDelegate
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
+//
+//        currentConditionsDict = conditions
+//
+//        let conditionItemsUnsorted = Array(conditions.keys)
+//
+//        conditionItems = conditionItemsUnsorted.sort{ $0 < $1 }.filter({ (item) -> Bool in
+//
+//            // Remove undesireables
+//            if item == "icon" || item == "icon_url"
+//                || item == "estimated"
+//            {
+//                return false
+//            }
+//
+//            if let valueText = self.currentConditionsDict?[item] as? String {
+//                if valueText == "NA" {
+//                    return false
+//                }
+//            }
+//
+//            // Remove undesireable primary items
+//
+//            if item == "temperature_string" || item == "weather"
+//                || item == "feelslike_string"
+//                || item == "station_id"
+//                || item == "wind_string"
+//                || item == "dewpoint_string"
+//                || item == "display_location"
+//            {
+//                return false
+//            }
+//
+//            return true
+//        })
+//
+//        optionTitle = "Other items"
+//
+//        setupPrimaryItems()
+//
+//        dispatch_async(dispatch_get_main_queue()) {
+//            self.tableView.reloadData()
+//        }
+//
+//        let icon = currentConditionsDict?["icon"] as! String
+//        let iconURLString = currentConditionsDict?["icon_url"] as! String
+//
+//        self.imageFor(icon, imageURLString: iconURLString)
+//
+//
+//        if let displayLocationDict = currentConditionsDict?["display_location"] as? [String:AnyObject],
+//            let cityName = displayLocationDict["city"],
+//            let stateName = displayLocationDict["state_name"],
+//            let zipCode = displayLocationDict["zip"]
+//        {
+//            let displayString = "\(cityName), \(stateName) \(zipCode)"
+//            dispatch_async(dispatch_get_main_queue()) {
+//                self.locationLabel.text = displayString
+//            }
+//
+//        } else {
+//            dispatch_async(dispatch_get_main_queue()) {
+//                self.locationLabel.text = ""
+//            }
+//        }
+//
+//        //                let fullName = displayLocationDict["full"],
+//
+//        refreshInProgress = false
+//        self.refreshControl?.endRefreshing()
+//    }
+//
+//    func setupPrimaryItems() {
+//
+//        primaryTitle = currentConditionsDict?["weather"] as! String
+//
+//        primaryConditionsDict = [String : AnyObject]()
+//        primaryItems = []
+//
+//        primaryItems += ["Temperature"]
+//        primaryConditionsDict!["Temperature"] = currentConditionsDict?["temperature_string"] as! String
+//        primaryItems += ["Feels Like"]
+//        primaryConditionsDict!["Feels Like"] = currentConditionsDict?["feelslike_string"] as! String
+//        primaryItems += ["Wind"]
+//        primaryConditionsDict!["Wind"] = currentConditionsDict?["wind_string"] as! String
+//        primaryItems += ["Dewpoint"]
+//        primaryConditionsDict!["Dewpoint"] = currentConditionsDict?["dewpoint_string"] as! String
+//
+//    }
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+//        // Empty impl
+//    }
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
+//        // Empty impl
+//    }
+//
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
+//        // Empty impl
+//    }
+
