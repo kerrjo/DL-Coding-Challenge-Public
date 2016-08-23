@@ -11,8 +11,6 @@ import UIKit
 
 class WAForecastTableViewController: UITableViewController, WADataStoreDelegate {
 
-    // var weatherInfo = WAWeatherInfo()
-    
     var weatherInfo = WADataStore()
 
     var forecastPeriods:[[String : AnyObject]] = []

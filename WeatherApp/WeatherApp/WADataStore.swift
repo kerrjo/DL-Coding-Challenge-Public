@@ -183,7 +183,5 @@ class WADataStore: WAWeatherInfoDelegate {
         }
     }
 
-
-
 }
 
