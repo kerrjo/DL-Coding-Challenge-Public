@@ -39,9 +39,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-//        dispatch_async(dispatch_get_main_queue()) {
-//            self.refreshTable(nil)
-//        }
+        dispatch_async(dispatch_get_main_queue()) {
+            self.refreshTable(nil)
+        }
     }
     
     func refreshTable(control:AnyObject?) {
