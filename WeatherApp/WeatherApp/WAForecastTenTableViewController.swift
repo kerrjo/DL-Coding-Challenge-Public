@@ -10,7 +10,6 @@ import UIKit
 
 class WAForecastTenTableViewController: WAForecastTableViewController {
 
-    
     override func refreshTable(control:AnyObject?) {
         
         if !refreshInProgress {

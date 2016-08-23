@@ -16,6 +16,7 @@ protocol WAWeatherInfoDelegate : class {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
 }
 
+
 class WAWeatherInfo {
     
     weak var delegate: WAWeatherInfoDelegate?
@@ -51,18 +52,16 @@ class WAWeatherInfo {
             let task = session.dataTaskWithURL(wiURL) { data, response, error in
                 
                 // HTTP request assumes NSHTTPURLResponse force cast
-                
                 let httpResponse = response as! NSHTTPURLResponse
-                
                 print("HTTP Status Code = \(httpResponse.statusCode)")
-                
                 if httpResponse.statusCode == 200 {
                     
                     if let jsonResponse = data {
                         self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
                         self.processResponseDataConditions(jsonResponse)
                     }
-                }
+                    
+                } // 200
                 
             } // dataTaskWithURL completion
             
@@ -117,18 +116,16 @@ class WAWeatherInfo {
             let task = session.dataTaskWithURL(wiURL) { data, response, error in
                 
                 // HTTP request assumes NSHTTPURLResponse force cast
-                
                 let httpResponse = response as! NSHTTPURLResponse
-                
                 print("HTTP Status Code = \(httpResponse.statusCode)")
-                
                 if httpResponse.statusCode == 200 {
                     
                     if let jsonResponse = data {
                         self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
                         self.processResponseDataForecast(jsonResponse)
                     }
-                }
+                    
+                } // 200
             }
             
             task.resume()
@@ -179,17 +176,15 @@ class WAWeatherInfo {
             let task = session.dataTaskWithURL(wiURL) { data, response, error in
                 
                 // HTTP request assumes NSHTTPURLResponse force cast
-                
                 let httpResponse = response as! NSHTTPURLResponse
-                
                 print("HTTP Status Code = \(httpResponse.statusCode)")
-                
                 if httpResponse.statusCode == 200 {
                     
                     if let jsonResponse = data {
                         self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
                         self.processResponseDataSatellite(jsonResponse)
                     }
+                    
                 } // 200
             }
             
@@ -207,6 +202,7 @@ class WAWeatherInfo {
                 
                 let imageURLBaseString = satteliteDict["image_url_vis"]
                 let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
+                
                 self.getSatteliteImageAtURL(imageURLString)
             }
             
@@ -233,13 +229,12 @@ class WAWeatherInfo {
             if let httpResponse = response as? NSHTTPURLResponse {
                 
                 print("HTTP Status Code = \(httpResponse.statusCode)")
-
                 if httpResponse.statusCode == 200 {
                     if let imageData = data,
                         let satImage = UIImage(data: imageData) {
                         self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
                     }
-
+                    
                 } // 200
             }
         }

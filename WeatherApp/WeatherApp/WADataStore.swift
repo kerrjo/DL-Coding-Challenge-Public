@@ -14,8 +14,7 @@ protocol WADataStoreDelegate : class {
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
         conditionsDict:[String : AnyObject],
         primaryItems:[String],
-        primaryDict:[String : AnyObject]
-                   )
+        primaryDict:[String : AnyObject])
     
     func dataStore(controller: WADataStore, primaryLocationTitle:String)
     func dataStore(controller: WADataStore, updateForIconImage iconName:String)
@@ -37,6 +36,8 @@ class WADataStore: WAWeatherInfoDelegate {
     init(){
         weatherInfo.delegate = self
     }
+    
+    // MARK: Public API
     
     func getCurrentConditions() {
         weatherInfo.getCurrentConditions()
@@ -93,18 +94,6 @@ class WADataStore: WAWeatherInfoDelegate {
             return true
         })
         
-        var primaryConditionsDict = [String : AnyObject]()
-        var primaryItems:[String] = []
-        
-        primaryItems += ["Temperature"]
-        primaryConditionsDict["Temperature"] = currentConditionsDict["temperature_string"] as! String
-        primaryItems += ["Feels Like"]
-        primaryConditionsDict["Feels Like"] = currentConditionsDict["feelslike_string"] as! String
-        primaryItems += ["Wind"]
-        primaryConditionsDict["Wind"] = currentConditionsDict["wind_string"] as! String
-        primaryItems += ["Dewpoint"]
-        primaryConditionsDict["Dewpoint"] = currentConditionsDict["dewpoint_string"] as! String
-
         
         let icon = currentConditionsDict["icon"] as! String
         let iconURLString = currentConditionsDict["icon_url"] as! String
@@ -122,13 +111,26 @@ class WADataStore: WAWeatherInfoDelegate {
             delegate?.dataStore(self, primaryLocationTitle:"")
         }
         
+        
+        var primaryConditionsDict = [String : AnyObject]()
+        var primaryItems:[String] = []
+        
+        primaryItems += ["Temperature"]
+        primaryConditionsDict["Temperature"] = currentConditionsDict["temperature_string"] as! String
+        primaryItems += ["Feels Like"]
+        primaryConditionsDict["Feels Like"] = currentConditionsDict["feelslike_string"] as! String
+        primaryItems += ["Wind"]
+        primaryConditionsDict["Wind"] = currentConditionsDict["wind_string"] as! String
+        primaryItems += ["Dewpoint"]
+        primaryConditionsDict["Dewpoint"] = currentConditionsDict["dewpoint_string"] as! String
+        
         delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
             conditionsDict:conditions,
             primaryItems:primaryItems,
             primaryDict:primaryConditionsDict
         )
 
-        //                let fullName = displayLocationDict["full"],
+        //  displayLocationDict["full"],
         
     }
     

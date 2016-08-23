@@ -21,7 +21,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
 
     var primaryItems:[String] = []
     var primaryConditionsDict:[String : AnyObject]?
-    
     var conditionItems:[String] = []
     var currentConditionsDict:[String : AnyObject]?
     
