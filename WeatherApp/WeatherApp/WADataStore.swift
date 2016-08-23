@@ -160,7 +160,7 @@ class WADataStore: WAWeatherInfoDelegate {
     
 
     
-    // MARK: Image methods
+    // MARK:- Image methods
     
     func imageFor(iconName:String) -> UIImage? {
         
