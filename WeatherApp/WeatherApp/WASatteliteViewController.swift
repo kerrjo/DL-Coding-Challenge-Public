@@ -48,7 +48,7 @@ class WASatteliteViewController: UIViewController, WADataStoreDelegate {
         // EMPTY Impl
     }
     
-    func dataStore(controller: WADataStore, primaryTitle:String) {
+    func dataStore(controller: WADataStore, primaryLocationTitle:String) {
         // EMPTY Impl
     }
     

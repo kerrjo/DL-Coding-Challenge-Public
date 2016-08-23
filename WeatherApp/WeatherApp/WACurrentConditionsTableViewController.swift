@@ -72,6 +72,7 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
         self.primaryItems = primaryItems
         self.primaryConditionsDict = primaryDict
         
+        primaryTitle = currentConditionsDict?["weather"] as! String
         optionTitle = "Other items"
         
         dispatch_async(dispatch_get_main_queue()) {
@@ -83,10 +84,10 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
     }
     
     
-    func dataStore(controller: WADataStore, primaryTitle:String) {
+    func dataStore(controller: WADataStore, primaryLocationTitle:String) {
         
         dispatch_async(dispatch_get_main_queue()) {
-            self.locationLabel.text = primaryTitle
+            self.locationLabel.text = primaryLocationTitle
         }
     }
 

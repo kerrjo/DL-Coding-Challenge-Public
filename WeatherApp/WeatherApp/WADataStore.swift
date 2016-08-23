@@ -17,7 +17,7 @@ protocol WADataStoreDelegate : class {
         primaryDict:[String : AnyObject]
                    )
     
-    func dataStore(controller: WADataStore, primaryTitle:String)
+    func dataStore(controller: WADataStore, primaryLocationTitle:String)
     func dataStore(controller: WADataStore, updateForIconImage iconName:String)
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage)
@@ -117,9 +117,9 @@ class WADataStore: WAWeatherInfoDelegate {
             let zipCode = displayLocationDict["zip"]
         {
             let displayString = "\(cityName), \(stateName) \(zipCode)"
-            delegate?.dataStore(self, primaryTitle:displayString)
+            delegate?.dataStore(self, primaryLocationTitle:displayString)
         } else {
-            delegate?.dataStore(self, primaryTitle:"")
+            delegate?.dataStore(self, primaryLocationTitle:"")
         }
         
         delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
