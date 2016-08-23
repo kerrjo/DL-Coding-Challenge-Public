@@ -15,7 +15,7 @@ import Foundation
 
 extension NSURL {
     
-    class func CacheFileURLFromURL(sourceURL: NSURL, delimiter:String) -> NSURL? {
+    class func cacheFileURLFromURL(sourceURL: NSURL, delimiter:String) -> NSURL? {
         
         var resultFileURL: NSURL?
         var relativePathComponents = [String]()

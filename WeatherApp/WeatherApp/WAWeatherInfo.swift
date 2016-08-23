@@ -26,7 +26,10 @@ class WAWeatherInfo {
     var currentState = "MI"
 
     let cacheFiles = WACacheFiles()
+
     
+    // MARK: -
+
     func getCurrentConditions () {
         
         let urlString = "http://api.wunderground.com/api/\(apiKey)/conditions/q/\(currentState)/\(currentCity).json"
@@ -36,7 +39,7 @@ class WAWeatherInfo {
                 return
         }
         
-        let fileURL = NSURL.CacheFileURLFromURL(wiURL, delimiter: apiKey)
+        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
         
         if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
             print("Cached response")
@@ -83,6 +86,8 @@ class WAWeatherInfo {
     }
 
   
+    // MARK: -
+
     func getForecast () {
         getForecastWith("forecast")
     }
@@ -100,7 +105,7 @@ class WAWeatherInfo {
                 return
         }
         
-        let fileURL = NSURL.CacheFileURLFromURL(wiURL, delimiter: apiKey)
+        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
         
         if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
             print("Cached response")
@@ -149,6 +154,8 @@ class WAWeatherInfo {
     }
     
     
+    // MARK: -
+
     func getSattelite () {
         
         let urlString = "http://api.wunderground.com/api/\(apiKey)/satellite/q/\(currentState)/\(currentCity).json"
@@ -158,7 +165,7 @@ class WAWeatherInfo {
                 return
         }
         
-        let fileURL = NSURL.CacheFileURLFromURL(wiURL, delimiter: apiKey)
+        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
         
         if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
             print("Cached response")
@@ -208,8 +215,9 @@ class WAWeatherInfo {
         }
         
     }
-
     
+
+    // MARK: -
     
     func getSatteliteImageAtURL (urlString: String) {
         
