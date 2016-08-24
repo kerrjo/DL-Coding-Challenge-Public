@@ -61,7 +61,6 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
             self.collectionView?.reloadData()
         }
         refreshInProgress = false
-
     }
     
     
@@ -142,19 +141,31 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
         if let fcTime = hourItem["FCTTIME"] {
             
             if let hour = fcTime["hour"] as? String {
-                print(hour)
-                bottomText = hour
+                //print(hour)
+                
+                let hourInt:Int? = Int(hour)
+                if let intHour = hourInt {
+                    if intHour > 12 {
+                        bottomText = "\(intHour - 12)"
+                    } else {
+                        bottomText = "\(intHour)"
+                    }
+                } else {
+                    bottomText = hour
+                }
+                
             }
             
             if let ampm = fcTime["ampm"] as? String {
                 bottomText += " \(ampm)"
             }
-
-            if let hourText = fcTime["civil"] as? String {
-                print(hourText)
-                
+            if let dow = fcTime["weekday_name_abbrev"] as? String {
+                bottomText += "\n\(dow)"
             }
-            //print(fcTime)
+
+//            if let hourText = fcTime["civil"] as? String {
+//                //print(hourText)
+//            }
         }
         
         if let tempDict = hourItem["temp"] as? [String:AnyObject],

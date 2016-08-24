@@ -24,6 +24,7 @@
 		55D720AE1D6C97900056FC62 /* WADataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720AD1D6C97900056FC62 /* WADataStore.swift */; };
 		55D720B01D6DDBFA0056FC62 /* WAHourlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720AF1D6DDBFA0056FC62 /* WAHourlyViewController.swift */; };
 		55D720B21D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */; };
+		55D720B41D6DF70E0056FC62 /* WACurrentHourlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720B31D6DF70E0056FC62 /* WACurrentHourlyViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		55D720AD1D6C97900056FC62 /* WADataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WADataStore.swift; sourceTree = "<group>"; };
 		55D720AF1D6DDBFA0056FC62 /* WAHourlyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHourlyViewController.swift; sourceTree = "<group>"; };
 		55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHourlyCollectionViewController.swift; sourceTree = "<group>"; };
+		55D720B31D6DF70E0056FC62 /* WACurrentHourlyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WACurrentHourlyViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				55D720A51D6A418F0056FC62 /* WASatteliteViewController.swift */,
 				55D720AF1D6DDBFA0056FC62 /* WAHourlyViewController.swift */,
 				55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */,
+				55D720B31D6DF70E0056FC62 /* WACurrentHourlyViewController.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				55D720B21D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift in Sources */,
 				55D720B01D6DDBFA0056FC62 /* WAHourlyViewController.swift in Sources */,
 				55D720A61D6A418F0056FC62 /* WASatteliteViewController.swift in Sources */,
+				55D720B41D6DF70E0056FC62 /* WACurrentHourlyViewController.swift in Sources */,
 				55D720801D6A173C0056FC62 /* ViewController.swift in Sources */,
 				55D720AE1D6C97900056FC62 /* WADataStore.swift in Sources */,
 				55D7207E1D6A173C0056FC62 /* AppDelegate.swift in Sources */,

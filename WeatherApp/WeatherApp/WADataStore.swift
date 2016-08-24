@@ -70,32 +70,9 @@ class WADataStore: WAWeatherInfoDelegate {
     // MARK: - WAWeatherInfoDelegate
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
-
-//        for period in hourPeriods {
-//            
-//            //print(period)
-//            if let fcTime = period["FCTTIME"] {
-//            
-//                if let hour = fcTime["hour"] as? String {
-//                    print(hour)
-//                }
-//                if let hourText = fcTime["civil"] as? String {
-//                    print(hourText)
-//                }
-//                //print(fcTime)
-//            }
-//            
-//            if let tempDict = period["temp"] as? [String:AnyObject],
-//                let temp = tempDict["english"] as? String {
-//                print(temp)
-//            }
-//
-//        }
-        
         
         delegate?.dataStore(self, didReceiveHourly:hourPeriods)
   
-        
         for period in hourPeriods {
             let icon = period["icon"] as! String
             let iconURLString = period["icon_url"] as! String
@@ -167,10 +144,6 @@ class WADataStore: WAWeatherInfoDelegate {
     //    }, "sky": 20, "humidity": 62, "icon_url": http://icons.wxug.com/i/c/k/clear.gif]
     //
 
-    
-    
-    
-    
     
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
