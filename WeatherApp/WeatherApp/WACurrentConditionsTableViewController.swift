@@ -89,11 +89,9 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
     }
     
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
-
         dispatch_async(dispatch_get_main_queue()) {
             self.headerImageView.image = controller.imageFor(iconName)
         }
-
     }
 
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
@@ -118,7 +116,6 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
             } else {
                 cell.detailTextLabel!.text = nil
             }
-
             
         } else {
             let conditionItem = conditionItems[indexPath.row]

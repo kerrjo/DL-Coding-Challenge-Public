@@ -52,8 +52,6 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         
-        //print(#function)
-        
         hourlyPeriods = hourPeriods
         dispatch_async(dispatch_get_main_queue()) {
             self.collectionView?.reloadData()
@@ -61,23 +59,7 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
         refreshInProgress = false
     }
     
-    
-    func dataStore(controller: WADataStore, didReceiveCurrentConditions
-        conditionItems:[String],
-        conditionsDict:[String : AnyObject],
-        primaryItems:[String],
-        primaryDict:[String : AnyObject]
-        )
-    {
-        // EMPTY Impl
-    }
-    
-    func dataStore(controller: WADataStore, primaryLocationTitle:String) {
-        // EMPTY Impl
-    }
-    
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
-        // EMPTY Impl
         
         if let visible = self.collectionView?.indexPathsForVisibleItems() {
             for indexPath in visible {
@@ -96,7 +78,20 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
                 }
             }
         }  // let visible
+    }
 
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions
+        conditionItems:[String],
+        conditionsDict:[String : AnyObject],
+        primaryItems:[String],
+        primaryDict:[String : AnyObject]
+        )
+    {
+        // EMPTY Impl
+    }
+    
+    func dataStore(controller: WADataStore, primaryLocationTitle:String) {
+        // EMPTY Impl
     }
     
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
