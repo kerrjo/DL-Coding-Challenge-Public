@@ -26,6 +26,8 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     var hourlyPeriods:[[String : AnyObject]] = []
     
     var refreshInProgress = false
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Register cell classes
@@ -53,9 +55,11 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         
         hourlyPeriods = hourPeriods
+        
         dispatch_async(dispatch_get_main_queue()) {
             self.collectionView?.reloadData()
         }
+        
         refreshInProgress = false
     }
     
