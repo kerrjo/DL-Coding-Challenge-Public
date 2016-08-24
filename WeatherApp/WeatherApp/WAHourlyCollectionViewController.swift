@@ -35,7 +35,6 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -107,7 +106,6 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage) {
         // EMPTY Impl
     }
-    
 
 
     /*
