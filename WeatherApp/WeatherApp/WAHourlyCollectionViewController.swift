@@ -53,10 +53,9 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         
-        print(#function)
+        //print(#function)
         
         hourlyPeriods = hourPeriods
-        //print(hourPeriods)
         dispatch_async(dispatch_get_main_queue()) {
             self.collectionView?.reloadData()
         }

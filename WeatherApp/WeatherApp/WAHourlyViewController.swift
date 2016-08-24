@@ -30,18 +30,7 @@ class WAHourlyViewController: UIViewController, WADataStoreDelegate {
     
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
 
-        print(#function)
-        
-        //print(hourPeriods)
-        
-        
-//        for period in hourPeriods {
-//        
-//            //print(period)
-//            let fcTime = period["FCTTIME"]
-//            print(fcTime)
-//            break
-//        }
+//        print(#function)
         
         
     }
