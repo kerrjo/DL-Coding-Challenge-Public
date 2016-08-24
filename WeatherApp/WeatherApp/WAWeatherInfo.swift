@@ -14,6 +14,13 @@ protocol WAWeatherInfoDelegate : class {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
+
+}
+
+extension WAWeatherInfoDelegate {
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
+    {}
 }
 
 
@@ -77,6 +84,62 @@ class WAWeatherInfo {
             
             if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
                 self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+            }
+            
+        } catch {
+            print("Error processing JSON \(error)")
+        }
+    }
+
+    
+    // MARK: -
+    
+    func getHourly () {
+        
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/hourly/q/\(currentState)/\(currentCity).json"
+        guard let wiURL = NSURL(string: urlString)
+            else {
+                print("Error Invalid URL \(urlString)")
+                return
+        }
+        
+        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
+        
+        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
+            print("Cached response")
+            self.processResponseDataHourly(cacheResponse)
+            
+        } else {
+            print("Server response")
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+            let task = session.dataTaskWithURL(wiURL) { data, response, error in
+                
+                // HTTP request assumes NSHTTPURLResponse force cast
+                let httpResponse = response as! NSHTTPURLResponse
+                print("HTTP Status Code = \(httpResponse.statusCode)")
+                if httpResponse.statusCode == 200 {
+                    
+                    if let jsonResponse = data {
+                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.processResponseDataHourly(jsonResponse)
+                    }
+                    
+                } // 200
+                
+            } // dataTaskWithURL completion
+            
+            task.resume()
+        }
+        
+    }
+    
+    func processResponseDataHourly (jsonResponse: NSData) {
+        
+        do {
+            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+            
+            if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+                self.delegate?.WeatherInfo(self, didReceiveHourly:hourlyItems)
             }
             
         } catch {

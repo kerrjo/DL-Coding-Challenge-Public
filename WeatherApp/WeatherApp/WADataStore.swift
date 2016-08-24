@@ -20,6 +20,11 @@ protocol WADataStoreDelegate : class {
     func dataStore(controller: WADataStore, updateForIconImage iconName:String)
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage)
+    func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]])
+}
+
+extension WADataStoreDelegate {
+    func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]){}
 }
 
 
@@ -32,6 +37,8 @@ class WADataStore: WAWeatherInfoDelegate {
 
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
     private var imageCache: NSCache = NSCache()
+
+    private var pendingImage = [String:String]()
     
     init(){
         weatherInfo.delegate = self
@@ -54,9 +61,117 @@ class WADataStore: WAWeatherInfoDelegate {
     func getSatellite() {
         weatherInfo.getSattelite()
     }
-    
+
+    func getHourly() {
+        weatherInfo.getHourly()
+    }
+
     
     // MARK: - WAWeatherInfoDelegate
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
+
+//        for period in hourPeriods {
+//            
+//            //print(period)
+//            if let fcTime = period["FCTTIME"] {
+//            
+//                if let hour = fcTime["hour"] as? String {
+//                    print(hour)
+//                }
+//                if let hourText = fcTime["civil"] as? String {
+//                    print(hourText)
+//                }
+//                //print(fcTime)
+//            }
+//            
+//            if let tempDict = period["temp"] as? [String:AnyObject],
+//                let temp = tempDict["english"] as? String {
+//                print(temp)
+//            }
+//
+//        }
+        
+        
+        delegate?.dataStore(self, didReceiveHourly:hourPeriods)
+  
+        
+        for period in hourPeriods {
+            let icon = period["icon"] as! String
+            let iconURLString = period["icon_url"] as! String
+            self.imageFor(icon, imageURLString: iconURLString)
+        }
+
+    }
+    
+    
+    
+    //    ["snow": {
+    //    english = "0.0";
+    //    metric = 0;
+    //    }, "windchill": {
+    //    english = "-9999";
+    //    metric = "-9999";
+    //    }, "icon": clear, "mslp": {
+    //    english = "30.11";
+    //    metric = 1020;
+    //    }, "wx": Mostly Sunny, "condition": Clear, "pop": 0, "heatindex": {
+    //    english = "-9999";
+    //    metric = "-9999";
+    //    }, "uvi": 4, "dewpoint": {
+    //    english = 63;
+    //    metric = 17;
+    //    }, "wspd": {
+    //    english = 13;
+    //    metric = 21;
+    //    }, "FCTTIME": {
+    //    UTCDATE = "";
+    //    age = "";
+    //    ampm = AM;
+    //    civil = "11:00 AM";
+    //    epoch = 1472050800;
+    //    hour = 11;
+    //    "hour_padded" = 11;
+    //    isdst = 1;
+    //    mday = 24;
+    //    "mday_padded" = 24;
+    //    min = 00;
+    //    "min_unpadded" = 0;
+    //    mon = 8;
+    //    "mon_abbrev" = Aug;
+    //    "mon_padded" = 08;
+    //    "month_name" = August;
+    //    "month_name_abbrev" = Aug;
+    //    pretty = "11:00 AM EDT on August 24, 2016";
+    //    sec = 0;
+    //    tz = "";
+    //    "weekday_name" = Wednesday;
+    //    "weekday_name_abbrev" = Wed;
+    //    "weekday_name_night" = "Wednesday Night";
+    //    "weekday_name_night_unlang" = "Wednesday Night";
+    //    "weekday_name_unlang" = Wednesday;
+    //    yday = 236;
+    //    year = 2016;
+    //    }, "feelslike": {
+    //    english = 78;
+    //    metric = 26;
+    //    }, "wdir": {
+    //    degrees = 188;
+    //    dir = S;
+    //    }, "fctcode": 1, "qpf": {
+    //    english = "0.0";
+    //    metric = 0;
+    //    }, "temp": {
+    //    english = 78;
+    //    metric = 26;
+    //    }, "sky": 20, "humidity": 62, "icon_url": http://icons.wxug.com/i/c/k/clear.gif]
+    //
+
+    
+    
+    
+    
+    
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
         
@@ -177,11 +292,16 @@ class WADataStore: WAWeatherInfoDelegate {
     
     func imageFor(iconName:String, imageURLString:String) -> Void {
         
+        if let _ = pendingImage[iconName] {
+            return
+        }
+        pendingImage[iconName] = imageURLString
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             if let imageURL = NSURL(string: imageURLString),
                 imageData = NSData(contentsOfURL:imageURL),
                 iconImage = UIImage(data: imageData) {
                 
+                self.pendingImage.removeValueForKey(iconName)
                 self.imageCache.setObject(iconImage, forKey: iconName)
                 
                 self.delegate?.dataStore(self, updateForIconImage:iconName)

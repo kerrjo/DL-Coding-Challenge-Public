@@ -22,6 +22,8 @@
 		55D720AA1D6B462F0056FC62 /* WAForecastTenTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720A91D6B462F0056FC62 /* WAForecastTenTableViewController.swift */; };
 		55D720AC1D6C8F4E0056FC62 /* WACacheFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720AB1D6C8F4E0056FC62 /* WACacheFiles.swift */; };
 		55D720AE1D6C97900056FC62 /* WADataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720AD1D6C97900056FC62 /* WADataStore.swift */; };
+		55D720B01D6DDBFA0056FC62 /* WAHourlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720AF1D6DDBFA0056FC62 /* WAHourlyViewController.swift */; };
+		55D720B21D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		55D720A91D6B462F0056FC62 /* WAForecastTenTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAForecastTenTableViewController.swift; sourceTree = "<group>"; };
 		55D720AB1D6C8F4E0056FC62 /* WACacheFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WACacheFiles.swift; sourceTree = "<group>"; };
 		55D720AD1D6C97900056FC62 /* WADataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WADataStore.swift; sourceTree = "<group>"; };
+		55D720AF1D6DDBFA0056FC62 /* WAHourlyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHourlyViewController.swift; sourceTree = "<group>"; };
+		55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHourlyCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,8 @@
 				55D7209E1D6A17CC0056FC62 /* WAForecastTableViewController.swift */,
 				55D720A91D6B462F0056FC62 /* WAForecastTenTableViewController.swift */,
 				55D720A51D6A418F0056FC62 /* WASatteliteViewController.swift */,
+				55D720AF1D6DDBFA0056FC62 /* WAHourlyViewController.swift */,
+				55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -228,6 +234,8 @@
 				55D720A81D6B46020056FC62 /* WAForecastsViewController.swift in Sources */,
 				55D720A11D6A17CC0056FC62 /* WAForecastTableViewController.swift in Sources */,
 				55D720A01D6A17CC0056FC62 /* WACurrentConditionsTableViewController.swift in Sources */,
+				55D720B21D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift in Sources */,
+				55D720B01D6DDBFA0056FC62 /* WAHourlyViewController.swift in Sources */,
 				55D720A61D6A418F0056FC62 /* WASatteliteViewController.swift in Sources */,
 				55D720801D6A173C0056FC62 /* ViewController.swift in Sources */,
 				55D720AE1D6C97900056FC62 /* WADataStore.swift in Sources */,

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="0Bx-qw-Bix">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fe0-VS-f5z">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Current Conditions-->
@@ -345,6 +346,178 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0JW-Aj-R4Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1685" y="1855"/>
+        </scene>
+        <!--Hourly Collection View Controller-->
+        <scene sceneID="V9w-DR-FvN">
+            <objects>
+                <collectionViewController id="Ki8-rV-SMt" customClass="WAHourlyCollectionViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="b3v-xX-Iy9">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="MHe-d7-OBx">
+                            <size key="itemSize" width="56" height="88"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="WAHourlyCollectionViewCell" id="QKT-Z8-q1C" customClass="WAHourlyCollectionViewCell" customModule="WeatherApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="6" width="56" height="88"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="56" height="88"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBp-OD-ekI">
+                                            <rect key="frame" x="0.0" y="8" width="56" height="14.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8rf-vO-zM0">
+                                            <rect key="frame" x="0.0" y="20" width="56" height="48"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JVD-YA-tIf">
+                                            <rect key="frame" x="0.0" y="63" width="56" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="WBp-OD-ekI" firstAttribute="top" secondItem="QKT-Z8-q1C" secondAttribute="topMargin" id="A5L-dz-x8a"/>
+                                    <constraint firstItem="WBp-OD-ekI" firstAttribute="centerX" secondItem="QKT-Z8-q1C" secondAttribute="centerX" id="Ihb-c3-y0g"/>
+                                    <constraint firstItem="JVD-YA-tIf" firstAttribute="width" secondItem="QKT-Z8-q1C" secondAttribute="width" id="Lqx-0V-Efp"/>
+                                    <constraint firstItem="8rf-vO-zM0" firstAttribute="centerX" secondItem="QKT-Z8-q1C" secondAttribute="centerX" id="POI-tx-mK0"/>
+                                    <constraint firstItem="8rf-vO-zM0" firstAttribute="centerY" secondItem="QKT-Z8-q1C" secondAttribute="centerY" id="Wy3-hk-JpA"/>
+                                    <constraint firstItem="WBp-OD-ekI" firstAttribute="width" secondItem="QKT-Z8-q1C" secondAttribute="width" id="XmC-rc-M2s"/>
+                                    <constraint firstItem="JVD-YA-tIf" firstAttribute="centerX" secondItem="QKT-Z8-q1C" secondAttribute="centerX" id="Z2L-gn-AUB"/>
+                                    <constraint firstItem="8rf-vO-zM0" firstAttribute="height" secondItem="QKT-Z8-q1C" secondAttribute="height" constant="-40" id="bUU-ZH-cpK"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="JVD-YA-tIf" secondAttribute="bottom" id="gyY-io-aFz"/>
+                                    <constraint firstItem="8rf-vO-zM0" firstAttribute="width" secondItem="QKT-Z8-q1C" secondAttribute="width" id="sX3-Ee-Efl"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="bottomLabel" destination="JVD-YA-tIf" id="IuO-QP-1eC"/>
+                                    <outlet property="imageView" destination="8rf-vO-zM0" id="2oj-jS-fmP"/>
+                                    <outlet property="topLabel" destination="WBp-OD-ekI" id="L6n-QD-HC1"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="Ki8-rV-SMt" id="U1b-Qu-A1i"/>
+                            <outlet property="delegate" destination="Ki8-rV-SMt" id="ZYn-rG-OSP"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EKq-dl-vyo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2500" y="811"/>
+        </scene>
+        <!--Hourly View Controller-->
+        <scene sceneID="DtN-lL-3xf">
+            <objects>
+                <viewController id="Fe0-VS-f5z" customClass="WAHourlyViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ugW-Xt-HlS"/>
+                        <viewControllerLayoutGuide type="bottom" id="7B3-M6-RjJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="RR1-fW-865">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dyw-Ct-aa0">
+                                <rect key="frame" x="0.0" y="20" width="600" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="3cS-YC-J2U"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="Ki8-rV-SMt" kind="embed" id="pjW-QR-ViB"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Dyw-Ct-aa0" firstAttribute="centerX" secondItem="RR1-fW-865" secondAttribute="centerX" id="P0d-sV-XPN"/>
+                            <constraint firstItem="Dyw-Ct-aa0" firstAttribute="top" secondItem="ugW-Xt-HlS" secondAttribute="bottom" id="Q1h-Da-P5h"/>
+                            <constraint firstItem="Dyw-Ct-aa0" firstAttribute="width" secondItem="RR1-fW-865" secondAttribute="width" id="XdA-8M-1o8"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DXI-k4-g1H" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1758" y="970"/>
+        </scene>
+        <!--Hourly Collection View Controller-->
+        <scene sceneID="B7J-tW-1kb">
+            <objects>
+                <collectionViewController id="lM0-ys-Yup" customClass="WAHourlyCollectionViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="BUh-YE-yS4">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="C79-4Y-8lU">
+                            <size key="itemSize" width="56" height="88"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="WAHourlyCollectionViewCell" id="Sez-WC-I25" customClass="WAHourlyCollectionViewCell" customModule="WeatherApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="56" height="88"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="56" height="88"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hhc-sk-Zeb">
+                                            <rect key="frame" x="0.0" y="8" width="56" height="14.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="paK-xE-RXf">
+                                            <rect key="frame" x="0.0" y="20" width="56" height="48"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Sr-5G-Fx8">
+                                            <rect key="frame" x="0.0" y="63" width="56" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="paK-xE-RXf" firstAttribute="height" secondItem="Sez-WC-I25" secondAttribute="height" constant="-40" id="3gD-8a-e2J"/>
+                                    <constraint firstItem="paK-xE-RXf" firstAttribute="centerY" secondItem="Sez-WC-I25" secondAttribute="centerY" id="7wv-aq-rPi"/>
+                                    <constraint firstItem="paK-xE-RXf" firstAttribute="centerX" secondItem="Sez-WC-I25" secondAttribute="centerX" id="FgT-5o-riv"/>
+                                    <constraint firstItem="hhc-sk-Zeb" firstAttribute="width" secondItem="Sez-WC-I25" secondAttribute="width" id="M2E-du-qCg"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="9Sr-5G-Fx8" secondAttribute="bottom" id="Ndb-cU-dxV"/>
+                                    <constraint firstItem="hhc-sk-Zeb" firstAttribute="centerX" secondItem="Sez-WC-I25" secondAttribute="centerX" id="Sxu-sP-c4y"/>
+                                    <constraint firstItem="paK-xE-RXf" firstAttribute="width" secondItem="Sez-WC-I25" secondAttribute="width" id="oKB-ms-fjm"/>
+                                    <constraint firstItem="hhc-sk-Zeb" firstAttribute="top" secondItem="Sez-WC-I25" secondAttribute="topMargin" id="q54-50-cze"/>
+                                    <constraint firstItem="9Sr-5G-Fx8" firstAttribute="centerX" secondItem="Sez-WC-I25" secondAttribute="centerX" id="r2K-0B-OuG"/>
+                                    <constraint firstItem="9Sr-5G-Fx8" firstAttribute="width" secondItem="Sez-WC-I25" secondAttribute="width" id="vU1-Gv-xlo"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="bottomLabel" destination="9Sr-5G-Fx8" id="ygZ-2d-iIN"/>
+                                    <outlet property="imageView" destination="paK-xE-RXf" id="M6M-XP-x7Y"/>
+                                    <outlet property="topLabel" destination="hhc-sk-Zeb" id="ONa-8Y-UFE"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="lM0-ys-Yup" id="icP-U3-Agx"/>
+                            <outlet property="delegate" destination="lM0-ys-Yup" id="mle-Zy-EdS"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nsB-7k-DrG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-162" y="1205"/>
         </scene>
     </scenes>
 </document>
