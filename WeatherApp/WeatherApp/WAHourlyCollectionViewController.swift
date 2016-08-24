@@ -114,7 +114,6 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     */
 
     
-    
     // MARK: UICollectionViewDelegate
     
     override func collectionView(collectionView: UICollectionView,
@@ -172,70 +171,8 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
         hourCell.imageView.image = weatherInfo.imageFor(icon)
         
     }
-
     
-    //    ["snow": {
-    //    english = "0.0";
-    //    metric = 0;
-    //    }, "windchill": {
-    //    english = "-9999";
-    //    metric = "-9999";
-    //    }, "icon": clear, "mslp": {
-    //    english = "30.11";
-    //    metric = 1020;
-    //    }, "wx": Mostly Sunny, "condition": Clear, "pop": 0, "heatindex": {
-    //    english = "-9999";
-    //    metric = "-9999";
-    //    }, "uvi": 4, "dewpoint": {
-    //    english = 63;
-    //    metric = 17;
-    //    }, "wspd": {
-    //    english = 13;
-    //    metric = 21;
-    //    }, "FCTTIME": {
-    //    UTCDATE = "";
-    //    age = "";
-    //    ampm = AM;
-    //    civil = "11:00 AM";
-    //    epoch = 1472050800;
-    //    hour = 11;
-    //    "hour_padded" = 11;
-    //    isdst = 1;
-    //    mday = 24;
-    //    "mday_padded" = 24;
-    //    min = 00;
-    //    "min_unpadded" = 0;
-    //    mon = 8;
-    //    "mon_abbrev" = Aug;
-    //    "mon_padded" = 08;
-    //    "month_name" = August;
-    //    "month_name_abbrev" = Aug;
-    //    pretty = "11:00 AM EDT on August 24, 2016";
-    //    sec = 0;
-    //    tz = "";
-    //    "weekday_name" = Wednesday;
-    //    "weekday_name_abbrev" = Wed;
-    //    "weekday_name_night" = "Wednesday Night";
-    //    "weekday_name_night_unlang" = "Wednesday Night";
-    //    "weekday_name_unlang" = Wednesday;
-    //    yday = 236;
-    //    year = 2016;
-    //    }, "feelslike": {
-    //    english = 78;
-    //    metric = 26;
-    //    }, "wdir": {
-    //    degrees = 188;
-    //    dir = S;
-    //    }, "fctcode": 1, "qpf": {
-    //    english = "0.0";
-    //    metric = 0;
-    //    }, "temp": {
-    //    english = 78;
-    //    metric = 26;
-    //    }, "sky": 20, "humidity": 62, "icon_url": http://icons.wxug.com/i/c/k/clear.gif]
-    //
-
-
+ 
     // MARK: UICollectionViewDataSource
 
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -254,3 +191,69 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     }
 
 }
+
+
+// Hourly Item
+//
+//    ["snow": {
+//    english = "0.0";
+//    metric = 0;
+//    }, "windchill": {
+//    english = "-9999";
+//    metric = "-9999";
+//    }, "icon": clear, "mslp": {
+//    english = "30.11";
+//    metric = 1020;
+//    }, "wx": Mostly Sunny, "condition": Clear, "pop": 0, "heatindex": {
+//    english = "-9999";
+//    metric = "-9999";
+//    }, "uvi": 4, "dewpoint": {
+//    english = 63;
+//    metric = 17;
+//    }, "wspd": {
+//    english = 13;
+//    metric = 21;
+//    }, "FCTTIME": {
+//    UTCDATE = "";
+//    age = "";
+//    ampm = AM;
+//    civil = "11:00 AM";
+//    epoch = 1472050800;
+//    hour = 11;
+//    "hour_padded" = 11;
+//    isdst = 1;
+//    mday = 24;
+//    "mday_padded" = 24;
+//    min = 00;
+//    "min_unpadded" = 0;
+//    mon = 8;
+//    "mon_abbrev" = Aug;
+//    "mon_padded" = 08;
+//    "month_name" = August;
+//    "month_name_abbrev" = Aug;
+//    pretty = "11:00 AM EDT on August 24, 2016";
+//    sec = 0;
+//    tz = "";
+//    "weekday_name" = Wednesday;
+//    "weekday_name_abbrev" = Wed;
+//    "weekday_name_night" = "Wednesday Night";
+//    "weekday_name_night_unlang" = "Wednesday Night";
+//    "weekday_name_unlang" = Wednesday;
+//    yday = 236;
+//    year = 2016;
+//    }, "feelslike": {
+//    english = 78;
+//    metric = 26;
+//    }, "wdir": {
+//    degrees = 188;
+//    dir = S;
+//    }, "fctcode": 1, "qpf": {
+//    english = "0.0";
+//    metric = 0;
+//    }, "temp": {
+//    english = 78;
+//    metric = 26;
+//    }, "sky": 20, "humidity": 62, "icon_url": http://icons.wxug.com/i/c/k/clear.gif]
+//
+
+
