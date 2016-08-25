@@ -17,10 +17,20 @@ class WAForecastTenTableViewController: WAForecastTableViewController {
                 // Programmatically started
                 self.refreshControl?.beginRefreshing()
             }
-            
-            refreshInProgress = true
-            weatherInfo.getForecastTen()
+
+            refreshAll()
+//            refreshInProgress = true
+//            weatherInfo.getForecastTen()
         }
     }
+    
+    override func refreshAll() {
+        refreshInProgress = true
+        refreshForecastInProgress = true
+        refreshHourlyInProgress = true
+        weatherInfo.getHourlyTen()
+        weatherInfo.getForecast()
+    }
+
 
 }

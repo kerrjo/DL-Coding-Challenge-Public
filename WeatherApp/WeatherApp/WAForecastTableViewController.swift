@@ -29,6 +29,9 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     private var imageCache: NSCache = NSCache()
     
     var refreshInProgress = false
+    var refreshForecastInProgress = false
+    var refreshHourlyInProgress = false
+
     var revealRow: Int?
     
     override func viewDidLoad() {
@@ -36,6 +39,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
          weatherInfo.delegate = self
         
+        self.clearsSelectionOnViewWillAppear = false
         self.refreshControl = UIRefreshControl()
         self.refreshControl!.addTarget(self, action:#selector(refreshTable(_:)), forControlEvents:[.ValueChanged])
     }
@@ -54,11 +58,21 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 self.refreshControl?.beginRefreshing()
             }
             
-            refreshInProgress = true
-            weatherInfo.getForecast()
+            refreshAll()
+//            refreshInProgress = true
+//            weatherInfo.getForecast()
         }
     }
+
     
+    func refreshAll() {
+        refreshInProgress = true
+        refreshForecastInProgress = true
+        refreshHourlyInProgress = true
+        weatherInfo.getHourlyTen()
+        weatherInfo.getForecast()
+    }
+
   
     // Mark: WADataStoreDelegate
     
@@ -77,8 +91,12 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             self.tableView.reloadData()
         }
 
-        refreshInProgress = false
-        self.refreshControl?.endRefreshing()
+        refreshForecastInProgress = false
+        if refreshInProgress && !refreshHourlyInProgress {
+            refreshInProgress = false
+            self.refreshControl?.endRefreshing()
+        }
+        
     }
     
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
@@ -99,6 +117,13 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                     cell.activity.stopAnimating()
                 }
             }
+        }
+        
+        refreshHourlyInProgress = false
+        
+        if refreshInProgress && !refreshForecastInProgress {
+            refreshInProgress = false
+            self.refreshControl?.endRefreshing()
         }
     }
 
@@ -170,7 +195,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             self.tableView.endUpdates()
         }
     }
-
     
     func dismissRevealHourlyCell(fromIndex:Int, toIndex:Int) {
         let deleteIndexPath = NSIndexPath(forRow: fromIndex, inSection: 0)
@@ -255,6 +279,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         if let revealIndex = revealRow {
             
             if indexPath.row == revealIndex {
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 dismissHourlyCell()
                 
             } else {
@@ -347,7 +372,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             }
         }
 
-        // Configure the cell...
         return cell
     }
     
