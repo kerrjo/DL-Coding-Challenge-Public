@@ -86,31 +86,16 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     }
     
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
-        
-        hourlyPeriods = hourPeriods
-        
-        if let revealIndex = revealRow {
-            let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
-            if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
-                dispatch_async(dispatch_get_main_queue()) {
-                    cell.collectionView?.reloadData()
-                }
-            }
-            
-        }
-        //refreshInProgress = false
+        // EMPTY Impl
     }
     
     func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]]) {
-        
-        print(#function)
         
         hourlyTenPeriods = hourPeriods
         
         selectPeriod()
         
         if let revealIndex = revealRow {
-            
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
             if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -118,7 +103,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                     cell.activity.stopAnimating()
                 }
             }
-            
         }
         //refreshInProgress = false
     }
@@ -174,6 +158,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             self.tableView.beginUpdates()
             self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             self.tableView.endUpdates()
+            self.tableView.rectForRowAtIndexPath(indexPath)
+            self.tableView.scrollRectToVisible(self.tableView.rectForRowAtIndexPath(indexPath), animated: true)
         }
     }
     

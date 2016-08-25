@@ -114,7 +114,7 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="A0s-dI-XzN">
                                 <rect key="frame" x="10" y="8" width="580" height="29"/>
                                 <segments>
-                                    <segment title="5 Day"/>
+                                    <segment title="4 Day"/>
                                     <segment title="10 Day"/>
                                 </segments>
                                 <color key="tintColor" red="0.26666666666666666" green="0.65490196078431373" blue="0.85490196078431369" alpha="1" colorSpace="calibratedRGB"/>
