@@ -171,6 +171,7 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
 
         hourCell.topLabel.text = topText
         hourCell.bottomLabel.text = bottomText
+        //print(iconURL)
         hourCell.imageView.image = weatherInfo.imageFor(iconURL)
         
     }
