@@ -15,12 +15,15 @@ protocol WAWeatherInfoDelegate : class {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
     func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
-
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
 }
 
 extension WAWeatherInfoDelegate {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
     {}
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
+    {}
+
 }
 
 
@@ -147,6 +150,67 @@ class WAWeatherInfo {
         }
     }
 
+    
+    // MARK: -
+    
+    func getHourlyTen () {
+        
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/hourly10day/q/\(currentState)/\(currentCity).json"
+        guard let wiURL = NSURL(string: urlString)
+            else {
+                print("Error Invalid URL \(urlString)")
+                return
+        }
+        
+        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
+        
+        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
+            print("Cached response")
+            self.processResponseDataHourlyTen(cacheResponse)
+            
+        } else {
+            print("Server response")
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+            let task = session.dataTaskWithURL(wiURL) { data, response, error in
+                
+                // HTTP request assumes NSHTTPURLResponse force cast
+                let httpResponse = response as! NSHTTPURLResponse
+                print("HTTP Status Code = \(httpResponse.statusCode)")
+                if httpResponse.statusCode == 200 {
+                    
+                    if let jsonResponse = data {
+                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                        self.processResponseDataHourlyTen(jsonResponse)
+                    }
+                    
+                } // 200
+                
+            } // dataTaskWithURL completion
+            
+            task.resume()
+        }
+        
+    }
+    
+    func processResponseDataHourlyTen (jsonResponse: NSData) {
+        
+        do {
+            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+            
+            //print(responseData)
+            
+            if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+                
+                
+                self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
+            }
+            
+        } catch {
+            print("Error processing JSON \(error)")
+        }
+    }
+
+    
   
     // MARK: -
 

@@ -21,10 +21,14 @@ protocol WADataStoreDelegate : class {
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage)
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]])
+    func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]])
+
 }
 
 extension WADataStoreDelegate {
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]){}
+    func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]]){}
+
 }
 
 
@@ -64,9 +68,129 @@ class WADataStore: WAWeatherInfoDelegate {
     func getHourly() {
         weatherInfo.getHourly()
     }
+    func getHourlyTen() {
+        weatherInfo.getHourlyTen()
+    }
 
     
     // MARK: - WAWeatherInfoDelegate
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]]) {
+
+        let perPeriod = hourTenPeriods.count / 10
+        //let dayIndex:Int = 0
+        var dayPeriods:[[String : AnyObject]]
+        var tenDayPeriods:[[[String : AnyObject]]] = []
+
+        var currentYday = ""
+
+        dayPeriods = []
+
+        for hourItem in hourTenPeriods {
+            
+            if let fcTime = hourItem["FCTTIME"] as? [String:AnyObject],
+                let yday = fcTime["yday"] as? String {
+                if currentYday.isEmpty {
+                    currentYday = yday
+                }
+                if yday == currentYday {
+                    dayPeriods += [hourItem]
+                } else {
+                    
+                    tenDayPeriods += [dayPeriods]
+                    
+//                    print("hourlyItem ...")
+//                    for hourlyItem in dayPeriods {
+//                        printHourItem(hourlyItem)
+//                    }
+
+                    for period in dayPeriods {
+                        let icon = period["icon"] as! String
+                        let iconURLString = period["icon_url"] as! String
+                        self.imageFor(icon, imageURLString: iconURLString)
+                    }
+
+                    dayPeriods = []
+
+                    currentYday = yday
+                }
+            } else {
+                tenDayPeriods += [dayPeriods]
+            }
+        }
+        
+
+    
+        delegate?.dataStore(self, didReceiveHourlyTen:tenDayPeriods)
+        
+    }
+    
+    
+    //        for dayIndex in 0..<10 {
+    //            dayPeriods = []
+    //
+    //            for p in 0..<perPeriod {
+    //                let hourItem = hourTenPeriods[dayIndex*perPeriod + p]
+    //                dayPeriods += [hourItem]
+    //            }
+    //
+    //            tenDayPeriods += [dayPeriods]
+    //
+    //            for period in dayPeriods {
+    //                let icon = period["icon"] as! String
+    //                let iconURLString = period["icon_url"] as! String
+    //                self.imageFor(icon, imageURLString: iconURLString)
+    //            }
+    //
+    //
+    ////            for hourItem in dayPeriods {
+    ////                print(hourItem)
+    ////            }
+    //            
+    //        }
+    
+    func printHourItem(hourItem:[String:AnyObject]){
+        
+        var topText = ""
+        var bottomText = ""
+        //print(period)
+        if let fcTime = hourItem["FCTTIME"] {
+            if let hour = fcTime["hour"] as? String {
+                //print(hour)
+                let hourInt:Int? = Int(hour)
+                if let intHour = hourInt {
+                    if intHour > 12 {
+                        bottomText = "\(intHour - 12)"
+                    } else {
+                        bottomText = "\(intHour)"
+                    }
+                } else {
+                    bottomText = hour
+                }
+            }
+            
+            if let ampm = fcTime["ampm"] as? String {
+                bottomText += " \(ampm)"
+            }
+            if let dow = fcTime["weekday_name_abbrev"] as? String {
+                bottomText += " \(dow)"
+            }
+            
+            //            if let hourText = fcTime["civil"] as? String {
+            //                //print(hourText)
+            //            }
+        }
+        
+        if let tempDict = hourItem["temp"] as? [String:AnyObject],
+            let temp = tempDict["english"] as? String {
+            //print(temp)
+            topText = temp
+        }
+        let icon = hourItem["icon"] as! String
+        print("\(topText) \(bottomText) \(icon)")
+
+    }
+    
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         
@@ -198,6 +322,7 @@ class WADataStore: WAWeatherInfoDelegate {
     }
     
     func imageFor(iconName:String, imageURLString:String) -> Void {
+        
         
         if let _ = pendingImage[iconName] {
             return
