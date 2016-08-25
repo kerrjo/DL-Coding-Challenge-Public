@@ -184,29 +184,21 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     func selectPeriod() {
         if let revealIndex = revealRow {
             var dayIndex = 0
-            
-            if revealIndex == 0 || revealIndex == 1 {
-                dayIndex = 0
-            } else if revealIndex == 2 || revealIndex == 3 {
-                dayIndex = 1
-            } else if revealIndex == 4 || revealIndex == 5 {
-                dayIndex = 2
-            } else if revealIndex == 6 || revealIndex == 7 {
-                dayIndex = 3
-            }
-            
+            dayIndex = revealIndex / 2
             hourlyPeriods = hourlyTenPeriods[dayIndex]
             
-            print("dayIndex \(dayIndex)")
-            if let hourlyItems = hourlyPeriods {
-                for hourItem in hourlyItems {
-                    weatherInfo.printHourItem(hourItem)
-                }
-            }
+            print("dayIndex \(dayIndex) \(hourlyPeriods!.count)")
+            
             
         }
     }
-    
+
+    //            if let hourlyItems = hourlyPeriods {
+    //                for hourItem in hourlyItems {
+    //                    weatherInfo.printHourItem(hourItem)
+    //                }
+    //            }
+
 
 
     // MARK: -
@@ -319,8 +311,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 dismissHourlyCell()
                 revealRow = normalizedRow
                 revealHourlyCell()
-                
-//
+
 //                let fromIndex = revealIndex + 1
 //                let toIndex = indexPath.row
 //                revealRow = normalizedRow
@@ -382,10 +373,21 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             if let revealCell = cell as? WAForecastRevealCell {
                 revealCell.collectionView.dataSource = self
                 revealCell.collectionView.delegate = self
-                if let _ = hourlyPeriods {
+                if let hourlyItems = hourlyPeriods {
                     revealCell.collectionView.reloadData()
-                    let startIndexPath = NSIndexPath(forItem: 0, inSection: 0)
-                    revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .Left, animated:false)
+                    
+                    if hourlyItems.count < 23 {
+                        // Less than a full day must be current day
+                        let startIndex = 0
+                        let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
+                        revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .Left, animated:false)
+                    } else {
+                        // Full day
+                        let startIndex = hourlyItems.count / 2
+                        let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
+                        revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .CenteredHorizontally, animated:false)
+                    }
+                    
                 } else {
                     revealCell.activity.startAnimating()
                 }
