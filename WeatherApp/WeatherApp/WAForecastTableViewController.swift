@@ -373,9 +373,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                                 let iconURL = hourItem["icon_url"] as! String
                                 if iconURL == iconName {
                                     dispatch_async(dispatch_get_main_queue()) {
-                                        //self.collectionView.beginUpdates()
                                         cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
-                                        //self.tableView.endUpdates()
                                     }
                                 }
                             }

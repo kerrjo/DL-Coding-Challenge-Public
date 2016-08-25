@@ -73,9 +73,7 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
                     let iconURL = hourItem["icon_url"] as! String
                     if iconURL == iconName {
                         dispatch_async(dispatch_get_main_queue()) {
-                            //self.collectionView.beginUpdates()
                             self.collectionView?.reloadItemsAtIndexPaths([indexPath])
-                            //self.tableView.endUpdates()
                         }
                     }
                 }
