@@ -183,41 +183,41 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAForecastRevealCell" rowHeight="110" id="4ah-Nt-3Qe" customClass="WAForecastRevealCell" customModule="WeatherApp" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="110"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAForecastRevealCell" rowHeight="100" id="4ah-Nt-3Qe" customClass="WAForecastRevealCell" customModule="WeatherApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="600" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4ah-Nt-3Qe" id="exG-0t-H0L">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="109.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TCx-6S-b9F">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="109.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Xme-jW-wvz">
-                                                <size key="itemSize" width="56" height="100"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="6" id="Xme-jW-wvz">
+                                                <size key="itemSize" width="56" height="96"/>
                                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             </collectionViewFlowLayout>
                                             <cells>
                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="WAHourlyCollectionViewCell" id="WSE-dX-av0" customClass="WAHourlyCollectionViewCell" customModule="WeatherApp" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="5" width="56" height="100"/>
+                                                    <rect key="frame" x="0.0" y="2" width="56" height="96"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="100"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="96"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F7E-35-2wa">
-                                                                <rect key="frame" x="0.0" y="8" width="56" height="14.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <rect key="frame" x="0.0" y="8" width="56" height="20.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1hi-yu-8Pt">
-                                                                <rect key="frame" x="0.0" y="20" width="56" height="60"/>
+                                                                <rect key="frame" x="0.0" y="26" width="56" height="44"/>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ETk-WA-np5">
-                                                                <rect key="frame" x="0.0" y="75" width="56" height="17"/>
+                                                                <rect key="frame" x="0.0" y="71" width="56" height="17"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -229,7 +229,7 @@
                                                         <constraint firstItem="1hi-yu-8Pt" firstAttribute="width" secondItem="WSE-dX-av0" secondAttribute="width" id="E5G-Vg-Ofa"/>
                                                         <constraint firstItem="1hi-yu-8Pt" firstAttribute="centerY" secondItem="WSE-dX-av0" secondAttribute="centerY" id="SbH-5e-NN2"/>
                                                         <constraint firstItem="F7E-35-2wa" firstAttribute="top" secondItem="WSE-dX-av0" secondAttribute="topMargin" id="TaG-Cl-5Vd"/>
-                                                        <constraint firstItem="1hi-yu-8Pt" firstAttribute="height" secondItem="WSE-dX-av0" secondAttribute="height" constant="-40" id="TtU-1h-k5l"/>
+                                                        <constraint firstItem="1hi-yu-8Pt" firstAttribute="height" secondItem="WSE-dX-av0" secondAttribute="height" constant="-52" id="TtU-1h-k5l"/>
                                                         <constraint firstAttribute="bottomMargin" secondItem="ETk-WA-np5" secondAttribute="bottom" id="TxX-oU-E8y"/>
                                                         <constraint firstItem="ETk-WA-np5" firstAttribute="centerX" secondItem="WSE-dX-av0" secondAttribute="centerX" id="U3S-uR-Qrd"/>
                                                         <constraint firstItem="ETk-WA-np5" firstAttribute="width" secondItem="WSE-dX-av0" secondAttribute="width" id="kzU-jw-gts"/>
@@ -246,7 +246,7 @@
                                             </cells>
                                         </collectionView>
                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ZTD-St-4S1">
-                                            <rect key="frame" x="290" y="45" width="20" height="20"/>
+                                            <rect key="frame" x="290" y="40" width="20" height="20"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <constraints>
@@ -307,41 +307,41 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAForecastRevealCell" rowHeight="110" id="Qoj-cc-uwi" customClass="WAForecastRevealCell" customModule="WeatherApp" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="110"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAForecastRevealCell" rowHeight="100" id="Qoj-cc-uwi" customClass="WAForecastRevealCell" customModule="WeatherApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="600" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Qoj-cc-uwi" id="sNu-mI-uBN">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="109.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lrv-lV-pN1">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="109.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nSJ-Xk-GMX">
-                                                <size key="itemSize" width="56" height="100"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="6" id="nSJ-Xk-GMX">
+                                                <size key="itemSize" width="56" height="96"/>
                                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             </collectionViewFlowLayout>
                                             <cells>
                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="WAHourlyCollectionViewCell" id="LgC-2p-xyI" customClass="WAHourlyCollectionViewCell" customModule="WeatherApp" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="5" width="56" height="100"/>
+                                                    <rect key="frame" x="0.0" y="2" width="56" height="96"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="100"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="56" height="96"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HmB-IB-cia">
-                                                                <rect key="frame" x="0.0" y="8" width="56" height="14.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <rect key="frame" x="0.0" y="8" width="56" height="20.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GAh-Pa-exB">
-                                                                <rect key="frame" x="0.0" y="20" width="56" height="60"/>
+                                                                <rect key="frame" x="0.0" y="26" width="56" height="44"/>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lyB-iI-W9c">
-                                                                <rect key="frame" x="0.0" y="75" width="56" height="17"/>
+                                                                <rect key="frame" x="0.0" y="71" width="56" height="17"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -355,7 +355,7 @@
                                                         <constraint firstAttribute="bottomMargin" secondItem="lyB-iI-W9c" secondAttribute="bottom" id="4us-j1-gbW"/>
                                                         <constraint firstItem="lyB-iI-W9c" firstAttribute="centerX" secondItem="LgC-2p-xyI" secondAttribute="centerX" id="AoN-ZH-Vkn"/>
                                                         <constraint firstItem="HmB-IB-cia" firstAttribute="top" secondItem="LgC-2p-xyI" secondAttribute="topMargin" id="D8A-ew-5Bb"/>
-                                                        <constraint firstItem="GAh-Pa-exB" firstAttribute="height" secondItem="LgC-2p-xyI" secondAttribute="height" constant="-40" id="QQ0-6z-AbP"/>
+                                                        <constraint firstItem="GAh-Pa-exB" firstAttribute="height" secondItem="LgC-2p-xyI" secondAttribute="height" constant="-52" id="QQ0-6z-AbP"/>
                                                         <constraint firstItem="HmB-IB-cia" firstAttribute="centerX" secondItem="LgC-2p-xyI" secondAttribute="centerX" id="i5r-0g-dxH"/>
                                                         <constraint firstItem="HmB-IB-cia" firstAttribute="width" secondItem="LgC-2p-xyI" secondAttribute="width" id="mCa-Hc-3Cq"/>
                                                         <constraint firstItem="GAh-Pa-exB" firstAttribute="width" secondItem="LgC-2p-xyI" secondAttribute="width" id="vrr-VF-8a3"/>
@@ -369,7 +369,7 @@
                                                 </collectionViewCell>
                                             </cells>
                                         </collectionView>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Hb6-ab-j5f">
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Hb6-ab-j5f">
                                             <rect key="frame" x="290" y="45" width="20" height="20"/>
                                         </activityIndicatorView>
                                     </subviews>

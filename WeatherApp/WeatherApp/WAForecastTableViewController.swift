@@ -61,55 +61,15 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     }
 
     
+    
+  
     // Mark: WADataStoreDelegate
     
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
 
-        if let visible = self.tableView.indexPathsForVisibleRows {
-            for indexPath in visible {
-                if indexPath.row < self.forecastPeriods.count {
-                    
-                    let forecastPeriod = forecastPeriods[indexPath.row]
-                    //let icon = forecastPeriod["icon"] as! String
-                    let iconURL = forecastPeriod["icon_url"] as! String
-                    
-                    if iconURL == iconName {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.tableView.beginUpdates()
-                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                            self.tableView.endUpdates()
-                        }
-                    }
-                }
-            }
-        }  // let visible
+        updateTableForIconImage(iconName)
         
-        
-        if let revealIndex = revealRow {
-            let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
-            if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
-                
-                if let visible = cell.collectionView?.indexPathsForVisibleItems() {
-                    for indexPath in visible {
-                        if let hourlyItems = hourlyPeriods {
-                            if indexPath.row < hourlyItems.count {
-                                
-                                let hourItem = hourlyItems[indexPath.row]
-                                //let icon = hourItem["icon"] as! String
-                                let iconURL = hourItem["icon_url"] as! String
-                                if iconURL == iconName {
-                                    dispatch_async(dispatch_get_main_queue()) {
-                                        //self.collectionView.beginUpdates()
-                                        cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
-                                        //self.tableView.endUpdates()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }  // let visible
-            }
-        }
+        updateCollectionForIconImage(iconName)
         
     }
     
@@ -187,9 +147,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             dayIndex = revealIndex / 2
             hourlyPeriods = hourlyTenPeriods[dayIndex]
             
-            print("dayIndex \(dayIndex) \(hourlyPeriods!.count)")
-            
-            
+            //print("dayIndex \(dayIndex) \(hourlyPeriods!.count)")
         }
     }
 
@@ -201,7 +159,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
 
 
-    // MARK: -
+    // MARK:- UITableview
 
     func revealHourlyCell() {
 
@@ -232,17 +190,36 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
     
     func dismissRevealHourlyCell(fromIndex:Int, toIndex:Int) {
-        
-        if let revealIndex = revealRow {
-            let deleteIndexPath = NSIndexPath(forRow: fromIndex, inSection: 0)
-            let insertIndexPath = NSIndexPath(forRow: toIndex, inSection: 0)
-            self.tableView.beginUpdates()
-            self.tableView.deleteRowsAtIndexPaths([deleteIndexPath], withRowAnimation: .Automatic)
-            self.tableView.insertRowsAtIndexPaths([insertIndexPath], withRowAnimation: .Automatic)
-            self.tableView.endUpdates()
-        }
+        let deleteIndexPath = NSIndexPath(forRow: fromIndex, inSection: 0)
+        let insertIndexPath = NSIndexPath(forRow: toIndex, inSection: 0)
+        self.tableView.beginUpdates()
+        self.tableView.deleteRowsAtIndexPaths([deleteIndexPath], withRowAnimation: .Automatic)
+        self.tableView.insertRowsAtIndexPaths([insertIndexPath], withRowAnimation: .Automatic)
+        self.tableView.endUpdates()
     }
 
+    
+    
+    func updateTableForIconImage(iconName:String) {
+        if let visible = self.tableView.indexPathsForVisibleRows {
+            for indexPath in visible {
+                if indexPath.row < self.forecastPeriods.count {
+                    
+                    let forecastPeriod = forecastPeriods[indexPath.row]
+                    let iconURL = forecastPeriod["icon_url"] as! String
+                    
+                    if iconURL == iconName {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.tableView.beginUpdates()
+                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                            self.tableView.endUpdates()
+                        }
+                    }
+                }
+            }
+        }  // let visible
+    }
+    
     
 
     // MARK: - Table view delegate
@@ -333,7 +310,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         if let revealIndex = revealRow {
             if indexPath.row == revealIndex + 1 {
-                result = 110.0
+                result = 100.0
             }
         }
 
@@ -399,7 +376,40 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     }
     
     
+    // MARK:- UICollectionView
+    //
+    // COLLECTION VIEW
+    //
     
+    func updateCollectionForIconImage(iconName:String) {
+        
+        if let revealIndex = revealRow {
+            let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
+            if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
+                
+                if let visible = cell.collectionView?.indexPathsForVisibleItems() {
+                    for indexPath in visible {
+                        if let hourlyItems = hourlyPeriods {
+                            if indexPath.row < hourlyItems.count {
+                                
+                                let hourItem = hourlyItems[indexPath.row]
+                                //let icon = hourItem["icon"] as! String
+                                let iconURL = hourItem["icon_url"] as! String
+                                if iconURL == iconName {
+                                    dispatch_async(dispatch_get_main_queue()) {
+                                        //self.collectionView.beginUpdates()
+                                        cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
+                                        //self.tableView.endUpdates()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  // let visible
+            }
+        }
+        
+    }
     
     // MARK: UICollectionViewDelegate
     
