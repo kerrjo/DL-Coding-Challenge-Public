@@ -302,7 +302,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
     }
     
-    
     override func tableView(tableView: UITableView,
                               heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 

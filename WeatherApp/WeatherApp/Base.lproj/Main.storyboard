@@ -369,8 +369,8 @@
                                                 </collectionViewCell>
                                             </cells>
                                         </collectionView>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Hb6-ab-j5f">
-                                            <rect key="frame" x="290" y="45" width="20" height="20"/>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Hb6-ab-j5f">
+                                            <rect key="frame" x="290" y="40" width="20" height="20"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <constraints>
