@@ -323,20 +323,23 @@ class WADataStore: WAWeatherInfoDelegate {
     
     func imageFor(iconName:String, imageURLString:String) -> Void {
         
+        // The key for the cache must contain a notion of night vs day
+        // icon = clear
+        // iconURL = clear.gif or nt_clear.gif
         
-        if let _ = pendingImage[iconName] {
+        if let _ = pendingImage[imageURLString] {
             return
         }
-        pendingImage[iconName] = imageURLString
+        pendingImage[imageURLString] = iconName
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             if let imageURL = NSURL(string: imageURLString),
                 imageData = NSData(contentsOfURL:imageURL),
                 iconImage = UIImage(data: imageData) {
                 
-                self.pendingImage.removeValueForKey(iconName)
-                self.imageCache.setObject(iconImage, forKey: iconName)
+                self.pendingImage.removeValueForKey(imageURLString)
+                self.imageCache.setObject(iconImage, forKey: imageURLString)
                 
-                self.delegate?.dataStore(self, updateForIconImage:iconName)
+                self.delegate?.dataStore(self, updateForIconImage:imageURLString)
             }
         }
     }

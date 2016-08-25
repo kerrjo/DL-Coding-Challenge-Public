@@ -70,9 +70,10 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 if indexPath.row < self.forecastPeriods.count {
                     
                     let forecastPeriod = forecastPeriods[indexPath.row]
-                    let icon = forecastPeriod["icon"] as! String
+                    //let icon = forecastPeriod["icon"] as! String
+                    let iconURL = forecastPeriod["icon_url"] as! String
                     
-                    if icon == iconName {
+                    if iconURL == iconName {
                         dispatch_async(dispatch_get_main_queue()) {
                             self.tableView.beginUpdates()
                             self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
@@ -94,9 +95,9 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                             if indexPath.row < hourlyItems.count {
                                 
                                 let hourItem = hourlyItems[indexPath.row]
-                                let icon = hourItem["icon"] as! String
-                                
-                                if icon == iconName {
+                                //let icon = hourItem["icon"] as! String
+                                let iconURL = hourItem["icon_url"] as! String
+                                if iconURL == iconName {
                                     dispatch_async(dispatch_get_main_queue()) {
                                         //self.collectionView.beginUpdates()
                                         cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
@@ -107,9 +108,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                         }
                     }
                 }  // let visible
-                
             }
-            
         }
         
     }
@@ -287,8 +286,9 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             }
             
             let icon = forecastPeriod["icon"] as! String
+            let iconURL = forecastPeriod["icon_url"] as! String
             
-            cell.imageView!.image = self.weatherInfo.imageFor(icon)
+            cell.imageView!.image = self.weatherInfo.imageFor(iconURL)
         }
         
     }
@@ -384,10 +384,11 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 revealCell.collectionView.delegate = self
                 if let _ = hourlyPeriods {
                     revealCell.collectionView.reloadData()
+                    let startIndexPath = NSIndexPath(forItem: 0, inSection: 0)
+                    revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .Left, animated:false)
                 } else {
                     revealCell.activity.startAnimating()
                 }
-
             }
         }
 
@@ -430,7 +431,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                     } else {
                         bottomText = hour
                     }
-                    
                 }
                 
                 if let ampm = fcTime["ampm"] as? String {
@@ -439,7 +439,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 //                if let dow = fcTime["weekday_name_abbrev"] as? String {
 //                    bottomText += "\n\(dow)"
 //                }
-                
                 //            if let hourText = fcTime["civil"] as? String {
                 //                //print(hourText)
                 //            }
@@ -451,8 +450,9 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 topText = temp
             }
             let icon = hourItem["icon"] as! String
+            let iconURL = hourItem["icon_url"] as! String
             
-            hourCell.imageView.image = weatherInfo.imageFor(icon)
+            hourCell.imageView.image = weatherInfo.imageFor(iconURL)
             
         }
         

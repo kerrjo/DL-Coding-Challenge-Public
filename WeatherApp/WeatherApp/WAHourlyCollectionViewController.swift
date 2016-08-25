@@ -169,6 +169,7 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
             topText = temp
         }
         let icon = hourItem["icon"] as! String
+        let iconURL = hourItem["icon_url"] as! String
 
         hourCell.topLabel.text = topText
         hourCell.bottomLabel.text = bottomText
