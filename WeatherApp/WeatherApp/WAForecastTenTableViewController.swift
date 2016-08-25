@@ -16,11 +16,13 @@ class WAForecastTenTableViewController: WAForecastTableViewController {
             if control == nil {
                 // Programmatically started
                 self.refreshControl?.beginRefreshing()
+                refreshInProgress = true
+                weatherInfo.getForecastTen()
+            } else {
+//                refreshAll()
+                refreshInProgress = true
+                weatherInfo.getForecastTen()
             }
-
-            refreshAll()
-//            refreshInProgress = true
-//            weatherInfo.getForecastTen()
         }
     }
     
@@ -29,7 +31,7 @@ class WAForecastTenTableViewController: WAForecastTableViewController {
         refreshForecastInProgress = true
         refreshHourlyInProgress = true
         weatherInfo.getHourlyTen()
-        weatherInfo.getForecast()
+        weatherInfo.getForecastTen()
     }
 
 

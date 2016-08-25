@@ -325,6 +325,7 @@ class WADataStore: WAWeatherInfoDelegate {
         if let _ = pendingImage[imageURLString] {
             return
         }
+        
         pendingImage[imageURLString] = iconName
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             if let imageURL = NSURL(string: imageURLString),

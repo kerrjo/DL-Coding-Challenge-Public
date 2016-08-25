@@ -23,8 +23,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     var hourlyPeriods:[[String : AnyObject]]?
     var hourlyTenPeriods:[[[String : AnyObject]]] = []
 
-    //var hourlyPeriods:[[String : AnyObject]] = []
-    
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
     private var imageCache: NSCache = NSCache()
     
@@ -56,11 +54,14 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             if control == nil {
                 // Programmatically started
                 self.refreshControl?.beginRefreshing()
+                refreshInProgress = true
+                weatherInfo.getForecast()
+
+            } else {
+//                refreshAll()
+                refreshInProgress = true
+                weatherInfo.getForecast()
             }
-            
-            refreshAll()
-//            refreshInProgress = true
-//            weatherInfo.getForecast()
         }
     }
 
@@ -89,13 +90,23 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
+            if let revealIndex = self.revealRow {
+                let indexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
+                self.tableView.selectRowAtIndexPath(indexPath,
+                                                    animated: false,
+                                                    scrollPosition: .None)
+            }
         }
 
-        refreshForecastInProgress = false
-        if refreshInProgress && !refreshHourlyInProgress {
-            refreshInProgress = false
-            self.refreshControl?.endRefreshing()
-        }
+        refreshInProgress = false
+        self.refreshControl?.endRefreshing()
+
+        
+//        refreshForecastInProgress = false
+//        if refreshInProgress && !refreshHourlyInProgress {
+//            refreshInProgress = false
+//            self.refreshControl?.endRefreshing()
+//        }
         
     }
     
@@ -121,10 +132,11 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         refreshHourlyInProgress = false
         
-        if refreshInProgress && !refreshForecastInProgress {
-            refreshInProgress = false
-            self.refreshControl?.endRefreshing()
-        }
+//        if refreshInProgress && !refreshForecastInProgress {
+//            refreshInProgress = false
+//            self.refreshControl?.endRefreshing()
+//        }
+        
     }
 
 
