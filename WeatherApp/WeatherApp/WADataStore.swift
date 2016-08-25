@@ -28,9 +28,7 @@ protocol WADataStoreDelegate : class {
 extension WADataStoreDelegate {
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]){}
     func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]]){}
-
 }
-
 
 
 class WADataStore: WAWeatherInfoDelegate {

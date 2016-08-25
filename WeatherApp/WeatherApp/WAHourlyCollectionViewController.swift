@@ -70,9 +70,8 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
                 if indexPath.row < self.hourlyPeriods.count {
                     
                     let hourItem = hourlyPeriods[indexPath.row]
-                    let icon = hourItem["icon"] as! String
-                    
-                    if icon == iconName {
+                    let iconURL = hourItem["icon_url"] as! String
+                    if iconURL == iconName {
                         dispatch_async(dispatch_get_main_queue()) {
                             //self.collectionView.beginUpdates()
                             self.collectionView?.reloadItemsAtIndexPaths([indexPath])
