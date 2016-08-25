@@ -77,8 +77,6 @@ class WADataStore: WAWeatherInfoDelegate {
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]]) {
 
-        let perPeriod = hourTenPeriods.count / 10
-        //let dayIndex:Int = 0
         var dayPeriods:[[String : AnyObject]]
         var tenDayPeriods:[[[String : AnyObject]]] = []
 
@@ -118,7 +116,6 @@ class WADataStore: WAWeatherInfoDelegate {
                 tenDayPeriods += [dayPeriods]
             }
         }
-        
 
     
         delegate?.dataStore(self, didReceiveHourlyTen:tenDayPeriods)

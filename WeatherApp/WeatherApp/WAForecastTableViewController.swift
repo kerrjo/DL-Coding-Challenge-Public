@@ -254,7 +254,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 cell.detailTextLabel!.text = detailText
             }
             
-            let icon = forecastPeriod["icon"] as! String
             let iconURL = forecastPeriod["icon_url"] as! String
             
             cell.imageView!.image = self.weatherInfo.imageFor(iconURL)
@@ -304,9 +303,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     override func tableView(tableView: UITableView,
                               heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-
         var result = 64.0
-        
         if let revealIndex = revealRow {
             if indexPath.row == revealIndex + 1 {
                 result = 100.0
@@ -460,11 +457,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 //print(temp)
                 topText = temp
             }
-            let icon = hourItem["icon"] as! String
             let iconURL = hourItem["icon_url"] as! String
-            
             hourCell.imageView.image = weatherInfo.imageFor(iconURL)
-            
         }
         
         hourCell.topLabel.text = topText

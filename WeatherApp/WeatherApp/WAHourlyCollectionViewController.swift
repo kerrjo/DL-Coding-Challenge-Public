@@ -168,12 +168,11 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
             //print(temp)
             topText = temp
         }
-        let icon = hourItem["icon"] as! String
         let iconURL = hourItem["icon_url"] as! String
 
         hourCell.topLabel.text = topText
         hourCell.bottomLabel.text = bottomText
-        hourCell.imageView.image = weatherInfo.imageFor(icon)
+        hourCell.imageView.image = weatherInfo.imageFor(iconURL)
         
     }
     
