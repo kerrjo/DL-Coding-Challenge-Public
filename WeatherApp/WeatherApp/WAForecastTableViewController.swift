@@ -38,7 +38,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl!.addTarget(self, action:#selector(refreshTable(_:)), forControlEvents:[.ValueChanged])
-        
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -59,8 +58,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             weatherInfo.getForecast()
         }
     }
-
-    
     
   
     // Mark: WADataStoreDelegate
@@ -70,7 +67,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         updateTableForIconImage(iconName)
         
         updateCollectionForIconImage(iconName)
-        
     }
     
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
@@ -104,7 +100,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 }
             }
         }
-        //refreshInProgress = false
     }
 
 
@@ -124,6 +119,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         // EMPTY Impl
     }
 
+    
+    // MARK: Helper
     
     func selectPeriod() {
         if let revealIndex = revealRow {
@@ -183,8 +180,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         self.tableView.insertRowsAtIndexPaths([insertIndexPath], withRowAnimation: .Automatic)
         self.tableView.endUpdates()
     }
-
-    
     
     func updateTableForIconImage(iconName:String) {
         if let visible = self.tableView.indexPathsForVisibleRows {
@@ -193,7 +188,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                     
                     let forecastPeriod = forecastPeriods[indexPath.row]
                     let iconURL = forecastPeriod["icon_url"] as! String
-                    
                     if iconURL == iconName {
                         dispatch_async(dispatch_get_main_queue()) {
                             self.tableView.beginUpdates()
@@ -208,7 +202,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     
 
-    // MARK: - Table view delegate
+    // MARK: Table view delegate
     
     override func tableView(tableView: UITableView,
                             willDisplayCell cell: UITableViewCell,
@@ -220,7 +214,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         var standardCell = true
         
         if let revealIndex = revealRow {
-            
             if normalizedRow > revealIndex + 1 {
                 normalizedRow -= 1
             } else if normalizedRow == revealIndex + 1  {
@@ -300,7 +293,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     }
 
     
-    // MARK: - Table view data source
+    // MARK: Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -321,7 +314,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         var reuseIdentifier = "WAForecastPeriodCell"
 
         if let revealIndex = revealRow {
-            if indexPath.row  == revealIndex + 1 {
+            if indexPath.row == revealIndex + 1 {
                 reuseIdentifier = "WAForecastRevealCell"
             }
         }
@@ -332,6 +325,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             if let revealCell = cell as? WAForecastRevealCell {
                 revealCell.collectionView.dataSource = self
                 revealCell.collectionView.delegate = self
+                
                 if let hourlyItems = hourlyPeriods {
                     revealCell.collectionView.reloadData()
                     
@@ -433,9 +427,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 //                if let dow = fcTime["weekday_name_abbrev"] as? String {
 //                    bottomText += "\n\(dow)"
 //                }
-                //            if let hourText = fcTime["civil"] as? String {
-                //                //print(hourText)
-                //            }
             }
             
             if let tempDict = hourItem["temp"] as? [String:AnyObject],
