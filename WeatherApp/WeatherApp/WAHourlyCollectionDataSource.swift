@@ -36,12 +36,9 @@ class WAHourlyCollectionData: NSObject, UICollectionViewDelegate, UICollectionVi
         
         let hourItem = hourlyPeriods[indexPath.row]
         
-        //print(period)
         if let fcTime = hourItem["FCTTIME"] {
             
             if let hour = fcTime["hour"] as? String {
-                //print(hour)
-                
                 let hourInt:Int? = Int(hour)
                 if let intHour = hourInt {
                     if intHour > 12 {
@@ -64,9 +61,9 @@ class WAHourlyCollectionData: NSObject, UICollectionViewDelegate, UICollectionVi
         
         if let tempDict = hourItem["temp"] as? [String:AnyObject],
             let temp = tempDict["english"] as? String {
-            //print(temp)
             topText = temp
         }
+        
         let iconURL = hourItem["icon_url"] as! String
         let image = delegate?.hourlyCollection(self, imageForIcon: iconURL)
         
