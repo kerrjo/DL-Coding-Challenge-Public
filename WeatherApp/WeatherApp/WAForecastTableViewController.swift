@@ -78,14 +78,12 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     // Mark: WAHourlyCollectionDataDelegate
     
     func hourlyCollection(controller:WAHourlyCollectionData, imageForIcon iconName:String) -> UIImage? {
-        
         return self.weatherInfo.imageFor(iconName)
     }
     
     // Mark: WADataStoreDelegate
     
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
-
         updateTableForIconImage(iconName)
         updateCollectionForIconImage(iconName)
     }
