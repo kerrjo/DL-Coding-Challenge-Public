@@ -139,16 +139,31 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         if let revealIndex = revealRow {
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
+            
             if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
+                
                 dispatch_async(dispatch_get_main_queue()) {
                     cell.collectionView?.reloadData()
                     cell.activity.stopAnimating()
+                }
+                
+//                let delaySeconds = Double(0.25)
+//                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delaySeconds * Double(NSEC_PER_SEC)))
+//                dispatch_after(delayTime, dispatch_get_main_queue()) {
+//                    self.tableView.beginUpdates()
+//                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+//                    self.tableView.endUpdates()
+//                }
+
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.tableView.beginUpdates()
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                    self.tableView.endUpdates()
                 }
             }
         }
         
         refreshHourlyInProgress = false
-        
     }
 
     //        if refreshInProgress && !refreshForecastInProgress {
@@ -183,7 +198,21 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             if let hourlyTenItems = hourlyTenPeriods {
                 hourlyCollectionData.hourlyPeriods = hourlyTenItems[dayIndex]
             }
+            
+//            for hourlyItem in hourlyCollectionData.hourlyPeriods {
+//                weatherInfo.printHourItem(hourlyItem)
+//            }
         }
+    }
+
+
+    func isNightForRow(index:Int) -> Bool {
+        var result = false
+        let forecastPeriod = forecastPeriods[index]
+        if let icon = forecastPeriod["icon"] as? String {
+            result = icon.hasPrefix("nt_")
+        }
+        return result
     }
 
 
@@ -223,7 +252,10 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         let deleteIndexPath = NSIndexPath(forRow: fromIndex, inSection: 0)
         let insertIndexPath = NSIndexPath(forRow: toIndex, inSection: 0)
         self.tableView.beginUpdates()
+        revealRow = nil
         self.tableView.deleteRowsAtIndexPaths([deleteIndexPath], withRowAnimation: .Automatic)
+        revealRow = toIndex - 1
+        selectPeriod()
         self.tableView.insertRowsAtIndexPaths([insertIndexPath], withRowAnimation: .Automatic)
         self.tableView.endUpdates()
     }
@@ -232,19 +264,35 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     func updateTableForIconImage(iconName:String) {
         if let visible = self.tableView.indexPathsForVisibleRows {
             for indexPath in visible {
-                if indexPath.row < self.forecastPeriods.count {
-                    
-                    let forecastPeriod = forecastPeriods[indexPath.row]
-                    
-                    let iconURL = forecastPeriod["icon_url"] as! String
-                    if iconURL == iconName {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.tableView.beginUpdates()
-                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                            self.tableView.endUpdates()
-                        }
-                        
+                
+                var normalizedRow = indexPath.row
+                var standardCell = true
+                
+                if let revealIndex = revealRow {
+                    if normalizedRow > revealIndex + 1 {
+                        normalizedRow -= 1
+                    } else if normalizedRow == revealIndex + 1  {
+                        standardCell = false
                     }
+                }
+                
+                if standardCell {
+                    if normalizedRow < self.forecastPeriods.count {
+                        
+                        let forecastPeriod = forecastPeriods[normalizedRow]
+                        
+                        let iconURL = forecastPeriod["icon_url"] as! String
+                        if iconURL == iconName {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.tableView.beginUpdates()
+                                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                                self.tableView.endUpdates()
+                            }
+                            
+                        }
+                    }
+                } else {
+                    //print("non standard cell")
                 }
             }
         }  // let visible
@@ -293,6 +341,21 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 }
             }
 
+        } else {
+            
+            var isNight = false
+            if let revealIndex = revealRow {
+                isNight = isNightForRow(revealIndex)
+            }
+
+            if let revealCell = cell as? WAForecastRevealCell {
+                if let _ = hourlyTenPeriods {
+                    revealCell.collectionView.reloadData()
+                    positionCollection(revealCell, isNight:isNight)
+                } else {
+                    revealCell.activity.startAnimating()
+                }
+            }
         }
         
     }
@@ -318,13 +381,17 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             } else {
 
                 var normalizedRow = indexPath.row
-                if normalizedRow > revealIndex + 1 {
-                    normalizedRow -= 1
+                if normalizedRow < revealIndex  {
+                    normalizedRow += 1
                 }
-                dismissHourlyCell(false)
-                revealRow = normalizedRow
-                revealHourlyCell()
-
+                
+//                dismissHourlyCell(false)
+//                revealRow = normalizedRow
+//                revealHourlyCell()
+                
+                let fromIndex = revealIndex + 1
+                let toIndex = normalizedRow
+                dismissRevealHourlyCell(fromIndex, toIndex: toIndex)
             }
             
         } else {
@@ -333,12 +400,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         }
         
     }
-    
-    //                let fromIndex = revealIndex + 1
-    //                let toIndex = indexPath.row
-    //                revealRow = normalizedRow
-    //                dismissRevealHourlyCell(fromIndex, toIndex: toIndex)
-
     
     override func tableView(tableView: UITableView,
                               heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -383,26 +444,9 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         if reuseIdentifier == "WAForecastRevealCell" {
             if let revealCell = cell as? WAForecastRevealCell {
+                //print("revealCell \(reuseIdentifier)")
                 revealCell.collectionView.dataSource = hourlyCollectionData
                 revealCell.collectionView.delegate = hourlyCollectionData
-                
-                if let _ = hourlyTenPeriods {
-                    revealCell.collectionView.reloadData()
-                    if hourlyCollectionData.hourlyPeriods.count < 23 {
-                        // Less than a full day must be current day
-                        let startIndex = 0
-                        let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
-                        revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .Left, animated:false)
-                    } else {
-                        // Full day
-                        let startIndex = hourlyCollectionData.hourlyPeriods.count / 2
-                        let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
-                        revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .CenteredHorizontally, animated:false)
-                    }
-                    
-                } else {
-                    revealCell.activity.startAnimating()
-                }
             }
         }
 
@@ -411,6 +455,33 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     
     // MARK:- UICollectionView
+    
+    
+    func positionCollection(revealCell:WAForecastRevealCell, isNight:Bool) {
+        print(#function)
+        
+        if isNight {
+            if hourlyCollectionData.hourlyPeriods.count > 0 {
+                let endIndex = hourlyCollectionData.hourlyPeriods.count - 1
+                let endIndexPath = NSIndexPath(forItem: endIndex, inSection: 0)
+                revealCell.collectionView.scrollToItemAtIndexPath(endIndexPath, atScrollPosition: .Right, animated:false)
+            }
+        } else {
+            if hourlyCollectionData.hourlyPeriods.count < 23 {
+                // Less than a full day must be current day
+                let startIndex = 0
+                let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
+                revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .Left, animated:false)
+            } else {
+                // Full day
+                let startIndex = hourlyCollectionData.hourlyPeriods.count / 2
+                let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
+                revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .CenteredHorizontally, animated:false)
+            }
+        }
+    }
+
+    
     
     func updateCollectionForIconImage(iconName:String) {
         

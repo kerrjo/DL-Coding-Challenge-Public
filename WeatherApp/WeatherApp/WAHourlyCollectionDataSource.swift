@@ -50,20 +50,21 @@ class WAHourlyCollectionData: NSObject, UICollectionViewDelegate, UICollectionVi
                     bottomText = hour
                 }
             }
-            
+
+//            if let dow = fcTime["weekday_name_abbrev"] as? String {
+//                bottomText += " \(dow)"
+//            }
+
             if let ampm = fcTime["ampm"] as? String {
                 bottomText += " \(ampm)"
             }
-            //                if let dow = fcTime["weekday_name_abbrev"] as? String {
-            //                    bottomText += "\n\(dow)"
-            //                }
         }
         
         if let tempDict = hourItem["temp"] as? [String:AnyObject],
             let temp = tempDict["english"] as? String {
             topText = temp
         }
-        
+
         let iconURL = hourItem["icon_url"] as! String
         let image = delegate?.hourlyCollection(self, imageForIcon: iconURL)
         
