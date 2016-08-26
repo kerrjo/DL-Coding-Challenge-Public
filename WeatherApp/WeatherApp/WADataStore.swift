@@ -40,9 +40,14 @@ class WADataStore: WAWeatherInfoDelegate {
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
     private var imageCache: NSCache = NSCache()
     private var pendingImage = [String:String]()
+
+    private var imagePendingLockQueue: dispatch_queue_t
     
     init(){
+        imagePendingLockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
         weatherInfo.delegate = self
+        
+
     }
     
     // MARK: Public API
@@ -323,21 +328,32 @@ class WADataStore: WAWeatherInfoDelegate {
         // icon = clear
         // iconURL = clear.gif or nt_clear.gif
         
-        if let _ = pendingImage[imageURLString] {
-            return
-        }
+        var pending = false
         
-        pendingImage[imageURLString] = iconName
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let imageURL = NSURL(string: imageURLString),
-                imageData = NSData(contentsOfURL:imageURL),
-                iconImage = UIImage(data: imageData) {
-                
-                self.pendingImage.removeValueForKey(imageURLString)
-                self.imageCache.setObject(iconImage, forKey: imageURLString)
-                
-                self.delegate?.dataStore(self, updateForIconImage:imageURLString)
+        dispatch_sync(imagePendingLockQueue) {
+            if let _ = self.pendingImage[imageURLString] {
+                pending = true
             }
+        }
+
+        if !pending {
+            pendingImage[imageURLString] = iconName
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                if let imageURL = NSURL(string: imageURLString),
+                    imageData = NSData(contentsOfURL:imageURL),
+                    iconImage = UIImage(data: imageData) {
+                    
+                    //let lockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
+                    dispatch_sync(self.imagePendingLockQueue) {
+                        self.pendingImage.removeValueForKey(imageURLString)
+                    }
+                    
+                    self.imageCache.setObject(iconImage, forKey: imageURLString)
+                    
+                    self.delegate?.dataStore(self, updateForIconImage:imageURLString)
+                }
+            }
+            
         }
     }
 
