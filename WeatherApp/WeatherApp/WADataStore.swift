@@ -42,6 +42,8 @@ class WADataStore: WAWeatherInfoDelegate {
     private var pendingImage = [String:String]()
 
     private var imagePendingLockQueue: dispatch_queue_t
+
+    private var iconSet: String? // use a,b,..g,i,k
     
     init(){
         imagePendingLockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
@@ -339,18 +341,39 @@ class WADataStore: WAWeatherInfoDelegate {
         if !pending {
             pendingImage[imageURLString] = iconName
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                if let imageURL = NSURL(string: imageURLString),
-                    imageData = NSData(contentsOfURL:imageURL),
-                    iconImage = UIImage(data: imageData) {
-                    
-                    //let lockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
-                    dispatch_sync(self.imagePendingLockQueue) {
-                        self.pendingImage.removeValueForKey(imageURLString)
+
+                // http://icons.wxug.com/i/c/a/partlycloudy.gif
+                // http://icons.wxug.com/i/b/a/partlycloudy.gif
+                
+                if let customIconSet = self.iconSet {
+                    if let imageURL = NSURL(string: imageURLString) {
+                        var modifiedIconURL = imageURL.URLByDeletingLastPathComponent?.URLByDeletingLastPathComponent
+                        print(modifiedIconURL)
+                        modifiedIconURL = modifiedIconURL?.URLByAppendingPathComponent(customIconSet).URLByAppendingPathComponent(imageURL.lastPathComponent!)
+                        
+                        if let imageIconURL = modifiedIconURL,
+                            let imageData = NSData(contentsOfURL:imageIconURL),
+                            iconImage = UIImage(data: imageData) {
+                            dispatch_sync(self.imagePendingLockQueue) {
+                                self.pendingImage.removeValueForKey(imageURLString)
+                            }
+                            
+                            self.imageCache.setObject(iconImage, forKey: imageURLString)
+                            self.delegate?.dataStore(self, updateForIconImage:imageURLString)
+                        }
                     }
+                } else {
                     
-                    self.imageCache.setObject(iconImage, forKey: imageURLString)
-                    
-                    self.delegate?.dataStore(self, updateForIconImage:imageURLString)
+                    if let imageURL = NSURL(string: imageURLString),
+                        imageData = NSData(contentsOfURL:imageURL),
+                        iconImage = UIImage(data: imageData) {
+                        //let lockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
+                        dispatch_sync(self.imagePendingLockQueue) {
+                            self.pendingImage.removeValueForKey(imageURLString)
+                        }
+                        self.imageCache.setObject(iconImage, forKey: imageURLString)
+                        self.delegate?.dataStore(self, updateForIconImage:imageURLString)
+                    }
                 }
             }
             
