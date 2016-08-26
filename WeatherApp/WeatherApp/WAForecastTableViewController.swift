@@ -146,14 +146,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                     cell.collectionView?.reloadData()
                     cell.activity.stopAnimating()
                 }
-                
-//                let delaySeconds = Double(0.25)
-//                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delaySeconds * Double(NSEC_PER_SEC)))
-//                dispatch_after(delayTime, dispatch_get_main_queue()) {
-//                    self.tableView.beginUpdates()
-//                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
-//                    self.tableView.endUpdates()
-//                }
 
                 dispatch_async(dispatch_get_main_queue()) {
                     self.tableView.beginUpdates()
@@ -165,6 +157,14 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         refreshHourlyInProgress = false
     }
+
+    //                let delaySeconds = Double(0.25)
+    //                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delaySeconds * Double(NSEC_PER_SEC)))
+    //                dispatch_after(delayTime, dispatch_get_main_queue()) {
+    //                    self.tableView.beginUpdates()
+    //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+    //                    self.tableView.endUpdates()
+    //                }
 
     //        if refreshInProgress && !refreshForecastInProgress {
     //            refreshInProgress = false
@@ -480,8 +480,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             }
         }
     }
-
-    
     
     func updateCollectionForIconImage(iconName:String) {
         
@@ -502,6 +500,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                         }
                     }
                 }  // let visible
+                
             }
         }
     }
