@@ -147,7 +147,7 @@ class WACacheFiles {
         
         if let creationDate = createDate {
             let timeSince = creationDate.timeIntervalSinceNow
-            if (-timeSince > 45) {
+            if (-timeSince > 60) {
                 do {
                     print("CacheFile Timedout")
                     try NSFileManager.defaultManager().removeItemAtURL(fileURL)

@@ -18,6 +18,7 @@ class WAForecastRevealCell: UITableViewCell {
 class WAForecastTableViewController: UITableViewController, WADataStoreDelegate, WAHourlyCollectionDataDelegate {
 
     var weatherInfo = WADataStore()
+    
     var forecastPeriods:[[String : AnyObject]] = []
     var hourlyTenPeriods:[[[String : AnyObject]]]?
 
@@ -51,7 +52,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     func refreshTable(control:AnyObject?) {
         if !refreshInProgress {
             
-            
             if control == nil {
                 // Programmatically started
                 self.refreshControl?.beginRefreshing()
@@ -72,7 +72,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             }
         }
     }
-
     
     func refreshAll() {
         refreshInProgress = true
@@ -141,12 +140,10 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         if let revealIndex = revealRow {
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
             if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
-                
                 dispatch_async(dispatch_get_main_queue()) {
                     cell.collectionView?.reloadData()
                     cell.activity.stopAnimating()
                 }
-                
             }
         }
         
