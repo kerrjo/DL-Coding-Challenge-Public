@@ -113,13 +113,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
-        
-        if let revealIndex = self.revealRow {
-            let indexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
-            self.tableView.selectRowAtIndexPath(indexPath,
-                                                animated: false,
-                                                scrollPosition: .None)
-        }
 
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
@@ -131,7 +124,13 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     //            self.refreshControl?.endRefreshing()
     //        }
 
-    
+    //        if let revealIndex = self.revealRow {
+    //            let indexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
+    //            self.tableView.selectRowAtIndexPath(indexPath,
+    //                                                animated: false,
+    //                                                scrollPosition: .None)
+    //        }
+
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         // EMPTY Impl
     }
@@ -188,16 +187,12 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             var dayIndex = 0
             dayIndex = revealIndex / 2
             if let hourlyTenItems = hourlyTenPeriods {
+                print("\(dayIndex) \(hourlyTenItems.count) ")
+
                 hourlyCollectionData.hourlyPeriods = hourlyTenItems[dayIndex]
             }
         }
     }
-
-    //            hourlyPeriods = hourlyTenPeriods[dayIndex]
-    //            if let hourlyItems = hourlyPeriods {
-    //                hourlyCollectionData.hourlyPeriods = hourlyItems
-    //            }
-    
 
     //            if let hourlyItems = hourlyPeriods {
     //                for hourItem in hourlyItems {

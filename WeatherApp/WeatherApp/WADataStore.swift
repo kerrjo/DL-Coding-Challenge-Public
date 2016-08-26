@@ -115,6 +115,7 @@ class WADataStore: WAWeatherInfoDelegate {
             }
         }
 
+        tenDayPeriods += [dayPeriods]
     
         delegate?.dataStore(self, didReceiveHourlyTen:tenDayPeriods)
         
