@@ -29,6 +29,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     var refreshHourlyInProgress = false
 
     var revealRow: Int?
+
+    var firstLoad = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,9 +46,12 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        dispatch_async(dispatch_get_main_queue()) {
-            self.refreshTable(nil)
+        if firstLoad {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.refreshTable(nil)
+            }
         }
+        firstLoad = false
     }
     
     func refreshTable(control:AnyObject?) {

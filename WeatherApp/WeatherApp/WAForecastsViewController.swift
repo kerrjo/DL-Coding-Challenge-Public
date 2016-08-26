@@ -35,4 +35,12 @@ class WAForecastsViewController: UIViewController {
         }
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "WAEmbedForecastSome" {
+            //print(segue.identifier )
+        } else if segue.identifier == "WAEmbedForecastTen" {
+            //print(segue.identifier )
+        }
+    }
+    
 }
