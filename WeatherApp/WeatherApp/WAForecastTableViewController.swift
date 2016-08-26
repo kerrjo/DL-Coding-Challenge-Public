@@ -458,7 +458,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     
     func positionCollection(revealCell:WAForecastRevealCell, isNight:Bool) {
-        print(#function)
+        //print(#function)
         
         if isNight {
             if hourlyCollectionData.hourlyPeriods.count > 0 {
