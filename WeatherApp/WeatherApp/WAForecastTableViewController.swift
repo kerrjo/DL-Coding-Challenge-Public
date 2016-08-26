@@ -186,13 +186,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         }
     }
 
-    //            if let hourlyItems = hourlyPeriods {
-    //                for hourItem in hourlyItems {
-    //                    weatherInfo.printHourItem(hourItem)
-    //                }
-    //            }
-
-
 
     // MARK:- UITableview
 
@@ -251,12 +244,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                             self.tableView.endUpdates()
                         }
                         
-//                        if let revealIndex = revealRow {
-//                            if indexPath.row == revealIndex {
-//                                let selectIndexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
-//                                self.tableView.selectRowAtIndexPath(selectIndexPath, animated: false, scrollPosition: .None)
-//                            }
-//                        }
                     }
                 }
             }
@@ -424,9 +411,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     
     // MARK:- UICollectionView
-    //
-    // COLLECTION VIEW
-    //
     
     func updateCollectionForIconImage(iconName:String) {
         
@@ -449,7 +433,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 }  // let visible
             }
         }
-        
     }
     
 
