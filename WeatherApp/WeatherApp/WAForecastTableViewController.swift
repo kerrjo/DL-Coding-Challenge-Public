@@ -15,14 +15,14 @@ class WAForecastRevealCell: UITableViewCell {
 }
 
 
-class WAForecastTableViewController: UITableViewController, WADataStoreDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class WAForecastTableViewController: UITableViewController, WADataStoreDelegate, WAHourlyCollectionDataDelegate {
 
     var weatherInfo = WADataStore()
-
     var forecastPeriods:[[String : AnyObject]] = []
-    var hourlyPeriods:[[String : AnyObject]]?
-    var hourlyTenPeriods:[[[String : AnyObject]]] = []
+    var hourlyTenPeriods:[[[String : AnyObject]]]?
 
+    var hourlyCollectionData = WAHourlyCollectionData()
+    
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
     private var imageCache: NSCache = NSCache()
     
@@ -35,9 +35,11 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-         weatherInfo.delegate = self
+        weatherInfo.delegate = self
+        hourlyCollectionData.delegate = self
         
         self.clearsSelectionOnViewWillAppear = false
+        
         self.refreshControl = UIRefreshControl()
         self.refreshControl!.addTarget(self, action:#selector(refreshTable(_:)), forControlEvents:[.ValueChanged])
     }
@@ -51,16 +53,25 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     func refreshTable(control:AnyObject?) {
         if !refreshInProgress {
+            
+            
             if control == nil {
                 // Programmatically started
                 self.refreshControl?.beginRefreshing()
                 refreshInProgress = true
-                weatherInfo.getForecast()
+                refreshData()
+                //weatherInfo.getForecast()
 
             } else {
+                dismissHourlyCell(false)
+                
+                hourlyTenPeriods = nil
+                hourlyCollectionData.hourlyPeriods = []
+
 //                refreshAll()
                 refreshInProgress = true
-                weatherInfo.getForecast()
+                refreshData()
+//                weatherInfo.getForecast()
             }
         }
     }
@@ -70,17 +81,28 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         refreshInProgress = true
         refreshForecastInProgress = true
         refreshHourlyInProgress = true
+        refreshData()
+        //weatherInfo.getForecast()
         weatherInfo.getHourlyTen()
+    }
+
+    func refreshData() {
         weatherInfo.getForecast()
     }
 
   
+    // Mark: WAHourlyCollectionDataDelegate
+    
+    func hourlyCollection(controller:WAHourlyCollectionData, imageForIcon iconName:String) -> UIImage? {
+        
+        return self.weatherInfo.imageFor(iconName)
+    }
+    
     // Mark: WADataStoreDelegate
     
     func dataStore(controller: WADataStore, updateForIconImage iconName:String) {
 
         updateTableForIconImage(iconName)
-        
         updateCollectionForIconImage(iconName)
     }
     
@@ -90,25 +112,25 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
-            if let revealIndex = self.revealRow {
-                let indexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
-                self.tableView.selectRowAtIndexPath(indexPath,
-                                                    animated: false,
-                                                    scrollPosition: .None)
-            }
+        }
+        
+        if let revealIndex = self.revealRow {
+            let indexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
+            self.tableView.selectRowAtIndexPath(indexPath,
+                                                animated: false,
+                                                scrollPosition: .None)
         }
 
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
-
-        
-//        refreshForecastInProgress = false
-//        if refreshInProgress && !refreshHourlyInProgress {
-//            refreshInProgress = false
-//            self.refreshControl?.endRefreshing()
-//        }
-        
     }
+    
+    //        refreshForecastInProgress = false
+    //        if refreshInProgress && !refreshHourlyInProgress {
+    //            refreshInProgress = false
+    //            self.refreshControl?.endRefreshing()
+    //        }
+
     
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         // EMPTY Impl
@@ -123,21 +145,23 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         if let revealIndex = revealRow {
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
             if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
+                
                 dispatch_async(dispatch_get_main_queue()) {
                     cell.collectionView?.reloadData()
                     cell.activity.stopAnimating()
                 }
+                
             }
         }
         
         refreshHourlyInProgress = false
         
-//        if refreshInProgress && !refreshForecastInProgress {
-//            refreshInProgress = false
-//            self.refreshControl?.endRefreshing()
-//        }
-        
     }
+
+    //        if refreshInProgress && !refreshForecastInProgress {
+    //            refreshInProgress = false
+    //            self.refreshControl?.endRefreshing()
+    //        }
 
 
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
@@ -163,11 +187,17 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         if let revealIndex = revealRow {
             var dayIndex = 0
             dayIndex = revealIndex / 2
-            hourlyPeriods = hourlyTenPeriods[dayIndex]
-            
-            //print("dayIndex \(dayIndex) \(hourlyPeriods!.count)")
+            if let hourlyTenItems = hourlyTenPeriods {
+                hourlyCollectionData.hourlyPeriods = hourlyTenItems[dayIndex]
+            }
         }
     }
+
+    //            hourlyPeriods = hourlyTenPeriods[dayIndex]
+    //            if let hourlyItems = hourlyPeriods {
+    //                hourlyCollectionData.hourlyPeriods = hourlyItems
+    //            }
+    
 
     //            if let hourlyItems = hourlyPeriods {
     //                for hourItem in hourlyItems {
@@ -182,32 +212,33 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     func revealHourlyCell() {
 
         if let revealIndex = revealRow {
-            
-            if let _ = hourlyPeriods {
+            if let _ = hourlyTenPeriods {
                 selectPeriod()
             } else {
                 weatherInfo.getHourlyTen()
             }
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
             self.tableView.beginUpdates()
-            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Bottom)
             self.tableView.endUpdates()
+            
             self.tableView.rectForRowAtIndexPath(indexPath)
             self.tableView.scrollRectToVisible(self.tableView.rectForRowAtIndexPath(indexPath), animated: true)
         }
     }
     
-    func dismissHourlyCell() {
+    func dismissHourlyCell(animated:Bool) {
         
         if let revealIndex = revealRow {
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
             revealRow = nil
             self.tableView.beginUpdates()
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: animated ? .Top : .None)
             self.tableView.endUpdates()
         }
     }
     
+    // Work In Progress : perform delete and insert simultaneously
     func dismissRevealHourlyCell(fromIndex:Int, toIndex:Int) {
         let deleteIndexPath = NSIndexPath(forRow: fromIndex, inSection: 0)
         let insertIndexPath = NSIndexPath(forRow: toIndex, inSection: 0)
@@ -217,12 +248,14 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         self.tableView.endUpdates()
     }
     
+    
     func updateTableForIconImage(iconName:String) {
         if let visible = self.tableView.indexPathsForVisibleRows {
             for indexPath in visible {
                 if indexPath.row < self.forecastPeriods.count {
                     
                     let forecastPeriod = forecastPeriods[indexPath.row]
+                    
                     let iconURL = forecastPeriod["icon_url"] as! String
                     if iconURL == iconName {
                         dispatch_async(dispatch_get_main_queue()) {
@@ -230,6 +263,13 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                             self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
                             self.tableView.endUpdates()
                         }
+                        
+//                        if let revealIndex = revealRow {
+//                            if indexPath.row == revealIndex {
+//                                let selectIndexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
+//                                self.tableView.selectRowAtIndexPath(selectIndexPath, animated: false, scrollPosition: .None)
+//                            }
+//                        }
                     }
                 }
             }
@@ -244,7 +284,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                             willDisplayCell cell: UITableViewCell,
                                             forRowAtIndexPath indexPath: NSIndexPath)
     {
-        
         var normalizedRow = indexPath.row
 
         var standardCell = true
@@ -272,6 +311,14 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             let iconURL = forecastPeriod["icon_url"] as! String
             
             cell.imageView!.image = self.weatherInfo.imageFor(iconURL)
+            
+            if let revealIndex = revealRow {
+                if indexPath.row == revealIndex {
+                    let selectIndexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
+                    self.tableView.selectRowAtIndexPath(selectIndexPath, animated: false, scrollPosition: .None)
+                }
+            }
+
         }
         
     }
@@ -292,7 +339,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             
             if indexPath.row == revealIndex {
                 tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                dismissHourlyCell()
+                dismissHourlyCell(true)
                 
             } else {
 
@@ -300,14 +347,10 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 if normalizedRow > revealIndex + 1 {
                     normalizedRow -= 1
                 }
-                dismissHourlyCell()
+                dismissHourlyCell(false)
                 revealRow = normalizedRow
                 revealHourlyCell()
 
-//                let fromIndex = revealIndex + 1
-//                let toIndex = indexPath.row
-//                revealRow = normalizedRow
-//                dismissRevealHourlyCell(fromIndex, toIndex: toIndex)
             }
             
         } else {
@@ -316,6 +359,12 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         }
         
     }
+    
+    //                let fromIndex = revealIndex + 1
+    //                let toIndex = indexPath.row
+    //                revealRow = normalizedRow
+    //                dismissRevealHourlyCell(fromIndex, toIndex: toIndex)
+
     
     override func tableView(tableView: UITableView,
                               heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -360,20 +409,19 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         if reuseIdentifier == "WAForecastRevealCell" {
             if let revealCell = cell as? WAForecastRevealCell {
-                revealCell.collectionView.dataSource = self
-                revealCell.collectionView.delegate = self
+                revealCell.collectionView.dataSource = hourlyCollectionData
+                revealCell.collectionView.delegate = hourlyCollectionData
                 
-                if let hourlyItems = hourlyPeriods {
+                if let _ = hourlyTenPeriods {
                     revealCell.collectionView.reloadData()
-                    
-                    if hourlyItems.count < 23 {
+                    if hourlyCollectionData.hourlyPeriods.count < 23 {
                         // Less than a full day must be current day
                         let startIndex = 0
                         let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
                         revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .Left, animated:false)
                     } else {
                         // Full day
-                        let startIndex = hourlyItems.count / 2
+                        let startIndex = hourlyCollectionData.hourlyPeriods.count / 2
                         let startIndexPath = NSIndexPath(forItem: startIndex, inSection: 0)
                         revealCell.collectionView.scrollToItemAtIndexPath(startIndexPath, atScrollPosition: .CenteredHorizontally, animated:false)
                     }
@@ -401,16 +449,12 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 
                 if let visible = cell.collectionView?.indexPathsForVisibleItems() {
                     for indexPath in visible {
-                        if let hourlyItems = hourlyPeriods {
-                            if indexPath.row < hourlyItems.count {
-                                
-                                let hourItem = hourlyItems[indexPath.row]
-                                //let icon = hourItem["icon"] as! String
-                                let iconURL = hourItem["icon_url"] as! String
-                                if iconURL == iconName {
-                                    dispatch_async(dispatch_get_main_queue()) {
-                                        cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
-                                    }
+                        if indexPath.row < hourlyCollectionData.hourlyPeriods.count {
+                            let hourItem = hourlyCollectionData.hourlyPeriods[indexPath.row]
+                            let iconURL = hourItem["icon_url"] as! String
+                            if iconURL == iconName {
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
                                 }
                             }
                         }
@@ -421,84 +465,88 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
     }
     
-    // MARK: UICollectionViewDelegate
-    
-    func collectionView(collectionView: UICollectionView,
-                                 willDisplayCell cell: UICollectionViewCell,
-                                                 forItemAtIndexPath indexPath: NSIndexPath)
-        
-    {
-        let hourCell = cell as! WAHourlyCollectionViewCell
-        
-        var topText = ""
-        var bottomText = ""
-        
-        if let hourlyItems = hourlyPeriods {
-            
-            let hourItem = hourlyItems[indexPath.row]
-            
-            //print(period)
-            if let fcTime = hourItem["FCTTIME"] {
-                
-                if let hour = fcTime["hour"] as? String {
-                    //print(hour)
-                    
-                    let hourInt:Int? = Int(hour)
-                    if let intHour = hourInt {
-                        if intHour > 12 {
-                            bottomText = "\(intHour - 12)"
-                        } else {
-                            bottomText = "\(intHour)"
-                        }
-                    } else {
-                        bottomText = hour
-                    }
-                }
-                
-                if let ampm = fcTime["ampm"] as? String {
-                    bottomText += " \(ampm)"
-                }
-//                if let dow = fcTime["weekday_name_abbrev"] as? String {
-//                    bottomText += "\n\(dow)"
-//                }
-            }
-            
-            if let tempDict = hourItem["temp"] as? [String:AnyObject],
-                let temp = tempDict["english"] as? String {
-                //print(temp)
-                topText = temp
-            }
-            let iconURL = hourItem["icon_url"] as! String
-            hourCell.imageView.image = weatherInfo.imageFor(iconURL)
-        }
-        
-        hourCell.topLabel.text = topText
-        hourCell.bottomLabel.text = bottomText
-
-    }
-
-    // MARK: UICollectionViewDataSource
-    
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var result = 0
-        if let hourlyItems = hourlyPeriods {
-            result = hourlyItems.count
-        }
-        return result
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let reuseIdentifier = "WAHourlyCollectionViewCell"
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! WAHourlyCollectionViewCell
-        
-        return cell
-    }
-
 
 }
+
+
+
+
+//    // MARK: UICollectionViewDelegate
+//
+//    func collectionView(collectionView: UICollectionView,
+//                                 willDisplayCell cell: UICollectionViewCell,
+//                                                 forItemAtIndexPath indexPath: NSIndexPath)
+//
+//    {
+//        let hourCell = cell as! WAHourlyCollectionViewCell
+//
+//        var topText = ""
+//        var bottomText = ""
+//
+//        if let hourlyItems = hourlyPeriods {
+//
+//            let hourItem = hourlyItems[indexPath.row]
+//
+//            //print(period)
+//            if let fcTime = hourItem["FCTTIME"] {
+//
+//                if let hour = fcTime["hour"] as? String {
+//                    //print(hour)
+//
+//                    let hourInt:Int? = Int(hour)
+//                    if let intHour = hourInt {
+//                        if intHour > 12 {
+//                            bottomText = "\(intHour - 12)"
+//                        } else {
+//                            bottomText = "\(intHour)"
+//                        }
+//                    } else {
+//                        bottomText = hour
+//                    }
+//                }
+//
+//                if let ampm = fcTime["ampm"] as? String {
+//                    bottomText += " \(ampm)"
+//                }
+////                if let dow = fcTime["weekday_name_abbrev"] as? String {
+////                    bottomText += "\n\(dow)"
+////                }
+//            }
+//
+//            if let tempDict = hourItem["temp"] as? [String:AnyObject],
+//                let temp = tempDict["english"] as? String {
+//                //print(temp)
+//                topText = temp
+//            }
+//            let iconURL = hourItem["icon_url"] as! String
+//            hourCell.imageView.image = weatherInfo.imageFor(iconURL)
+//        }
+//
+//        hourCell.topLabel.text = topText
+//        hourCell.bottomLabel.text = bottomText
+//
+//    }
+//
+//    // MARK: UICollectionViewDataSource
+//
+//    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+//        return 1
+//    }
+//
+//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        var result = 0
+//        if let hourlyItems = hourlyPeriods {
+//            result = hourlyItems.count
+//        }
+//        return result
+//    }
+//
+//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+//        let reuseIdentifier = "WAHourlyCollectionViewCell"
+//        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! WAHourlyCollectionViewCell
+//
+//        return cell
+//    }
+
 
 
