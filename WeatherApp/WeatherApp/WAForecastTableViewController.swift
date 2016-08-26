@@ -187,8 +187,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             var dayIndex = 0
             dayIndex = revealIndex / 2
             if let hourlyTenItems = hourlyTenPeriods {
-                print("\(dayIndex) \(hourlyTenItems.count) ")
-
                 hourlyCollectionData.hourlyPeriods = hourlyTenItems[dayIndex]
             }
         }
@@ -462,86 +460,5 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
 
 }
-
-
-
-
-//    // MARK: UICollectionViewDelegate
-//
-//    func collectionView(collectionView: UICollectionView,
-//                                 willDisplayCell cell: UICollectionViewCell,
-//                                                 forItemAtIndexPath indexPath: NSIndexPath)
-//
-//    {
-//        let hourCell = cell as! WAHourlyCollectionViewCell
-//
-//        var topText = ""
-//        var bottomText = ""
-//
-//        if let hourlyItems = hourlyPeriods {
-//
-//            let hourItem = hourlyItems[indexPath.row]
-//
-//            //print(period)
-//            if let fcTime = hourItem["FCTTIME"] {
-//
-//                if let hour = fcTime["hour"] as? String {
-//                    //print(hour)
-//
-//                    let hourInt:Int? = Int(hour)
-//                    if let intHour = hourInt {
-//                        if intHour > 12 {
-//                            bottomText = "\(intHour - 12)"
-//                        } else {
-//                            bottomText = "\(intHour)"
-//                        }
-//                    } else {
-//                        bottomText = hour
-//                    }
-//                }
-//
-//                if let ampm = fcTime["ampm"] as? String {
-//                    bottomText += " \(ampm)"
-//                }
-////                if let dow = fcTime["weekday_name_abbrev"] as? String {
-////                    bottomText += "\n\(dow)"
-////                }
-//            }
-//
-//            if let tempDict = hourItem["temp"] as? [String:AnyObject],
-//                let temp = tempDict["english"] as? String {
-//                //print(temp)
-//                topText = temp
-//            }
-//            let iconURL = hourItem["icon_url"] as! String
-//            hourCell.imageView.image = weatherInfo.imageFor(iconURL)
-//        }
-//
-//        hourCell.topLabel.text = topText
-//        hourCell.bottomLabel.text = bottomText
-//
-//    }
-//
-//    // MARK: UICollectionViewDataSource
-//
-//    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-//        return 1
-//    }
-//
-//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        var result = 0
-//        if let hourlyItems = hourlyPeriods {
-//            result = hourlyItems.count
-//        }
-//        return result
-//    }
-//
-//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-//        let reuseIdentifier = "WAHourlyCollectionViewCell"
-//        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! WAHourlyCollectionViewCell
-//
-//        return cell
-//    }
-
 
 
