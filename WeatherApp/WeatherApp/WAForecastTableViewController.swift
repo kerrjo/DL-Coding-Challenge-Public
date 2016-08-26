@@ -302,10 +302,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
     // MARK: Table view delegate
     
-    override func tableView(tableView: UITableView,
-                            willDisplayCell cell: UITableViewCell,
-                                            forRowAtIndexPath indexPath: NSIndexPath)
-    {
+    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         var normalizedRow = indexPath.row
 
         var standardCell = true
@@ -366,11 +363,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         result.contentView.backgroundColor = UIColor.clearColor()
         return result
     }
-
     
-    override func tableView(tableView: UITableView,
-                              didSelectRowAtIndexPath indexPath: NSIndexPath)
-    {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if let revealIndex = revealRow {
             
@@ -385,10 +379,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                     normalizedRow += 1
                 }
                 
-//                dismissHourlyCell(false)
-//                revealRow = normalizedRow
-//                revealHourlyCell()
-                
                 let fromIndex = revealIndex + 1
                 let toIndex = normalizedRow
                 dismissRevealHourlyCell(fromIndex, toIndex: toIndex)
@@ -400,6 +390,11 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         }
         
     }
+    
+    //                dismissHourlyCell(false)
+    //                revealRow = normalizedRow
+    //                revealHourlyCell()
+
     
     override func tableView(tableView: UITableView,
                               heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -444,7 +439,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         if reuseIdentifier == "WAForecastRevealCell" {
             if let revealCell = cell as? WAForecastRevealCell {
-                //print("revealCell \(reuseIdentifier)")
                 revealCell.collectionView.dataSource = hourlyCollectionData
                 revealCell.collectionView.delegate = hourlyCollectionData
             }
@@ -458,7 +452,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     
     func positionCollection(revealCell:WAForecastRevealCell, isNight:Bool) {
-        //print(#function)
         
         if isNight {
             if hourlyCollectionData.hourlyPeriods.count > 0 {
