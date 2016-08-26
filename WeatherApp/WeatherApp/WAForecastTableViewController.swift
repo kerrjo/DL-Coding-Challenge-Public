@@ -57,30 +57,18 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 self.refreshControl?.beginRefreshing()
                 refreshInProgress = true
                 refreshData()
-                //weatherInfo.getForecast()
-
             } else {
                 dismissHourlyCell(false)
                 
                 hourlyTenPeriods = nil
                 hourlyCollectionData.hourlyPeriods = []
 
-//                refreshAll()
                 refreshInProgress = true
                 refreshData()
-//                weatherInfo.getForecast()
             }
         }
     }
     
-    func refreshAll() {
-        refreshInProgress = true
-        refreshForecastInProgress = true
-        refreshHourlyInProgress = true
-        refreshData()
-        //weatherInfo.getForecast()
-        weatherInfo.getHourlyTen()
-    }
 
     func refreshData() {
         weatherInfo.getForecast()
@@ -113,20 +101,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
     }
-    
-    //        refreshForecastInProgress = false
-    //        if refreshInProgress && !refreshHourlyInProgress {
-    //            refreshInProgress = false
-    //            self.refreshControl?.endRefreshing()
-    //        }
-
-    //        if let revealIndex = self.revealRow {
-    //            let indexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
-    //            self.tableView.selectRowAtIndexPath(indexPath,
-    //                                                animated: false,
-    //                                                scrollPosition: .None)
-    //        }
-
+ 
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         // EMPTY Impl
     }
@@ -157,20 +132,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         refreshHourlyInProgress = false
     }
-
-    //                let delaySeconds = Double(0.25)
-    //                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delaySeconds * Double(NSEC_PER_SEC)))
-    //                dispatch_after(delayTime, dispatch_get_main_queue()) {
-    //                    self.tableView.beginUpdates()
-    //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
-    //                    self.tableView.endUpdates()
-    //                }
-
-    //        if refreshInProgress && !refreshForecastInProgress {
-    //            refreshInProgress = false
-    //            self.refreshControl?.endRefreshing()
-    //        }
-
 
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
                    conditionsDict:[String : AnyObject],
