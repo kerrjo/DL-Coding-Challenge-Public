@@ -23,9 +23,6 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
     var hourlyCollectionData = WAHourlyCollectionData()
     
-    private var imagePlaceholder = UIImage(named: "imageplaceholder")!
-    private var imageCache: NSCache = NSCache()
-    
     var refreshInProgress = false
     var refreshForecastInProgress = false
     var refreshHourlyInProgress = false
