@@ -45,7 +45,7 @@ class WADataStore: WAWeatherInfoDelegate {
     init() {
         imagePendingLockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
         weatherInfo.delegate = self
-        //iconSet = "g"
+        iconSet = "i"
     }
     
     // MARK: Public API
