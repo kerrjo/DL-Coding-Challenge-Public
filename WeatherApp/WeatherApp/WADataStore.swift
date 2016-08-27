@@ -44,7 +44,7 @@ class WADataStore: WAWeatherInfoDelegate {
 
     private var iconSet: String? // use a,b,..g,i,k
     
-    init(){
+    init() {
         imagePendingLockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
         weatherInfo.delegate = self
         //iconSet = "g"
@@ -112,6 +112,7 @@ class WADataStore: WAWeatherInfoDelegate {
                     dayPeriods = []
                     currentYday = yday
                 }
+                
             } else {
                 tenDayPeriods += [dayPeriods]
                 dayPeriods = []
@@ -182,8 +183,8 @@ class WADataStore: WAWeatherInfoDelegate {
             let iconURLString = period["icon_url"] as! String
             self.imageFor(icon, imageURLString: iconURLString)
         }
-
     }
+
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
         
