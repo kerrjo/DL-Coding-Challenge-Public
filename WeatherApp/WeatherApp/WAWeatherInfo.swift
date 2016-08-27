@@ -141,10 +141,10 @@ class WAWeatherInfo {
             do {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
-                if let satteliteDict = responseData["satellite"] as? [String : AnyObject] {
+                if let satteliteDict = responseData["satellite"] as? [String : AnyObject],
+                    let imageURLBaseString = satteliteDict["image_url_vis"] as? String {
                     
-                    let imageURLBaseString = satteliteDict["image_url_vis"]
-                    let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
+                    let imageURLString = imageURLBaseString + self.apiKey
                     self.getSatteliteImageAtURL(imageURLString)
                 }
                 
