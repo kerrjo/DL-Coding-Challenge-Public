@@ -87,6 +87,30 @@ class WAWeatherInfo {
     }
     
     
+    func commonSubmitNoCache(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
+        
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+        let task = session.dataTaskWithURL(wiURL) { data, response, error in
+            
+            // HTTP request assumes NSHTTPURLResponse force cast
+            let httpResponse = response as! NSHTTPURLResponse
+            print("HTTP Status Code = \(httpResponse.statusCode)")
+            if httpResponse.statusCode == 200 {
+                if let responseData = data {
+                    completion(data: responseData)
+                }
+            } // 200
+            else {
+                if let failure = onFailure  {
+                    failure()
+                }
+            }
+            
+        } // dataTaskWithURL completion
+        
+        task.resume()
+    }
+    
     func serviceRequest(service: String, processResponse:((data:NSData) -> Void)? ) {
         
         if let wiURL = serviceURLFor(service) {
@@ -104,7 +128,6 @@ class WAWeatherInfo {
                 }
             }
         }
-
         
     }
     
@@ -113,7 +136,6 @@ class WAWeatherInfo {
 
     func getCurrentConditions () {
         serviceRequest("conditions", processResponse: processResponseDataConditions)
-        
     }
     
     func processResponseDataConditions (jsonResponse: NSData) {
@@ -130,30 +152,11 @@ class WAWeatherInfo {
         }
     }
 
-    //        serviceRequest("conditions") { (data) in
-    //            self.processResponseDataConditions(data)
-    //        }
-    
-    
-    //        if let wiURL = serviceURLFor("conditions") {
-    //
-    //            if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
-    //                let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
-    //                processResponseDataConditions(cacheResponse)
-    //            } else {
-    //                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
-    //                    self.processResponseDataConditions(jsonResponse)
-    //                }
-    //            }
-    //        }
 
-    
     // MARK: -
     
     func getHourly () {
-        
         serviceRequest("hourly", processResponse: processResponseDataHourly)
-        
     }
     
     func processResponseDataHourly (jsonResponse: NSData) {
@@ -170,26 +173,10 @@ class WAWeatherInfo {
         }
     }
     
-    
-    
-//    if let wiURL = serviceURLFor("hourly") {
-//        
-//        if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
-//            let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
-//            processResponseDataHourly(cacheResponse)
-//        } else {
-//            commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
-//                self.processResponseDataHourly(jsonResponse)
-//            }
-//        }
-//    }
-
-    // MARK: -
+     // MARK: -
     
     func getHourlyTen () {
-        
         serviceRequest("hourly10day", processResponse: processResponseDataHourlyTen)
-
     }
     
     func processResponseDataHourlyTen (jsonResponse: NSData) {
@@ -206,20 +193,6 @@ class WAWeatherInfo {
         }
     }
     
-    
-    //        if let wiURL = serviceURLFor("hourly10day") {
-    //
-    //            if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
-    //                let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
-    //                processResponseDataHourlyTen(cacheResponse)
-    //            } else {
-    //                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
-    //                    self.processResponseDataHourlyTen(jsonResponse)
-    //                }
-    //            }
-    //        }
-
-
   
     // MARK: -
 
@@ -232,9 +205,7 @@ class WAWeatherInfo {
     }
 
     func getForecastWith (service: String) {
-        
         serviceRequest(service, processResponse: processResponseDataForecast)
-
     }
     
     func processResponseDataForecast (jsonResponse: NSData) {
@@ -256,36 +227,11 @@ class WAWeatherInfo {
     }
     
     
-    //        if let wiURL = serviceURLFor(service) {
-    //
-    //            if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
-    //                let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
-    //                processResponseDataForecast(cacheResponse)
-    //            } else {
-    //                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
-    //                    self.processResponseDataForecast(jsonResponse)
-    //                }
-    //            }
-    //        }
-
 
     // MARK: -
 
     func getSattelite () {
-        
-        if let wiURL = serviceURLFor("satellite") {
-            
-            let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
-            if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
-                self.processResponseDataSatellite(cacheResponse)
-            } else {
-                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
-                    //self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                    self.processResponseDataSatellite(jsonResponse)
-                }
-            }
-        }
-        
+        serviceRequest("satellite", processResponse: processResponseDataSatellite)
     }
     
     func processResponseDataSatellite (jsonResponse: NSData) {
@@ -306,6 +252,7 @@ class WAWeatherInfo {
         
     }
 
+    
     // MARK: -
     
     func getSatteliteImageAtURL (urlString: String) {
@@ -316,7 +263,7 @@ class WAWeatherInfo {
                 return
         }
         
-        commonSubmit(wiURL, onFailure:nil) { (imageData) in
+        commonSubmitNoCache(wiURL, onFailure:nil) { (imageData) in
             if let satImage = UIImage(data: imageData) {
                 self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
             }
