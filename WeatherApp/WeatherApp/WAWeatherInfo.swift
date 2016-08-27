@@ -51,6 +51,7 @@ class WAWeatherInfo {
                 if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
                     self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
                 }
+                
             } catch {
                 print("Error processing JSON \(error)")
             }
