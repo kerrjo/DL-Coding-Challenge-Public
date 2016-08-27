@@ -70,7 +70,6 @@ class WAWeatherInfo {
                     if let cacheFileURL = fileURL {
                         self.cacheFiles.writeCacheFile(cacheFileURL, data: responseData)
                     }
-
                     completion(data: responseData)
                 }
                 
@@ -134,64 +133,128 @@ class WAWeatherInfo {
     
     // MARK: -
 
+    
+    
     func getCurrentConditions () {
-        serviceRequest("conditions", processResponse: processResponseDataConditions)
+        
+        serviceRequest("conditions") {
+            
+            (jsonResponse) in
+            
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
+                    self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+                }
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+        }
+        
     }
     
-    func processResponseDataConditions (jsonResponse: NSData) {
-        print(#function)
-        do {
-            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-            
-            if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
-                self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
-            }
-            
-        } catch {
-            print("Error processing JSON \(error)")
-        }
-    }
+    
+//    func getCurrentConditions () {
+//        serviceRequest("conditions", processResponse: processResponseDataConditions)
+//    }
+//    
+//    func processResponseDataConditions (jsonResponse: NSData) {
+//        print(#function)
+//        do {
+//            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+//            
+//            if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
+//                self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+//            }
+//            
+//        } catch {
+//            print("Error processing JSON \(error)")
+//        }
+//    }
 
 
     // MARK: -
-    
+
     func getHourly () {
-        serviceRequest("hourly", processResponse: processResponseDataHourly)
-    }
-    
-    func processResponseDataHourly (jsonResponse: NSData) {
-        print(#function)
-        do {
-            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+        
+        serviceRequest("hourly") {
             
-            if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                self.delegate?.WeatherInfo(self, didReceiveHourly:hourlyItems)
+            (jsonResponse) in
+            
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+                    self.delegate?.WeatherInfo(self, didReceiveHourly:hourlyItems)
+                }
+                
+            } catch {
+                print("Error processing JSON \(error)")
             }
-            
-        } catch {
-            print("Error processing JSON \(error)")
         }
     }
+    
+    
+    
+//    func getHourly () {
+//        serviceRequest("hourly", processResponse: processResponseDataHourly)
+//    }
+//    
+//    func processResponseDataHourly (jsonResponse: NSData) {
+//        print(#function)
+//        do {
+//            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+//            
+//            if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+//                self.delegate?.WeatherInfo(self, didReceiveHourly:hourlyItems)
+//            }
+//            
+//        } catch {
+//            print("Error processing JSON \(error)")
+//        }
+//    }
     
      // MARK: -
-    
+
     func getHourlyTen () {
-        serviceRequest("hourly10day", processResponse: processResponseDataHourlyTen)
+        serviceRequest("hourly10day") {
+            
+            (jsonResponse) in
+
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+                    self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
+                }
+                
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+        }
+        
     }
     
-    func processResponseDataHourlyTen (jsonResponse: NSData) {
-        print(#function)
-        do {
-            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-            
-            if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
-            }
-            
-        } catch {
-            print("Error processing JSON \(error)")
-        }
-    }
+
+//    func getHourlyTen () {
+//        serviceRequest("hourly10day", processResponse: processResponseDataHourlyTen)
+//        
+//    }
+//    
+//    func processResponseDataHourlyTen (jsonResponse: NSData) {
+//        print(#function)
+//        do {
+//            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+//            
+//            if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+//                self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
+//            }
+//            
+//        } catch {
+//            print("Error processing JSON \(error)")
+//        }
+//    }
     
   
     // MARK: -
@@ -205,26 +268,49 @@ class WAWeatherInfo {
     }
 
     func getForecastWith (service: String) {
-        serviceRequest(service, processResponse: processResponseDataForecast)
+        serviceRequest(service) {
+            (jsonResponse) in
+
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
+                    txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
+                    forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
+                {
+                    self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
+                }
+                
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+
+            
+        }
     }
     
-    func processResponseDataForecast (jsonResponse: NSData) {
-        print(#function)
-        do {
-            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-            
-            if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-                txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
-                forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
-            {
-                self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
-            }
-            
-        } catch {
-            print("Error processing JSON \(error)")
-        }
-  
-    }
+
+//    func getForecastWith (service: String) {
+//        serviceRequest(service, processResponse: processResponseDataForecast)
+//    }
+//    
+//    func processResponseDataForecast (jsonResponse: NSData) {
+//        print(#function)
+//        do {
+//            let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+//            
+//            if let forecastDict = responseData["forecast"] as? [String : AnyObject],
+//                txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
+//                forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
+//            {
+//                self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
+//            }
+//            
+//        } catch {
+//            print("Error processing JSON \(error)")
+//        }
+//  
+//    }
     
     
 
