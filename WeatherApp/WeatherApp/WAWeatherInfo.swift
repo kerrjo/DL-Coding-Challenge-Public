@@ -221,30 +221,6 @@ class WAWeatherInfo {
         task.resume()
     }
     
-//    private func commonSubmitNoCache(wiURL:NSURL, failure:(() -> Void)?, success:(data:NSData) -> Void) {
-//        
-//        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-//        let task = session.dataTaskWithURL(wiURL) { data, response, error in
-//            
-//            // HTTP request assumes NSHTTPURLResponse force cast
-//            let httpResponse = response as! NSHTTPURLResponse
-//            print("HTTP Status Code = \(httpResponse.statusCode)")
-//            if httpResponse.statusCode == 200 {
-//                if let responseData = data {
-//                    success(data: responseData)
-//                }
-//            } // 200
-//            else {
-//                if let failureMethod = failure  {
-//                    failureMethod()
-//                }
-//            }
-//            
-//        } // dataTaskWithURL completion
-//        
-//        task.resume()
-//    }
-    
     private func serviceRequest(service: String, processResponse:((data:NSData) -> Void)? ) {
         
         if let wiURL = serviceURLFor(service) {
