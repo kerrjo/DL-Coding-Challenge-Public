@@ -23,7 +23,6 @@ extension WAWeatherInfoDelegate {
     {}
     func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
     {}
-
 }
 
 
@@ -39,49 +38,58 @@ class WAWeatherInfo {
     let cacheFiles = WACacheFiles()
 
     
+    func serviceURLFor(service:String) -> NSURL? {
+
+        var result: NSURL?
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
+        guard let wiURL = NSURL(string: urlString)
+            else {
+                print("Error Invalid URL \(urlString)")
+                return nil
+        }
+        
+        result = wiURL
+        
+        return result
+    }
+    
     // MARK: -
 
     func getCurrentConditions () {
         
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/conditions/q/\(currentState)/\(currentCity).json"
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return
-        }
-        
-        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
-        
-        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
-            print("Cached response")
-            self.processResponseDataConditions(cacheResponse)
+        if let wiURL = serviceURLFor("conditions") {
             
-        } else {
-            print("Server response")
-            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-            let task = session.dataTaskWithURL(wiURL) { data, response, error in
-                
-                // HTTP request assumes NSHTTPURLResponse force cast
-                let httpResponse = response as! NSHTTPURLResponse
-                print("HTTP Status Code = \(httpResponse.statusCode)")
-                if httpResponse.statusCode == 200 {
-                    
-                    if let jsonResponse = data {
-                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                        self.processResponseDataConditions(jsonResponse)
-                    }
-                    
-                } // 200
-                
-            } // dataTaskWithURL completion
+            let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
             
-            task.resume()
+            if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
+                self.processResponseDataConditions(cacheResponse)
+                
+            } else {
+                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+                let task = session.dataTaskWithURL(wiURL) { data, response, error in
+                    
+                    // HTTP request assumes NSHTTPURLResponse force cast
+                    let httpResponse = response as! NSHTTPURLResponse
+                    print("HTTP Status Code = \(httpResponse.statusCode)")
+                    if httpResponse.statusCode == 200 {
+                        
+                        if let jsonResponse = data {
+                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                            self.processResponseDataConditions(jsonResponse)
+                        }
+                        
+                    } // 200
+                    
+                } // dataTaskWithURL completion
+                
+                task.resume()
+            }
         }
 
     }
     
     func processResponseDataConditions (jsonResponse: NSData) {
-        
+        print(#function)
         do {
             let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
             
@@ -99,45 +107,37 @@ class WAWeatherInfo {
     
     func getHourly () {
         
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/hourly/q/\(currentState)/\(currentCity).json"
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return
-        }
-        
-        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
-        
-        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
-            print("Cached response")
-            self.processResponseDataHourly(cacheResponse)
+        if let wiURL = serviceURLFor("hourly") {
             
-        } else {
-            print("Server response")
-            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-            let task = session.dataTaskWithURL(wiURL) { data, response, error in
+            let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
+            if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
+                self.processResponseDataHourly(cacheResponse)
                 
-                // HTTP request assumes NSHTTPURLResponse force cast
-                let httpResponse = response as! NSHTTPURLResponse
-                print("HTTP Status Code = \(httpResponse.statusCode)")
-                if httpResponse.statusCode == 200 {
+            } else {
+                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+                let task = session.dataTaskWithURL(wiURL) { data, response, error in
                     
-                    if let jsonResponse = data {
-                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                        self.processResponseDataHourly(jsonResponse)
-                    }
+                    // HTTP request assumes NSHTTPURLResponse force cast
+                    let httpResponse = response as! NSHTTPURLResponse
+                    print("HTTP Status Code = \(httpResponse.statusCode)")
+                    if httpResponse.statusCode == 200 {
+                        
+                        if let jsonResponse = data {
+                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                            self.processResponseDataHourly(jsonResponse)
+                        }
+                        
+                    } // 200
                     
-                } // 200
+                } // dataTaskWithURL completion
                 
-            } // dataTaskWithURL completion
-            
-            task.resume()
+                task.resume()
+            }
         }
-        
     }
     
     func processResponseDataHourly (jsonResponse: NSData) {
-        
+        print(#function)
         do {
             let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
             
@@ -155,53 +155,42 @@ class WAWeatherInfo {
     
     func getHourlyTen () {
         
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/hourly10day/q/\(currentState)/\(currentCity).json"
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return
-        }
-        
-        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
-        
-        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
-            print("Cached response")
-            self.processResponseDataHourlyTen(cacheResponse)
+        if let wiURL = serviceURLFor("hourly10day") {
             
-        } else {
-            print("Server response")
-            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-            let task = session.dataTaskWithURL(wiURL) { data, response, error in
+            let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
+            if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
+                self.processResponseDataHourlyTen(cacheResponse)
                 
-                // HTTP request assumes NSHTTPURLResponse force cast
-                let httpResponse = response as! NSHTTPURLResponse
-                print("HTTP Status Code = \(httpResponse.statusCode)")
-                if httpResponse.statusCode == 200 {
+            } else {
+                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+                let task = session.dataTaskWithURL(wiURL) { data, response, error in
                     
-                    if let jsonResponse = data {
-                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                        self.processResponseDataHourlyTen(jsonResponse)
-                    }
+                    // HTTP request assumes NSHTTPURLResponse force cast
+                    let httpResponse = response as! NSHTTPURLResponse
+                    print("HTTP Status Code = \(httpResponse.statusCode)")
+                    if httpResponse.statusCode == 200 {
+                        
+                        if let jsonResponse = data {
+                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                            self.processResponseDataHourlyTen(jsonResponse)
+                        }
+                        
+                    } // 200
                     
-                } // 200
+                } // dataTaskWithURL completion
                 
-            } // dataTaskWithURL completion
-            
-            task.resume()
+                task.resume()
+            }
         }
         
     }
     
     func processResponseDataHourlyTen (jsonResponse: NSData) {
-        
+        print(#function)
         do {
             let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
             
-            //print(responseData)
-            
             if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                
-                
                 self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
             }
             
@@ -224,43 +213,36 @@ class WAWeatherInfo {
 
     func getForecastWith (service: String) {
         
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return
-        }
-        
-        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
-        
-        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
-            print("Cached response")
-            self.processResponseDataForecast(cacheResponse)
-
-        } else {
-            print("Server response")
-            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-            let task = session.dataTaskWithURL(wiURL) { data, response, error in
-                
-                // HTTP request assumes NSHTTPURLResponse force cast
-                let httpResponse = response as! NSHTTPURLResponse
-                print("HTTP Status Code = \(httpResponse.statusCode)")
-                if httpResponse.statusCode == 200 {
-                    
-                    if let jsonResponse = data {
-                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                        self.processResponseDataForecast(jsonResponse)
-                    }
-                    
-                } // 200
-            }
+        if let wiURL = serviceURLFor(service) {
             
-            task.resume()
+            let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
+            if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
+                self.processResponseDataForecast(cacheResponse)
+                
+            } else {
+                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+                let task = session.dataTaskWithURL(wiURL) { data, response, error in
+                    
+                    // HTTP request assumes NSHTTPURLResponse force cast
+                    let httpResponse = response as! NSHTTPURLResponse
+                    print("HTTP Status Code = \(httpResponse.statusCode)")
+                    if httpResponse.statusCode == 200 {
+                        
+                        if let jsonResponse = data {
+                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                            self.processResponseDataForecast(jsonResponse)
+                        }
+                        
+                    } // 200
+                }
+                
+                task.resume()
+            }
         }
     }
     
     func processResponseDataForecast (jsonResponse: NSData) {
-     
+        print(#function)
         do {
             let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
             
@@ -282,46 +264,37 @@ class WAWeatherInfo {
 
     func getSattelite () {
         
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/satellite/q/\(currentState)/\(currentCity).json"
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return
-        }
-        
-        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
-        
-        if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
-            print("Cached response")
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        if let wiURL = serviceURLFor("satellite") {
+            
+            let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
+            if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
                 self.processResponseDataSatellite(cacheResponse)
-            }
-            
-        } else {
-            print("Server response")
-            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-            let task = session.dataTaskWithURL(wiURL) { data, response, error in
                 
-                // HTTP request assumes NSHTTPURLResponse force cast
-                let httpResponse = response as! NSHTTPURLResponse
-                print("HTTP Status Code = \(httpResponse.statusCode)")
-                if httpResponse.statusCode == 200 {
+            } else {
+                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+                let task = session.dataTaskWithURL(wiURL) { data, response, error in
                     
-                    if let jsonResponse = data {
-                        self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                        self.processResponseDataSatellite(jsonResponse)
-                    }
-                    
-                } // 200
+                    // HTTP request assumes NSHTTPURLResponse force cast
+                    let httpResponse = response as! NSHTTPURLResponse
+                    print("HTTP Status Code = \(httpResponse.statusCode)")
+                    if httpResponse.statusCode == 200 {
+                        
+                        if let jsonResponse = data {
+                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                            self.processResponseDataSatellite(jsonResponse)
+                        }
+                        
+                    } // 200
+                }
+                
+                task.resume()
             }
-            
-            task.resume()
         }
         
     }
     
     func processResponseDataSatellite (jsonResponse: NSData) {
-        
+        print(#function)
         do {
             let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
             
