@@ -36,10 +36,147 @@ class WAWeatherInfo {
     var currentState = "MI"
 
     let cacheFiles = WACacheFiles()
+  
+    // MARK: - Public API
+    // MARK: -
 
+    func getCurrentConditions () {
+        
+        serviceRequest("conditions") {
+            (jsonResponse) in
+            
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
+                    self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+                }
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+        }
+        
+    }
+ 
+    // MARK: -
+
+    func getHourly () {
+        
+        serviceRequest("hourly") {
+            (jsonResponse) in
+            
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+                    self.delegate?.WeatherInfo(self, didReceiveHourly:hourlyItems)
+                }
+                
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+        }
+    }
     
-    func serviceURLFor(service:String) -> NSURL? {
+    // MARK: -
 
+    func getHourlyTen () {
+        
+        serviceRequest("hourly10day") {
+            (jsonResponse) in
+
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
+                    self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
+                }
+                
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+        }
+        
+    }
+  
+    // MARK: -
+
+    func getForecast () {
+        getForecastWith("forecast")
+    }
+
+    func getForecastTen () {
+        getForecastWith("forecast10day")
+    }
+
+    func getForecastWith (service: String) {
+        
+        serviceRequest(service) {
+            (jsonResponse) in
+
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
+                    txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
+                    forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
+                {
+                    self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
+                }
+                
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+        }
+    }
+
+    // MARK: -
+
+    func getSattelite () {
+        
+        serviceRequest("satellite") {
+            (jsonResponse) in
+
+            do {
+                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
+                
+                if let satteliteDict = responseData["satellite"] as? [String : AnyObject] {
+                    
+                    let imageURLBaseString = satteliteDict["image_url_vis"]
+                    let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
+                    self.getSatteliteImageAtURL(imageURLString)
+                }
+                
+            } catch {
+                print("Error processing JSON \(error)")
+            }
+        }
+    }
+    
+    // MARK: -
+    
+    func getSatteliteImageAtURL (urlString: String) {
+        
+        guard let wiURL = NSURL(string: urlString)
+            else {
+                print("Error Invalid URL \(urlString)")
+                return
+        }
+        
+        commonSubmitNoCache(wiURL, onFailure:nil) { (imageData) in
+            if let satImage = UIImage(data: imageData) {
+                self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
+            }
+        }
+
+        
+    }
+    
+
+    // MARK: - Private
+
+    private func serviceURLFor(service:String) -> NSURL? {
+        
         var result: NSURL?
         let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
         guard let wiURL = NSURL(string: urlString)
@@ -54,7 +191,7 @@ class WAWeatherInfo {
     }
     
     
-    func commonSubmit(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
+    private func commonSubmit(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
         
         let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
         
@@ -85,8 +222,7 @@ class WAWeatherInfo {
         task.resume()
     }
     
-    
-    func commonSubmitNoCache(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
+    private func commonSubmitNoCache(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
         
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         let task = session.dataTaskWithURL(wiURL) { data, response, error in
@@ -110,7 +246,7 @@ class WAWeatherInfo {
         task.resume()
     }
     
-    func serviceRequest(service: String, processResponse:((data:NSData) -> Void)? ) {
+    private func serviceRequest(service: String, processResponse:((data:NSData) -> Void)? ) {
         
         if let wiURL = serviceURLFor(service) {
             
@@ -129,148 +265,7 @@ class WAWeatherInfo {
         }
         
     }
-    
-    
-    // MARK: -
 
-    
-    
-    func getCurrentConditions () {
-        
-        serviceRequest("conditions") {
-            
-            (jsonResponse) in
-            
-            do {
-                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
-                if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
-                    self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
-                }
-            } catch {
-                print("Error processing JSON \(error)")
-            }
-        }
-        
-    }
- 
-    // MARK: -
-
-    func getHourly () {
-        
-        serviceRequest("hourly") {
-            
-            (jsonResponse) in
-            
-            do {
-                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
-                if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    self.delegate?.WeatherInfo(self, didReceiveHourly:hourlyItems)
-                }
-                
-            } catch {
-                print("Error processing JSON \(error)")
-            }
-        }
-    }
-    
-    // MARK: -
-
-    func getHourlyTen () {
-        serviceRequest("hourly10day") {
-            
-            (jsonResponse) in
-
-            do {
-                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
-                if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
-                }
-                
-            } catch {
-                print("Error processing JSON \(error)")
-            }
-        }
-        
-    }
-  
-    // MARK: -
-
-    func getForecast () {
-        getForecastWith("forecast")
-    }
-
-    func getForecastTen () {
-        getForecastWith("forecast10day")
-    }
-
-    func getForecastWith (service: String) {
-        serviceRequest(service) {
-            (jsonResponse) in
-
-            do {
-                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
-                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-                    txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
-                    forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
-                {
-                    self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
-                }
-                
-            } catch {
-                print("Error processing JSON \(error)")
-            }
-
-            
-        }
-    }
-    
-
-    // MARK: -
-
-    func getSattelite () {
-        serviceRequest("satellite") {
-            (jsonResponse) in
-
-            do {
-                let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
-                if let satteliteDict = responseData["satellite"] as? [String : AnyObject] {
-                    
-                    let imageURLBaseString = satteliteDict["image_url_vis"]
-                    let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
-                    self.getSatteliteImageAtURL(imageURLString)
-                }
-                
-            } catch {
-                print("Error processing JSON \(error)")
-            }
-
-        }
-    }
-    
-    
-    // MARK: -
-    
-    func getSatteliteImageAtURL (urlString: String) {
-        
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return
-        }
-        
-        commonSubmitNoCache(wiURL, onFailure:nil) { (imageData) in
-            if let satImage = UIImage(data: imageData) {
-                self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
-            }
-        }
-
-        
-    }
     
 }
 
