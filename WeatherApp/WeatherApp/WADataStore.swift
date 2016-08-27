@@ -126,30 +126,7 @@ class WADataStore: WAWeatherInfoDelegate {
         delegate?.dataStore(self, didReceiveHourlyTen:tenDayPeriods)
         
     }
-    
-    
-    //        for dayIndex in 0..<10 {
-    //            dayPeriods = []
-    //
-    //            for p in 0..<perPeriod {
-    //                let hourItem = hourTenPeriods[dayIndex*perPeriod + p]
-    //                dayPeriods += [hourItem]
-    //            }
-    //
-    //            tenDayPeriods += [dayPeriods]
-    //
-    //            for period in dayPeriods {
-    //                let icon = period["icon"] as! String
-    //                let iconURLString = period["icon_url"] as! String
-    //                self.imageFor(icon, imageURLString: iconURLString)
-    //            }
-    //
-    //
-    ////            for hourItem in dayPeriods {
-    ////                print(hourItem)
-    ////            }
-    //            
-    //        }
+
     
     func printHourItem(hourItem:[String:AnyObject]){
         
