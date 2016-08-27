@@ -63,12 +63,16 @@ class WAWeatherInfo {
             print("HTTP Status Code = \(httpResponse.statusCode)")
             if httpResponse.statusCode == 200 {
                 
-                if let jsonResponse = data {
-                    completion(data: jsonResponse)
-                    
+                if let responseData = data {
+                    completion(data: responseData)
                 }
                 
             } // 200
+            else {
+                if let failure = onFailure  {
+                    failure()
+                }
+            }
             
         } // dataTaskWithURL completion
         
@@ -113,25 +117,6 @@ class WAWeatherInfo {
         }
     }
 
-//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
-//        
-//        // HTTP request assumes NSHTTPURLResponse force cast
-//        let httpResponse = response as! NSHTTPURLResponse
-//        print("HTTP Status Code = \(httpResponse.statusCode)")
-//        if httpResponse.statusCode == 200 {
-//            
-//            if let jsonResponse = data {
-//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-//                self.processResponseDataConditions(jsonResponse)
-//            }
-//            
-//        } // 200
-//        
-//    } // dataTaskWithURL completion
-//    
-//    task.resume()
-
     
     // MARK: -
     
@@ -165,26 +150,6 @@ class WAWeatherInfo {
             print("Error processing JSON \(error)")
         }
     }
-
-//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
-//        
-//        // HTTP request assumes NSHTTPURLResponse force cast
-//        let httpResponse = response as! NSHTTPURLResponse
-//        print("HTTP Status Code = \(httpResponse.statusCode)")
-//        if httpResponse.statusCode == 200 {
-//            
-//            if let jsonResponse = data {
-//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-//                self.processResponseDataHourly(jsonResponse)
-//            }
-//            
-//        } // 200
-//        
-//    } // dataTaskWithURL completion
-//    
-//    task.resume()
-
     
     // MARK: -
     
@@ -220,26 +185,6 @@ class WAWeatherInfo {
         }
     }
 
-//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
-//        
-//        // HTTP request assumes NSHTTPURLResponse force cast
-//        let httpResponse = response as! NSHTTPURLResponse
-//        print("HTTP Status Code = \(httpResponse.statusCode)")
-//        if httpResponse.statusCode == 200 {
-//            
-//            if let jsonResponse = data {
-//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-//                self.processResponseDataHourlyTen(jsonResponse)
-//            }
-//            
-//        } // 200
-//        
-//    } // dataTaskWithURL completion
-//    
-//    task.resume()
-
-    
   
     // MARK: -
 
@@ -287,24 +232,6 @@ class WAWeatherInfo {
     }
     
 
-//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
-//        
-//        // HTTP request assumes NSHTTPURLResponse force cast
-//        let httpResponse = response as! NSHTTPURLResponse
-//        print("HTTP Status Code = \(httpResponse.statusCode)")
-//        if httpResponse.statusCode == 200 {
-//            
-//            if let jsonResponse = data {
-//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-//                self.processResponseDataForecast(jsonResponse)
-//            }
-//            
-//        } // 200
-//    }
-//    
-//    task.resume()
-
     // MARK: -
 
     func getSattelite () {
@@ -341,25 +268,6 @@ class WAWeatherInfo {
         }
         
     }
-    
-//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
-//        
-//        // HTTP request assumes NSHTTPURLResponse force cast
-//        let httpResponse = response as! NSHTTPURLResponse
-//        print("HTTP Status Code = \(httpResponse.statusCode)")
-//        if httpResponse.statusCode == 200 {
-//            
-//            if let jsonResponse = data {
-//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-//                self.processResponseDataSatellite(jsonResponse)
-//            }
-//            
-//        } // 200
-//    }
-//    
-//    task.resume()
-
 
     // MARK: -
     
@@ -379,26 +287,6 @@ class WAWeatherInfo {
 
         
     }
-
-//        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-//        let task = session.dataTaskWithURL(wiURL) { data, response, error in
-//            
-//            if let httpResponse = response as? NSHTTPURLResponse {
-//                
-//                print("HTTP Status Code = \(httpResponse.statusCode)")
-//                if httpResponse.statusCode == 200 {
-//                    if let imageData = data,
-//                        let satImage = UIImage(data: imageData) {
-//                        self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
-//                    }
-//                    
-//                } // 200
-//            }
-//        }
-//        
-//        task.resume()
-        
-        
         
 }
 
