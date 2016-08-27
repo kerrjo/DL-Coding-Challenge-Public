@@ -39,9 +39,7 @@ class WADataStore: WAWeatherInfoDelegate {
     private var imagePlaceholder = UIImage(named: "imageplaceholder")!
     private var imageCache: NSCache = NSCache()
     private var pendingImage = [String:String]()
-
     private var imagePendingLockQueue: dispatch_queue_t
-
     private var iconSet: String? // use a,b,..g,i,k
     
     init() {
@@ -71,6 +69,7 @@ class WADataStore: WAWeatherInfoDelegate {
     func getHourly() {
         weatherInfo.getHourly()
     }
+    
     func getHourlyTen() {
         weatherInfo.getHourlyTen()
     }
@@ -86,7 +85,8 @@ class WADataStore: WAWeatherInfoDelegate {
         var currentYday = ""
 
         dayPeriods = []
-
+        
+        
         for hourItem in hourTenPeriods {
             
             if let fcTime = hourItem["FCTTIME"] as? [String:AnyObject],
