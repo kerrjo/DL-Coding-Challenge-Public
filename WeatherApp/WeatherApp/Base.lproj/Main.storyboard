@@ -738,7 +738,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xHN-hC-fBs">
-                                    <rect key="frame" x="0.0" y="30" width="600" height="90"/>
+                                    <rect key="frame" x="0.0" y="24" width="600" height="96"/>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uj4-ra-rMS">
                                     <rect key="frame" x="0.0" y="20" width="600" height="0.0"/>
@@ -755,14 +755,8 @@
                                 <constraint firstItem="Uj4-ra-rMS" firstAttribute="top" secondItem="FCz-sb-R2c" secondAttribute="top" constant="20" symbolic="YES" id="DYS-ZQ-3Gr"/>
                                 <constraint firstItem="Uj4-ra-rMS" firstAttribute="width" secondItem="FCz-sb-R2c" secondAttribute="width" id="MUV-WH-Xfs"/>
                                 <constraint firstAttribute="bottom" secondItem="xHN-hC-fBs" secondAttribute="bottom" id="R6D-in-U3p"/>
-                                <constraint firstItem="xHN-hC-fBs" firstAttribute="top" secondItem="FCz-sb-R2c" secondAttribute="top" constant="30" id="Y4f-eJ-OcV"/>
-                                <constraint firstItem="Uj4-ra-rMS" firstAttribute="top" secondItem="xHN-hC-fBs" secondAttribute="bottom" constant="8" symbolic="YES" id="eq2-y8-dfb"/>
+                                <constraint firstItem="xHN-hC-fBs" firstAttribute="top" secondItem="Uj4-ra-rMS" secondAttribute="bottom" constant="4" id="TVg-Kj-qgr"/>
                             </constraints>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="eq2-y8-dfb"/>
-                                </mask>
-                            </variation>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="WAConditionCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="WAConditionCell" textLabel="RHM-lg-Nw7" detailTextLabel="t8R-im-pSR" style="IBUITableViewCellStyleValue1" id="Axe-P2-a6W">
