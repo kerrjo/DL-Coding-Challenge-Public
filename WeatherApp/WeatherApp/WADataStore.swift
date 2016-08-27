@@ -22,7 +22,6 @@ protocol WADataStoreDelegate : class {
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage)
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]])
     func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]])
-
 }
 
 extension WADataStoreDelegate {
@@ -92,19 +91,17 @@ class WADataStore: WAWeatherInfoDelegate {
             
             if let fcTime = hourItem["FCTTIME"] as? [String:AnyObject],
                 let yday = fcTime["yday"] as? String {
+                
                 if currentYday.isEmpty {
                     currentYday = yday
                 }
+                
                 if yday == currentYday {
+                    // Same day
                     dayPeriods += [hourItem]
                 } else {
-                    
+                    // New day
                     tenDayPeriods += [dayPeriods]
-                    
-//                    print("hourlyItem ...")
-//                    for hourlyItem in dayPeriods {
-//                        printHourItem(hourlyItem)
-//                    }
 
                     for period in dayPeriods {
                         let icon = period["icon"] as! String
@@ -113,11 +110,11 @@ class WADataStore: WAWeatherInfoDelegate {
                     }
 
                     dayPeriods = []
-
                     currentYday = yday
                 }
             } else {
                 tenDayPeriods += [dayPeriods]
+                dayPeriods = []
             }
         }
 
@@ -126,6 +123,11 @@ class WADataStore: WAWeatherInfoDelegate {
         delegate?.dataStore(self, didReceiveHourlyTen:tenDayPeriods)
         
     }
+
+    //                    print("hourlyItem ...")
+    //                    for hourlyItem in dayPeriods {
+    //                        printHourItem(hourlyItem)
+    //                    }
 
     
     func printHourItem(hourItem:[String:AnyObject]){
