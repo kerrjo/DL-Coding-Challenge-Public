@@ -127,7 +127,7 @@ class WAWeatherInfo {
 
             if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
                 let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
-                self.processResponseDataHourly(cacheResponse)
+                processResponseDataHourly(cacheResponse)
             } else {
                 commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
                     self.processResponseDataHourly(jsonResponse)
@@ -158,7 +158,7 @@ class WAWeatherInfo {
             
             if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
                 let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
-                self.processResponseDataHourlyTen(cacheResponse)
+                processResponseDataHourlyTen(cacheResponse)
             } else {
                 commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
                     self.processResponseDataHourlyTen(jsonResponse)
@@ -198,7 +198,7 @@ class WAWeatherInfo {
             
             if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
                 let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
-                self.processResponseDataForecast(cacheResponse)
+                processResponseDataForecast(cacheResponse)
             } else {
                 commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
                     self.processResponseDataForecast(jsonResponse)
