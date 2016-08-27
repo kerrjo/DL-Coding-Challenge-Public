@@ -316,15 +316,16 @@ class WADataStore: WAWeatherInfoDelegate {
 
         if !pending {
             pendingImage[imageURLString] = iconName
+            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
 
-                // http://icons.wxug.com/i/c/a/partlycloudy.gif
-                // http://icons.wxug.com/i/b/a/partlycloudy.gif
-                
                 var image:UIImage? = nil
 
                 if let customIconSet = self.iconSet {
-                    
+
+                    // http://icons.wxug.com/i/c/a/partlycloudy.gif
+                    // http://icons.wxug.com/i/b/a/partlycloudy.gif
+
                     if let imageURL = NSURL(string: imageURLString) {
                         let modifiedIconURL = imageURL.URLByDeletingLastPathComponent?.URLByDeletingLastPathComponent?.URLByAppendingPathComponent(customIconSet).URLByAppendingPathComponent(imageURL.lastPathComponent!)
                         
