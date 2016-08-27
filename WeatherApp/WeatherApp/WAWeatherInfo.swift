@@ -53,6 +53,31 @@ class WAWeatherInfo {
         return result
     }
     
+    
+    func commonSubmit(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+        let task = session.dataTaskWithURL(wiURL) { data, response, error in
+            
+            // HTTP request assumes NSHTTPURLResponse force cast
+            let httpResponse = response as! NSHTTPURLResponse
+            print("HTTP Status Code = \(httpResponse.statusCode)")
+            if httpResponse.statusCode == 200 {
+                
+                if let jsonResponse = data {
+                    completion(data: jsonResponse)
+                    
+                }
+                
+            } // 200
+            
+        } // dataTaskWithURL completion
+        
+        task.resume()
+    }
+
+    
+    
+    
     // MARK: -
 
     func getCurrentConditions () {
@@ -65,24 +90,10 @@ class WAWeatherInfo {
                 self.processResponseDataConditions(cacheResponse)
                 
             } else {
-                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-                let task = session.dataTaskWithURL(wiURL) { data, response, error in
-                    
-                    // HTTP request assumes NSHTTPURLResponse force cast
-                    let httpResponse = response as! NSHTTPURLResponse
-                    print("HTTP Status Code = \(httpResponse.statusCode)")
-                    if httpResponse.statusCode == 200 {
-                        
-                        if let jsonResponse = data {
-                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                            self.processResponseDataConditions(jsonResponse)
-                        }
-                        
-                    } // 200
-                    
-                } // dataTaskWithURL completion
-                
-                task.resume()
+                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
+                    self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                    self.processResponseDataConditions(jsonResponse)
+                }
             }
         }
 
@@ -102,6 +113,25 @@ class WAWeatherInfo {
         }
     }
 
+//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
+//        
+//        // HTTP request assumes NSHTTPURLResponse force cast
+//        let httpResponse = response as! NSHTTPURLResponse
+//        print("HTTP Status Code = \(httpResponse.statusCode)")
+//        if httpResponse.statusCode == 200 {
+//            
+//            if let jsonResponse = data {
+//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+//                self.processResponseDataConditions(jsonResponse)
+//            }
+//            
+//        } // 200
+//        
+//    } // dataTaskWithURL completion
+//    
+//    task.resume()
+
     
     // MARK: -
     
@@ -114,24 +144,10 @@ class WAWeatherInfo {
                 self.processResponseDataHourly(cacheResponse)
                 
             } else {
-                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-                let task = session.dataTaskWithURL(wiURL) { data, response, error in
-                    
-                    // HTTP request assumes NSHTTPURLResponse force cast
-                    let httpResponse = response as! NSHTTPURLResponse
-                    print("HTTP Status Code = \(httpResponse.statusCode)")
-                    if httpResponse.statusCode == 200 {
-                        
-                        if let jsonResponse = data {
-                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                            self.processResponseDataHourly(jsonResponse)
-                        }
-                        
-                    } // 200
-                    
-                } // dataTaskWithURL completion
-                
-                task.resume()
+                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
+                    self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                    self.processResponseDataHourly(jsonResponse)
+                }
             }
         }
     }
@@ -150,6 +166,25 @@ class WAWeatherInfo {
         }
     }
 
+//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
+//        
+//        // HTTP request assumes NSHTTPURLResponse force cast
+//        let httpResponse = response as! NSHTTPURLResponse
+//        print("HTTP Status Code = \(httpResponse.statusCode)")
+//        if httpResponse.statusCode == 200 {
+//            
+//            if let jsonResponse = data {
+//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+//                self.processResponseDataHourly(jsonResponse)
+//            }
+//            
+//        } // 200
+//        
+//    } // dataTaskWithURL completion
+//    
+//    task.resume()
+
     
     // MARK: -
     
@@ -162,24 +197,10 @@ class WAWeatherInfo {
                 self.processResponseDataHourlyTen(cacheResponse)
                 
             } else {
-                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-                let task = session.dataTaskWithURL(wiURL) { data, response, error in
-                    
-                    // HTTP request assumes NSHTTPURLResponse force cast
-                    let httpResponse = response as! NSHTTPURLResponse
-                    print("HTTP Status Code = \(httpResponse.statusCode)")
-                    if httpResponse.statusCode == 200 {
-                        
-                        if let jsonResponse = data {
-                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                            self.processResponseDataHourlyTen(jsonResponse)
-                        }
-                        
-                    } // 200
-                    
-                } // dataTaskWithURL completion
-                
-                task.resume()
+                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
+                    self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                    self.processResponseDataHourlyTen(jsonResponse)
+                }
             }
         }
         
@@ -198,6 +219,25 @@ class WAWeatherInfo {
             print("Error processing JSON \(error)")
         }
     }
+
+//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
+//        
+//        // HTTP request assumes NSHTTPURLResponse force cast
+//        let httpResponse = response as! NSHTTPURLResponse
+//        print("HTTP Status Code = \(httpResponse.statusCode)")
+//        if httpResponse.statusCode == 200 {
+//            
+//            if let jsonResponse = data {
+//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+//                self.processResponseDataHourlyTen(jsonResponse)
+//            }
+//            
+//        } // 200
+//        
+//    } // dataTaskWithURL completion
+//    
+//    task.resume()
 
     
   
@@ -220,23 +260,10 @@ class WAWeatherInfo {
                 self.processResponseDataForecast(cacheResponse)
                 
             } else {
-                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-                let task = session.dataTaskWithURL(wiURL) { data, response, error in
-                    
-                    // HTTP request assumes NSHTTPURLResponse force cast
-                    let httpResponse = response as! NSHTTPURLResponse
-                    print("HTTP Status Code = \(httpResponse.statusCode)")
-                    if httpResponse.statusCode == 200 {
-                        
-                        if let jsonResponse = data {
-                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                            self.processResponseDataForecast(jsonResponse)
-                        }
-                        
-                    } // 200
+                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
+                    self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                    self.processResponseDataForecast(jsonResponse)
                 }
-                
-                task.resume()
             }
         }
     }
@@ -259,7 +286,25 @@ class WAWeatherInfo {
   
     }
     
-    
+
+//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
+//        
+//        // HTTP request assumes NSHTTPURLResponse force cast
+//        let httpResponse = response as! NSHTTPURLResponse
+//        print("HTTP Status Code = \(httpResponse.statusCode)")
+//        if httpResponse.statusCode == 200 {
+//            
+//            if let jsonResponse = data {
+//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+//                self.processResponseDataForecast(jsonResponse)
+//            }
+//            
+//        } // 200
+//    }
+//    
+//    task.resume()
+
     // MARK: -
 
     func getSattelite () {
@@ -269,25 +314,11 @@ class WAWeatherInfo {
             let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
             if let cacheResponse = cacheFiles.readCacheFile(fileURL!) {
                 self.processResponseDataSatellite(cacheResponse)
-                
             } else {
-                let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-                let task = session.dataTaskWithURL(wiURL) { data, response, error in
-                    
-                    // HTTP request assumes NSHTTPURLResponse force cast
-                    let httpResponse = response as! NSHTTPURLResponse
-                    print("HTTP Status Code = \(httpResponse.statusCode)")
-                    if httpResponse.statusCode == 200 {
-                        
-                        if let jsonResponse = data {
-                            self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
-                            self.processResponseDataSatellite(jsonResponse)
-                        }
-                        
-                    } // 200
+                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
+                    self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+                    self.processResponseDataSatellite(jsonResponse)
                 }
-                
-                task.resume()
             }
         }
         
@@ -302,7 +333,6 @@ class WAWeatherInfo {
                 
                 let imageURLBaseString = satteliteDict["image_url_vis"]
                 let imageURLString = "\(imageURLBaseString!)\(self.apiKey)"
-                
                 self.getSatteliteImageAtURL(imageURLString)
             }
             
@@ -312,6 +342,24 @@ class WAWeatherInfo {
         
     }
     
+//    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//    let task = session.dataTaskWithURL(wiURL) { data, response, error in
+//        
+//        // HTTP request assumes NSHTTPURLResponse force cast
+//        let httpResponse = response as! NSHTTPURLResponse
+//        print("HTTP Status Code = \(httpResponse.statusCode)")
+//        if httpResponse.statusCode == 200 {
+//            
+//            if let jsonResponse = data {
+//                self.cacheFiles.writeCacheFile(fileURL!, data: jsonResponse)
+//                self.processResponseDataSatellite(jsonResponse)
+//            }
+//            
+//        } // 200
+//    }
+//    
+//    task.resume()
+
 
     // MARK: -
     
@@ -323,24 +371,34 @@ class WAWeatherInfo {
                 return
         }
         
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithURL(wiURL) { data, response, error in
-            
-            if let httpResponse = response as? NSHTTPURLResponse {
-                
-                print("HTTP Status Code = \(httpResponse.statusCode)")
-                if httpResponse.statusCode == 200 {
-                    if let imageData = data,
-                        let satImage = UIImage(data: imageData) {
-                        self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
-                    }
-                    
-                } // 200
+        commonSubmit(wiURL, onFailure:nil) { (imageData) in
+            if let satImage = UIImage(data: imageData) {
+                self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
             }
         }
+
         
-        task.resume()
     }
 
+//        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//        let task = session.dataTaskWithURL(wiURL) { data, response, error in
+//            
+//            if let httpResponse = response as? NSHTTPURLResponse {
+//                
+//                print("HTTP Status Code = \(httpResponse.statusCode)")
+//                if httpResponse.statusCode == 200 {
+//                    if let imageData = data,
+//                        let satImage = UIImage(data: imageData) {
+//                        self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
+//                    }
+//                    
+//                } // 200
+//            }
+//        }
+//        
+//        task.resume()
+        
+        
+        
 }
 
