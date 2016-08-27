@@ -172,22 +172,6 @@ class WAWeatherInfo {
     
 
     // MARK: - Private
-
-    private func serviceURLFor(service:String) -> NSURL? {
-        
-        var result: NSURL?
-        let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
-        guard let wiURL = NSURL(string: urlString)
-            else {
-                print("Error Invalid URL \(urlString)")
-                return nil
-        }
-        
-        result = wiURL
-        
-        return result
-    }
-    
     
     private func commonSubmit(wiURL:NSURL, cacheResponse:Bool, failure:(() -> Void)?, success:(data:NSData) -> Void) {
         
@@ -221,20 +205,25 @@ class WAWeatherInfo {
         task.resume()
     }
     
+
     private func serviceRequest(service: String, processResponse:((data:NSData) -> Void)? ) {
         
-        if let wiURL = serviceURLFor(service) {
-            
-            if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
-                let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
+        let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
+        guard let wiURL = NSURL(string: urlString)
+            else {
+                print("Error Invalid URL \(urlString)")
+                return
+        }
+
+        if let cacheFileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey),
+            let cacheResponse = cacheFiles.readCacheFile(cacheFileURL) {
+            if let responseMethod = processResponse {
+                responseMethod(data: cacheResponse)
+            }
+        } else {
+            commonSubmit(wiURL, cacheResponse: true, failure:nil) { (jsonResponse) in
                 if let responseMethod = processResponse {
-                    responseMethod(data: cacheResponse)
-                }
-            } else {
-                commonSubmit(wiURL, cacheResponse: true, failure:nil) { (jsonResponse) in
-                    if let responseMethod = processResponse {
-                        responseMethod(data: jsonResponse)
-                    }
+                    responseMethod(data: jsonResponse)
                 }
             }
         }
@@ -243,4 +232,6 @@ class WAWeatherInfo {
 
     
 }
+
+
 
