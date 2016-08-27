@@ -163,7 +163,7 @@ class WAWeatherInfo {
                 return
         }
         
-        commonSubmitNoCache(wiURL, onFailure:nil) { (imageData) in
+        commonSubmitNoCache(wiURL, failure:nil) { (imageData) in
             if let satImage = UIImage(data: imageData) {
                 self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
             }
@@ -191,9 +191,7 @@ class WAWeatherInfo {
     }
     
     
-    private func commonSubmit(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
-        
-        let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: apiKey)
+    private func commonSubmit(wiURL:NSURL, failure:(() -> Void)?, success:(data:NSData) -> Void) {
         
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         let task = session.dataTaskWithURL(wiURL) { data, response, error in
@@ -204,16 +202,17 @@ class WAWeatherInfo {
             if httpResponse.statusCode == 200 {
                 
                 if let responseData = data {
+                    let fileURL = NSURL.cacheFileURLFromURL(wiURL, delimiter: self.apiKey)
                     if let cacheFileURL = fileURL {
                         self.cacheFiles.writeCacheFile(cacheFileURL, data: responseData)
                     }
-                    completion(data: responseData)
+                    success(data: responseData)
                 }
                 
             } // 200
             else {
-                if let failure = onFailure  {
-                    failure()
+                if let failureMethod = failure  {
+                    failureMethod()
                 }
             }
             
@@ -222,7 +221,7 @@ class WAWeatherInfo {
         task.resume()
     }
     
-    private func commonSubmitNoCache(wiURL:NSURL, onFailure:(() -> Void)?, completion:(data:NSData) -> Void) {
+    private func commonSubmitNoCache(wiURL:NSURL, failure:(() -> Void)?, success:(data:NSData) -> Void) {
         
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         let task = session.dataTaskWithURL(wiURL) { data, response, error in
@@ -232,12 +231,12 @@ class WAWeatherInfo {
             print("HTTP Status Code = \(httpResponse.statusCode)")
             if httpResponse.statusCode == 200 {
                 if let responseData = data {
-                    completion(data: responseData)
+                    success(data: responseData)
                 }
             } // 200
             else {
-                if let failure = onFailure  {
-                    failure()
+                if let failureMethod = failure  {
+                    failureMethod()
                 }
             }
             
@@ -256,7 +255,7 @@ class WAWeatherInfo {
                     responseMethod(data: cacheResponse)
                 }
             } else {
-                commonSubmit(wiURL, onFailure:nil) { (jsonResponse) in
+                commonSubmit(wiURL, failure:nil) { (jsonResponse) in
                     if let responseMethod = processResponse {
                         responseMethod(data: jsonResponse)
                     }
