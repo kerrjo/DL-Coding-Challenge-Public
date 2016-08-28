@@ -51,7 +51,8 @@ class WAWeatherInfo {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
                 if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
-                    self.delegate?.weatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+                    //dispatch_async(dispatch_get_main_queue()) {
+                        self.delegate?.weatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
                 }
                 
             } catch {
@@ -75,7 +76,8 @@ class WAWeatherInfo {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
                 if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    self.delegate?.weatherInfo(self, didReceiveHourly:hourlyItems)
+                    //dispatch_async(dispatch_get_main_queue()) {
+                        self.delegate?.weatherInfo(self, didReceiveHourly:hourlyItems)
                 }
                 
             } catch {
@@ -95,7 +97,8 @@ class WAWeatherInfo {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
                 if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    self.delegate?.weatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
+                    // dispatch_async(dispatch_get_main_queue()) {
+                        self.delegate?.weatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
                 }
                 
             } catch {
@@ -124,7 +127,8 @@ class WAWeatherInfo {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
                 if let forecastDict = responseData["forecast"] as? [String : AnyObject] {
-                    self.delegate?.weatherInfo(self, didReceiveForecast:forecastDict)
+                    // dispatch_async(dispatch_get_main_queue()) {
+                        self.delegate?.weatherInfo(self, didReceiveForecast:forecastDict)
                 }
                 
             } catch {
@@ -169,7 +173,9 @@ class WAWeatherInfo {
         
         commonSubmit(wiURL, cacheResponse:false, failure:nil) { (imageData) in
             if let satImage = UIImage(data: imageData) {
-                self.delegate?.weatherInfo(self, didReceiveSatteliteImage: satImage)
+                // dispatch_async(dispatch_get_main_queue()) {
+
+                    self.delegate?.weatherInfo(self, didReceiveSatteliteImage: satImage)
             }
         }
     }

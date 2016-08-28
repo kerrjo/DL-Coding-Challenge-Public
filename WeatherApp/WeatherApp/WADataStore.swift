@@ -15,7 +15,15 @@ protocol WADataStoreDelegate : class {
         conditionsDict:[String : AnyObject],
         primaryItems:[String],
         primaryDict:[String : AnyObject])
-    
+
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
+                   conditionsDict:[String : AnyObject],
+                   primaryItems:[String],
+                   primaryDict:[String : AnyObject],
+                   secondaryItems:[String],
+                   secondaryDict:[String : AnyObject]
+                   )
+
     func dataStore(controller: WADataStore, primaryLocationTitle:String)
     func dataStore(controller: WADataStore, updateForIconImage iconName:String)
     
@@ -31,6 +39,21 @@ extension WADataStoreDelegate {
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]){}
     func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]]){}
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]], forecastDataPeriods:[[String : AnyObject]]) {}
+    
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
+                   conditionsDict:[String : AnyObject],
+                   primaryItems:[String],
+                   primaryDict:[String : AnyObject])
+    {}
+
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
+                   conditionsDict:[String : AnyObject],
+                   primaryItems:[String],
+                   primaryDict:[String : AnyObject],
+                   secondaryItems:[String],
+                   secondaryDict:[String : AnyObject])
+    {}
+
 
 }
 
@@ -45,10 +68,13 @@ class WADataStore: WAWeatherInfoDelegate {
     private var imageCache: NSCache = NSCache()
     private var pendingImage = [String:String]()
     private var imagePendingLockQueue: dispatch_queue_t
+    private var imageAvailableLockQueue: dispatch_queue_t
     private var iconSet: String? // use a,b,..g,i,k
     
     init() {
         imagePendingLockQueue = dispatch_queue_create("com.joker.imagePending.LockQueue", nil)
+        imageAvailableLockQueue = dispatch_queue_create("com.joker.imageAvailable.LockQueue", nil)
+
         weatherInfo.delegate = self
         iconSet = "i"
     }
@@ -243,6 +269,47 @@ class WADataStore: WAWeatherInfoDelegate {
                 return false
             }
             
+            if item.hasPrefix("temp_") {
+                return false
+            }
+
+            if item == "relative_humidity" || item == "UV" || item == "nowcast" || item == "image" || item == "solarradiation"
+            {
+                return false
+            }
+
+            if item.hasSuffix("_url") {
+                return false
+            }
+            if item.hasPrefix("wind_") {
+                return false
+            }
+            if item.hasPrefix("feelslike") {
+                return false
+            }
+            if item.hasPrefix("visibility_") {
+                return false
+            }
+            if item.hasPrefix("heat_") {
+                return false
+            }
+            if item.hasPrefix("pressure_") {
+                return false
+            }
+            if item.hasPrefix("precip_") {
+                return false
+            }
+            if item.hasPrefix("observation_") {
+                return false
+            }
+            if item.hasPrefix("local_") {
+                return false
+            }
+            if item.hasPrefix("dewpoint_") {
+                return false
+            }
+
+
             return true
         })
         
@@ -275,14 +342,83 @@ class WADataStore: WAWeatherInfoDelegate {
         primaryItems += ["Dewpoint"]
         primaryConditionsDict["Dewpoint"] = currentConditionsDict["dewpoint_string"] as! String
         
+
+        var secondaryConditionsDict = [String : AnyObject]()
+        var secondaryItems:[String] = []
         
+        var feelsLikeValue = ""
+        if let feelsLikeData =  currentConditionsDict["feelslike_f"] as? String {
+            feelsLikeValue += "\(feelsLikeData)"
+        }
+        secondaryItems += ["Feels Like"]
+        secondaryConditionsDict["Feels Like"] = feelsLikeValue
+        
+        var windValue = ""
+        if let windDirection =  currentConditionsDict["wind_dir"] as? String {
+            windValue += windDirection
+        }
+        if let windSpeed =  currentConditionsDict["wind_mph"] as? Double {
+            windValue += " " + "\(windSpeed) mph"
+        }
+        secondaryItems += ["Wind"]
+        secondaryConditionsDict["Wind"] = windValue
+
+        var visibilityValue = ""
+        if let visibilityDistance =  currentConditionsDict["visibility_mi"] as? String {
+            visibilityValue += "\(visibilityDistance) mi"
+        }
+        secondaryItems += ["Visibility"]
+        secondaryConditionsDict["Visibility"] = visibilityValue
+
+        var humidityValue = ""
+        if let humidityPercent =  currentConditionsDict["relative_humidity"] as? String {
+            humidityValue += "\(humidityPercent) mi"
+        }
+        secondaryItems += ["Humidity"]
+        secondaryConditionsDict["Humidity"] = humidityValue
+
+        
+        var pressureValue = ""
+        if let pressureData =  currentConditionsDict["pressure_in"] as? String {
+            pressureValue += "\(pressureData) in"
+        }
+        secondaryItems += ["Pressure"]
+        secondaryConditionsDict["Pressure"] = pressureValue
+        
+        var precipValue = ""
+        if let precipData =  currentConditionsDict["precip_today_in"] as? String {
+            precipValue += "\(precipData) in"
+        }
+        secondaryItems += ["Precipitation"]
+        secondaryConditionsDict["Precipitation"] = precipValue
+
+        var uvValue = ""
+        if let uvData =  currentConditionsDict["UV"] as? String {
+            uvValue += uvData
+        }
+        secondaryItems += ["UV"]
+        secondaryConditionsDict["UV"] = uvValue
+
+        
+//        print(secondaryItems)
+//        print(secondaryConditionsDict)
+
         dispatch_async(dispatch_get_main_queue()) {
-            
+
             self.delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
                                      conditionsDict:conditions,
                                      primaryItems:primaryItems,
-                                     primaryDict:primaryConditionsDict
+                                     primaryDict:primaryConditionsDict,
+                                     secondaryItems:secondaryItems,
+                                     secondaryDict:secondaryConditionsDict
             )
+
+            
+//            self.delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
+//                                     conditionsDict:conditions,
+//                                     primaryItems:primaryItems,
+//                                     primaryDict:primaryConditionsDict
+//            )
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
@@ -422,10 +558,15 @@ class WADataStore: WAWeatherInfoDelegate {
     
     func imageFor(iconName:String) -> UIImage? {
         
-        var result: UIImage?
-        if let cachedImage = imageCache.objectForKey(iconName) {
-            result = cachedImage as? UIImage
-        } else {
+        var result: UIImage? = nil
+        
+        dispatch_sync(imageAvailableLockQueue) {
+
+            if let cachedImage = self.imageCache.objectForKey(iconName) {
+                result = cachedImage as? UIImage
+            }
+        }
+        if result == nil {
             result = imagePlaceholder
         }
         return result
@@ -438,25 +579,35 @@ class WADataStore: WAWeatherInfoDelegate {
         // iconURL = clear.gif or nt_clear.gif
         
         var pending = false
+        var available = false
         
-        //dispatch_sync(imagePendingLockQueue) {
+        dispatch_sync(imagePendingLockQueue) {
             if let _ = self.pendingImage[imageURLString] {
                 pending = true
             }
-        //}
+        }
 
-        if !pending {
-            pendingImage[imageURLString] = iconName
+        dispatch_sync(imageAvailableLockQueue) {
+            if let _ = self.imageCache.objectForKey(iconName) {
+                available = true
+            }
+        }
+        
+        if !pending && !available {
+            
+            dispatch_sync(imagePendingLockQueue) {
+                self.pendingImage[imageURLString] = iconName
+            }
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-
+                
                 var image:UIImage? = nil
-
+                
                 if let customIconSet = self.iconSet {
-
+                    
                     // http://icons.wxug.com/i/c/a/partlycloudy.gif
                     // http://icons.wxug.com/i/b/a/partlycloudy.gif
-
+                    
                     if let imageURL = NSURL(string: imageURLString) {
                         let modifiedIconURL = imageURL.URLByDeletingLastPathComponent?.URLByDeletingLastPathComponent?.URLByAppendingPathComponent(customIconSet).URLByAppendingPathComponent(imageURL.lastPathComponent!)
                         
@@ -476,10 +627,14 @@ class WADataStore: WAWeatherInfoDelegate {
                 
                 if let iconImage = image {
                     
-                    //dispatch_sync(self.imagePendingLockQueue) {
+                    dispatch_sync(self.imagePendingLockQueue) {
                         self.pendingImage.removeValueForKey(imageURLString)
-                    //}
-                    self.imageCache.setObject(iconImage, forKey: imageURLString)
+                    }
+                    
+                    dispatch_sync(self.imageAvailableLockQueue) {
+                        self.imageCache.setObject(iconImage, forKey: imageURLString)
+                    }
+                    
                     self.delegate?.dataStore(self, updateForIconImage:imageURLString)
                 }
                 

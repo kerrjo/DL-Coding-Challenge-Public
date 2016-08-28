@@ -30,6 +30,13 @@ class WAForecastDescriptionCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
 }
 
+class WAHomeSecondaryCell: UITableViewCell {
+    
+    @IBOutlet weak var keyLabel: UILabel!
+    
+    @IBOutlet weak var valueLabel: UILabel!
+}
+
 
 
 class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WAHourlyCollectionDataDelegate{
@@ -45,7 +52,10 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     var primaryConditionsDict:[String : AnyObject]?
     var conditionItems:[String] = []
     var currentConditionsDict:[String : AnyObject]?
-    
+
+    var secondaryItems:[String] = []
+    var secondaryConditionsDict:[String : AnyObject]?
+
     var forecastPeriods:[[String : AnyObject]] = []
     var forecastDaysData:[[String : AnyObject]] = []
 
@@ -77,6 +87,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         tableHeaderHighLabel.text = ""
         tableHeaderLowLabel.text = ""
         tableHeaderPrimaryLabel.text = ""
+        
 
     }
 
@@ -120,9 +131,9 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             print("\(#function) finished!")
 
             refreshInProgress = false
-            self.refreshControl?.endRefreshing()
             
             dispatch_async(dispatch_get_main_queue()) {
+                self.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
             }
             
@@ -180,6 +191,31 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         checkRefreshFinished()
         
     }
+    
+    
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
+                   conditionsDict:[String : AnyObject],
+                   primaryItems:[String],
+                   primaryDict:[String : AnyObject],
+                   secondaryItems:[String],
+                   secondaryDict:[String : AnyObject])
+    {
+
+        self.currentConditionsDict = conditionsDict
+        self.conditionItems = conditionItems
+        self.primaryItems = primaryItems
+        self.primaryConditionsDict = primaryDict
+        self.secondaryItems = secondaryItems
+        self.secondaryConditionsDict = secondaryDict
+
+        primaryTitle = currentConditionsDict?["weather"] as! String
+        optionTitle = "Other items"
+        
+        refreshConditionsInProgress = false
+        checkRefreshFinished()
+
+    }
+
     
     //        refreshInProgress = false
     //        self.refreshControl?.endRefreshing()
@@ -348,6 +384,18 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         }
     }
 
+    func configureDisplayHomeSecondaryCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let secondaryCell = cell as? WAHomeSecondaryCell {
+            let conditionItem = secondaryItems[indexPath.row]
+            secondaryCell.keyLabel!.text = conditionItem
+        
+            if let detailText = secondaryConditionsDict?[conditionItem] as? String {
+                secondaryCell.valueLabel.text = detailText
+            }
+        }
+    }
+
     func configureDisplayHomeDataCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         let conditionItem = conditionItems[indexPath.row]
@@ -386,15 +434,17 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             configureDisplayForecastDescriptionCell(cell, forRowAtIndexPath: indexPath)
             
         } else if indexPath.section == 4 {
+            // "WAHomeSecondaryCell"
+            configureDisplayHomeSecondaryCell(cell, forRowAtIndexPath: indexPath)
+            
+        } else if indexPath.section == 5 {
             // "WAHomeDataCell"
             configureDisplayHomeDataCell(cell, forRowAtIndexPath: indexPath)
         }
         
     }
-
     
-    override func tableView(tableView: UITableView,
-                            heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var result = 42.0 // primary
         if indexPath.section == 1 {
             result = 100.0 // hourly
@@ -402,30 +452,30 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             result = 38.0 // forecastdays
         } else if indexPath.section == 3 {
             result = 102.0 // forecastdescription
+        } else if indexPath.section == 4 {
+            result = 40.0 // secondary
         }
         
         return CGFloat(result)
     }
 
-
     
     // MARK: - Table view data source
-
     
     /*
      section 0  - primary
      section 1  - hourly
      section 2  - forecastdays
      section 3  - forecastdescription
-     section 4  - otheritems
+     section 4  - secondary
+     section 5  - otheritems
   */
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         
         if section == 0 {
             return primaryItems.count
@@ -436,6 +486,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         } else if section == 3 {
             return 1
         } else if section == 4 {
+            return secondaryItems.count
+        } else if section == 5 {
             return conditionItems.count
         }
         
@@ -449,7 +501,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 // WAForecastDayCell
 // WAHourlyCell
 // WAForecastDescriptionCell
-
         
         var reuseIdentifier = "WAHomeDataCell"
         
@@ -462,6 +513,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         } else if indexPath.section == 3 {
             reuseIdentifier = "WAForecastDescriptionCell"
         } else if indexPath.section == 4 {
+            reuseIdentifier = "WAHomeSecondaryCell"
+        } else if indexPath.section == 5 {
             reuseIdentifier = "WAHomeDataCell"
         }
         
