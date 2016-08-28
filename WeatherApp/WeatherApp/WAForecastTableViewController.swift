@@ -20,6 +20,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     var weatherInfo = WADataStore()
     
     var forecastPeriods:[[String : AnyObject]] = []
+    var forecastDaysData:[[String : AnyObject]] = []
+
     var hourlyTenPeriods:[[[String : AnyObject]]]?
 
     var hourlyCollectionData = WAHourlyCollectionData()
@@ -104,6 +106,20 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         refreshInProgress = false
         self.refreshControl?.endRefreshing()
     }
+    
+    func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]], forecastDataPeriods:[[String : AnyObject]]) {
+
+        forecastPeriods = dayPeriods
+        forecastDaysData = forecastDataPeriods
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
+        
+        refreshInProgress = false
+        self.refreshControl?.endRefreshing()
+
+    }
+
  
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         // EMPTY Impl
@@ -283,9 +299,44 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             
             let forecastPeriod = forecastPeriods[normalizedRow]
             
-            if let titleText = forecastPeriod["title"] as? String {
-                cell.textLabel!.text = titleText
+            let dayIndex = normalizedRow / 2
+      
+            
+            let forecastDayData = forecastDaysData[dayIndex]
+
+//            if normalizedRow == 0 {
+//                print(forecastDayData)
+//            }
+
+            var isDataRow = false
+            if normalizedRow % 2 == 0 {
+                isDataRow = true
             }
+
+            var primaryText = ""
+            
+            if let titleText = forecastPeriod["title"] as? String {
+                primaryText = titleText
+            }
+
+            if isDataRow {
+                if let highData = forecastDayData["high"] {
+                    if let tempf = highData["fahrenheit"] as? String {
+                        primaryText += "  \(tempf)"
+                        //                    print("High \(tempf)")
+                    }
+                }
+                
+                if let highData = forecastDayData["low"] {
+                    if let tempf = highData["fahrenheit"] as? String {
+                        primaryText += " / \(tempf)"
+                        //                    print("Low \(tempf)")
+                    }
+                }
+            }
+            
+            cell.textLabel!.text = primaryText
+
             
             if let detailText = forecastPeriod["fcttext"] as? String {
                 cell.detailTextLabel!.text = detailText
@@ -294,6 +345,8 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             let iconURL = forecastPeriod["icon_url"] as! String
             
             cell.imageView!.image = self.weatherInfo.imageFor(iconURL)
+            
+            
             
             if let revealIndex = revealHourlyRow {
                 if indexPath.row == revealIndex {

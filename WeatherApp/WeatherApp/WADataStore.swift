@@ -19,6 +19,8 @@ protocol WADataStoreDelegate : class {
     func dataStore(controller: WADataStore, primaryLocationTitle:String)
     func dataStore(controller: WADataStore, updateForIconImage iconName:String)
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
+    func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]], forecastDataPeriods:[[String : AnyObject]])
+
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage)
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]])
     func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]])
@@ -27,6 +29,8 @@ protocol WADataStoreDelegate : class {
 extension WADataStoreDelegate {
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]){}
     func dataStore(controller: WADataStore, didReceiveHourlyTen hourPeriods:[[[String : AnyObject]]]){}
+    func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]], forecastDataPeriods:[[String : AnyObject]]) {}
+
 }
 
 
@@ -274,8 +278,36 @@ class WADataStore: WAWeatherInfoDelegate {
             let iconURLString = result["icon_url"] as! String
             
             self.imageFor(icon, imageURLString: iconURLString)
+            
+            //print(result)
         }
+        
     }
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
+                     forecastDataPeriods:[[String : AnyObject]])
+    {
+        let forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
+            let v1 = item1["period"] as! Int
+            let v2 = item2["period"] as! Int
+            return v1 < v2
+        })
+        
+        //delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods)
+        
+        for result in forecastPeriods {
+            let icon = result["icon"] as! String
+            let iconURLString = result["icon_url"] as! String
+            
+            self.imageFor(icon, imageURLString: iconURLString)
+            
+            //print(result)
+        }
+        
+        delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods, forecastDataPeriods: forecastDataPeriods)
+    
+    }
+
     
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
         // Empty impl
