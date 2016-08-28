@@ -135,10 +135,8 @@ class WADataStore: WAWeatherInfoDelegate {
         
         var topText = ""
         var bottomText = ""
-        //print(period)
         if let fcTime = hourItem["FCTTIME"] {
             if let hour = fcTime["hour"] as? String {
-                //print(hour)
                 let hourInt:Int? = Int(hour)
                 if let intHour = hourInt {
                     if intHour > 12 {
@@ -157,7 +155,6 @@ class WADataStore: WAWeatherInfoDelegate {
             if let dow = fcTime["weekday_name_abbrev"] as? String {
                 bottomText += " \(dow)"
             }
-            
             //            if let hourText = fcTime["civil"] as? String {
             //                //print(hourText)
             //            }

@@ -69,10 +69,8 @@ class WAHourlyCollectionData: NSObject, UICollectionViewDelegate, UICollectionVi
         let image = delegate?.hourlyCollection(self, imageForIcon: iconURL)
         
         hourCell.imageView.image = image
-        
         hourCell.topLabel.text = topText
         hourCell.bottomLabel.text = bottomText
-        
     }
     
     // MARK: UICollectionViewDataSource

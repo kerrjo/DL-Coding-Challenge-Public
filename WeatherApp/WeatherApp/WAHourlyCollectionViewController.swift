@@ -19,7 +19,7 @@ class WAHourlyCollectionViewCell: UICollectionViewCell {
 
 private let reuseIdentifier = "WAHourlyCollectionViewCell"
 
-class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDelegate {
+class WAHourlyCollectionViewController: UICollectionViewController, WADataStoreDelegate {
 
     var weatherInfo = WADataStore()
 
@@ -101,17 +101,6 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
         // EMPTY Impl
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
     
     // MARK: UICollectionViewDelegate
     
@@ -127,12 +116,8 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
         var topText = ""
         var bottomText = ""
         
-        //print(period)
         if let fcTime = hourItem["FCTTIME"] {
-            
             if let hour = fcTime["hour"] as? String {
-                //print(hour)
-                
                 let hourInt:Int? = Int(hour)
                 if let intHour = hourInt {
                     if intHour > 12 {
@@ -160,16 +145,13 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
         
         if let tempDict = hourItem["temp"] as? [String:AnyObject],
             let temp = tempDict["english"] as? String {
-            //print(temp)
             topText = temp
         }
         let iconURL = hourItem["icon_url"] as! String
 
         hourCell.topLabel.text = topText
         hourCell.bottomLabel.text = bottomText
-        //print(iconURL)
         hourCell.imageView.image = weatherInfo.imageFor(iconURL)
-        
     }
     
  
@@ -178,7 +160,6 @@ class WAHourlyCollectionViewController: UICollectionViewController,WADataStoreDe
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return hourlyPeriods.count
