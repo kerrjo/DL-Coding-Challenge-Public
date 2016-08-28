@@ -21,6 +21,8 @@ class WAHourlyCollectionData: NSObject, UICollectionViewDelegate, UICollectionVi
     
     var hourlyPeriods:[[String : AnyObject]] = []
 
+    var includeDOW = false
+    
     
     // MARK: UICollectionViewDelegate
     
@@ -50,14 +52,17 @@ class WAHourlyCollectionData: NSObject, UICollectionViewDelegate, UICollectionVi
                     bottomText = hour
                 }
             }
-
-//            if let dow = fcTime["weekday_name_abbrev"] as? String {
-//                bottomText += " \(dow)"
-//            }
-
+            
             if let ampm = fcTime["ampm"] as? String {
                 bottomText += " \(ampm)"
             }
+            
+            if includeDOW {
+                if let dow = fcTime["weekday_name_abbrev"] as? String {
+                    bottomText += "\n\(dow)"
+                }
+            }
+
         }
         
         if let tempDict = hourItem["temp"] as? [String:AnyObject],

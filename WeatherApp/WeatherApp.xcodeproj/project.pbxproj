@@ -25,6 +25,8 @@
 		55D720B21D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */; };
 		55D720B41D6DF70E0056FC62 /* WACurrentHourlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720B31D6DF70E0056FC62 /* WACurrentHourlyViewController.swift */; };
 		55D720BB1D6FCB760056FC62 /* WAHourlyCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720BA1D6FCB760056FC62 /* WAHourlyCollectionDataSource.swift */; };
+		55D720BD1D732FCB0056FC62 /* WAHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720BC1D732FCB0056FC62 /* WAHomeViewController.swift */; };
+		55D720BF1D732FE20056FC62 /* WAHomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D720BE1D732FE20056FC62 /* WAHomeTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		55D720B11D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHourlyCollectionViewController.swift; sourceTree = "<group>"; };
 		55D720B31D6DF70E0056FC62 /* WACurrentHourlyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WACurrentHourlyViewController.swift; sourceTree = "<group>"; };
 		55D720BA1D6FCB760056FC62 /* WAHourlyCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHourlyCollectionDataSource.swift; sourceTree = "<group>"; };
+		55D720BC1D732FCB0056FC62 /* WAHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHomeViewController.swift; sourceTree = "<group>"; };
+		55D720BE1D732FE20056FC62 /* WAHomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAHomeTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +125,8 @@
 				55D720B31D6DF70E0056FC62 /* WACurrentHourlyViewController.swift */,
 				55D720B51D6E0A8A0056FC62 /* Sample */,
 				55D720BA1D6FCB760056FC62 /* WAHourlyCollectionDataSource.swift */,
+				55D720BC1D732FCB0056FC62 /* WAHomeViewController.swift */,
+				55D720BE1D732FE20056FC62 /* WAHomeTableViewController.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -245,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55D720A81D6B46020056FC62 /* WAForecastsViewController.swift in Sources */,
+				55D720BD1D732FCB0056FC62 /* WAHomeViewController.swift in Sources */,
 				55D720A11D6A17CC0056FC62 /* WAForecastTableViewController.swift in Sources */,
 				55D720A01D6A17CC0056FC62 /* WACurrentConditionsTableViewController.swift in Sources */,
 				55D720B21D6DEA5B0056FC62 /* WAHourlyCollectionViewController.swift in Sources */,
@@ -254,6 +261,7 @@
 				55D720801D6A173C0056FC62 /* ViewController.swift in Sources */,
 				55D720AE1D6C97900056FC62 /* WADataStore.swift in Sources */,
 				55D7207E1D6A173C0056FC62 /* AppDelegate.swift in Sources */,
+				55D720BF1D732FE20056FC62 /* WAHomeTableViewController.swift in Sources */,
 				55D720AC1D6C8F4E0056FC62 /* WACacheFiles.swift in Sources */,
 				55D720AA1D6B462F0056FC62 /* WAForecastTenTableViewController.swift in Sources */,
 				55D720A21D6A17CC0056FC62 /* WAWeatherInfo.swift in Sources */,

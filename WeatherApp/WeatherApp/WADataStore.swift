@@ -178,7 +178,11 @@ class WADataStore: WAWeatherInfoDelegate {
     
     func weatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         
-        delegate?.dataStore(self, didReceiveHourly:hourPeriods)
+        
+        dispatch_async(dispatch_get_main_queue()) {
+
+         self.delegate?.dataStore(self, didReceiveHourly:hourPeriods)
+        }
   
         for period in hourPeriods {
             let icon = period["icon"] as! String
@@ -254,11 +258,16 @@ class WADataStore: WAWeatherInfoDelegate {
         primaryItems += ["Dewpoint"]
         primaryConditionsDict["Dewpoint"] = currentConditionsDict["dewpoint_string"] as! String
         
-        delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            
+
+        self.delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
             conditionsDict:conditions,
             primaryItems:primaryItems,
             primaryDict:primaryConditionsDict
         )
+        }
 
         //  displayLocationDict["full"],
         
@@ -344,18 +353,30 @@ class WADataStore: WAWeatherInfoDelegate {
             //print(result)
         }
 
-        print(txtForecastDayPeriods.count)
-        let txtForecastDayPeriod = txtForecastDayPeriods[0]
-        let fieldKeys1 = Array(txtForecastDayPeriod.keys)
-        print(fieldKeys1)
+        for result in simpleForecastDayPeriods {
+            let icon = result["icon"] as! String
+            let iconURLString = result["icon_url"] as! String
+            
+            self.imageFor(icon, imageURLString: iconURLString)
+            
+            //print(result)
+        }
+        
+//        print(txtForecastDayPeriods.count)
+//        let txtForecastDayPeriod = txtForecastDayPeriods[0]
+//        let fieldKeys1 = Array(txtForecastDayPeriod.keys)
+//        print(fieldKeys1)
+//
+//        print(simpleForecastDayPeriods.count)
+//        let simpleForecastPeriod = simpleForecastDayPeriods[0]
+//        let fieldKeys2 = Array(simpleForecastPeriod.keys)
+//        print(fieldKeys2)
+        //print(simpleForecastPeriod)
 
-        print(simpleForecastDayPeriods.count)
-        let simpleForecastPeriod = simpleForecastDayPeriods[0]
-        let fieldKeys2 = Array(simpleForecastPeriod.keys)
-        print(fieldKeys2)
-        //                    print(simpleForecastPeriod)
+        dispatch_async(dispatch_get_main_queue()) {
 
-        delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods, forecastDataPeriods: simpleForecastDayPeriods)
+            self.delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods, forecastDataPeriods: simpleForecastDayPeriods)
+        }
 
     }
 
