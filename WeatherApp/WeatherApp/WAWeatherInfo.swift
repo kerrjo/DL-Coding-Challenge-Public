@@ -135,11 +135,6 @@ class WAWeatherInfo {
 
             do {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-
-//                if let forecastDict = responseData["forecast"] as? [String : AnyObject] {
-//                    let fieldKeys = Array(forecastDict.keys)
-//                    print(fieldKeys)
-//                }
                 
                 if let forecastDict = responseData["forecast"] as? [String : AnyObject] {
                     self.delegate?.weatherInfo(self, didReceiveForecast:forecastDict)
@@ -150,7 +145,12 @@ class WAWeatherInfo {
             }
         }
     }
-    
+
+    //                if let forecastDict = responseData["forecast"] as? [String : AnyObject] {
+    //                    let fieldKeys = Array(forecastDict.keys)
+    //                    print(fieldKeys)
+    //                }
+
     
     //                var txtForecastDayPeriods = [[String : AnyObject]]()
     //                var simpleForecastDayPeriods = [[String : AnyObject]]()
