@@ -276,6 +276,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if indexPath.section == 0 {
+            
             // "WAHomePrimaryCell"
 
             let conditionItem = primaryItems[indexPath.row]
@@ -288,6 +289,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             }
             
         } else if indexPath.section == 1 {
+            
             // "WAHourlyCell"
             
             if let hourlyCell = cell as? WAHourlyCell {
@@ -299,6 +301,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
             
         } else if indexPath.section == 2 {
+            
             // "WAForecastDayCell"
 
             if let dayCell = cell as? WAForecastDayCell {
@@ -330,7 +333,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             
             
         } else if indexPath.section == 3 {
-            //reuseIdentifier = "WAForecastDescriptionCell"
+            
+            // "WAForecastDescriptionCell"
             
             if let descriptionCell = cell as? WAForecastDescriptionCell {
 
@@ -348,16 +352,18 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                     if let fcText = forecastPeriodFirstNight["fcttext"] as? String {
                         descriptionText += " " + fcText
                     }
-                } else {
-                    print("no forecastPeriods")
                 }
+//                else {
+//                    print("no forecastPeriods")
+//                }
                 
                 descriptionCell.descriptionLabel.text = descriptionText
             }
             
         } else if indexPath.section == 4 {
             
-            //reuseIdentifier = "WAHomeDataCell"
+            // "WAHomeDataCell"
+            
             let conditionItem = conditionItems[indexPath.row]
             cell.textLabel!.text = conditionItem
             
@@ -371,7 +377,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                 }
             }
         }
-
         
     }
 
