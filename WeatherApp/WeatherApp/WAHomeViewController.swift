@@ -14,12 +14,11 @@ class WAHomeViewController: UIViewController, WAHomeTableDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        locationLabel.text = ""
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func homeTable(controller:WAHomeTableViewController, primaryLocationTitle title:String) {

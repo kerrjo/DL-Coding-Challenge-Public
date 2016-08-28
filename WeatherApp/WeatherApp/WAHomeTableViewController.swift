@@ -49,7 +49,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     var forecastPeriods:[[String : AnyObject]] = []
     var forecastDaysData:[[String : AnyObject]] = []
 
-    //var hourlyPeriods:[[String : AnyObject]] = []
 
     var hourlyCollectionData = WAHourlyCollectionData()
 
@@ -71,7 +70,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         weatherInfo.delegate = self
         
         hourlyCollectionData.delegate = self
-        
         hourlyCollectionData.includeDOW = true
         
         self.refreshControl = UIRefreshControl()
