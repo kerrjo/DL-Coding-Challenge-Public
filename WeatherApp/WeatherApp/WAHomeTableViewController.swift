@@ -205,7 +205,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     func dataStore(controller: WADataStore, primaryLocationTitle:String) {
         dispatch_async(dispatch_get_main_queue()) {
             self.delegate?.homeTable(self, primaryLocationTitle: primaryLocationTitle)
-            //self.locationLabel.text = primaryLocationTitle
+            
         }
     }
     
@@ -337,6 +337,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                 var descriptionText = ""
 
                 if forecastPeriods.count > 0 {
+                    
                     let forecastPeriodFirstDay = forecastPeriods[0]
                     let forecastPeriodFirstNight = forecastPeriods[1]
                     
@@ -347,6 +348,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                     if let fcText = forecastPeriodFirstNight["fcttext"] as? String {
                         descriptionText += " " + fcText
                     }
+                } else {
+                    print("no forecastPeriods")
                 }
                 
                 descriptionCell.descriptionLabel.text = descriptionText
@@ -381,7 +384,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         } else if indexPath.section == 2 {
             result = 38.0 // forecastdays
         } else if indexPath.section == 3 {
-            result = 88.0 // forecastdescription
+            result = 102.0 // forecastdescription
         }
         
         return CGFloat(result)

@@ -178,10 +178,8 @@ class WADataStore: WAWeatherInfoDelegate {
     
     func weatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         
-        
         dispatch_async(dispatch_get_main_queue()) {
-
-         self.delegate?.dataStore(self, didReceiveHourly:hourPeriods)
+            self.delegate?.dataStore(self, didReceiveHourly:hourPeriods)
         }
   
         for period in hourPeriods {
@@ -261,12 +259,11 @@ class WADataStore: WAWeatherInfoDelegate {
         
         dispatch_async(dispatch_get_main_queue()) {
             
-
-        self.delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
-            conditionsDict:conditions,
-            primaryItems:primaryItems,
-            primaryDict:primaryConditionsDict
-        )
+            self.delegate?.dataStore(self, didReceiveCurrentConditions:conditionItems,
+                                     conditionsDict:conditions,
+                                     primaryItems:primaryItems,
+                                     primaryDict:primaryConditionsDict
+            )
         }
 
         //  displayLocationDict["full"],

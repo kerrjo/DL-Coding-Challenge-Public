@@ -750,7 +750,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="87.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RaV-fT-XtN">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="RaV-fT-XtN">
                                             <rect key="frame" x="8" y="8" width="584" height="71.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -928,8 +928,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r91-xL-1J6" userLabel="Hourly Container View">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="110"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r91-xL-1J6" userLabel="Hourly Container View">
+                                <rect key="frame" x="0.0" y="20" width="600" height="110"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="110" id="Ver-iQ-xr2"/>
                                 </constraints>
@@ -937,8 +937,8 @@
                                     <segue destination="lM0-ys-Yup" kind="embed" identifier="WAEmbedHourly" id="vso-SG-hC5"/>
                                 </connections>
                             </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VwB-0M-jgM" userLabel="Current condition ContainerView">
-                                <rect key="frame" x="0.0" y="110" width="600" height="369"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VwB-0M-jgM" userLabel="Current condition ContainerView">
+                                <rect key="frame" x="0.0" y="130" width="600" height="462"/>
                                 <connections>
                                     <segue destination="Ay4-Jh-bZs" kind="embed" id="3SE-Zi-DXF"/>
                                 </connections>
@@ -967,7 +967,7 @@
             <objects>
                 <tableViewController id="Ay4-Jh-bZs" customClass="WACurrentConditionsTableViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qxW-v8-Q3f">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="369"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="462"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="FCz-sb-R2c">
