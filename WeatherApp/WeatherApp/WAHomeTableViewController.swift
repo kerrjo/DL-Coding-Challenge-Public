@@ -281,8 +281,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         } else {
             cell.detailTextLabel!.text = nil
         }
-
-        
     }
 
     func configureDisplayHourlyCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -297,31 +295,28 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
     func configureDisplayForecastDayCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let dayCell = cell as? WAForecastDayCell {
+        if let dayCell = cell as? WAForecastDayCell where forecastDaysData.count > 0 {
             
-            if forecastDaysData.count > 0 {
-                
-                let forecastDayData = forecastDaysData[indexPath.row]
-                
-                if let highData = forecastDayData["high"],
-                    let tempf = highData["fahrenheit"] as? String {
-                    dayCell.highTempLabel.text = tempf
-                }
-                
-                if let highData = forecastDayData["low"],
-                    let tempf = highData["fahrenheit"] as? String {
-                    dayCell.lowTempLabel.text = tempf
-                }
-                
-                if let dateInfo = forecastDayData["date"],
-                    let dow = dateInfo["weekday"] as? String {
-                    dayCell.dayLabel.text = dow
-                }
-                
-                let iconURL = forecastDayData["icon_url"] as! String
-                
-                dayCell.iconImageView!.image = self.weatherInfo.imageFor(iconURL)
+            let forecastDayData = forecastDaysData[indexPath.row]
+            
+            if let highData = forecastDayData["high"],
+                let tempf = highData["fahrenheit"] as? String {
+                dayCell.highTempLabel.text = tempf
             }
+            
+            if let highData = forecastDayData["low"],
+                let tempf = highData["fahrenheit"] as? String {
+                dayCell.lowTempLabel.text = tempf
+            }
+            
+            if let dateInfo = forecastDayData["date"],
+                let dow = dateInfo["weekday"] as? String {
+                dayCell.dayLabel.text = dow
+            }
+            
+            let iconURL = forecastDayData["icon_url"] as! String
+            
+            dayCell.iconImageView!.image = self.weatherInfo.imageFor(iconURL)
         }
     }
 
@@ -374,113 +369,24 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if indexPath.section == 0 {
-            
             // "WAHomePrimaryCell"
             configureDisplayPrimaryCell(cell, forRowAtIndexPath: indexPath)
 
-//            let conditionItem = primaryItems[indexPath.row]
-//            cell.textLabel!.text = conditionItem
-//            
-//            if let detailText = primaryConditionsDict?[conditionItem] as? String {
-//                cell.detailTextLabel!.text = detailText
-//            } else {
-//                cell.detailTextLabel!.text = nil
-//            }
-            
         } else if indexPath.section == 1 {
-            
             // "WAHourlyCell"
-            
             configureDisplayHourlyCell(cell, forRowAtIndexPath: indexPath)
-//            if let hourlyCell = cell as? WAHourlyCell {
-//                hourlyCell.collectionView?.reloadData()
-//                if !refreshInProgress {
-//                    hourlyCell.activity.stopAnimating()
-//                }
-//            }
-
             
         } else if indexPath.section == 2 {
-            
             // "WAForecastDayCell"
-
             configureDisplayForecastDayCell(cell, forRowAtIndexPath: indexPath)
             
-//            if let dayCell = cell as? WAForecastDayCell {
-//                
-//                if forecastDaysData.count > 0 {
-//                    
-//                    let forecastDayData = forecastDaysData[indexPath.row]
-//                    
-//                    if let highData = forecastDayData["high"],
-//                        let tempf = highData["fahrenheit"] as? String {
-//                        dayCell.highTempLabel.text = tempf
-//                    }
-//                    
-//                    if let highData = forecastDayData["low"],
-//                        let tempf = highData["fahrenheit"] as? String {
-//                        dayCell.lowTempLabel.text = tempf
-//                    }
-//                    
-//                    if let dateInfo = forecastDayData["date"],
-//                        let dow = dateInfo["weekday"] as? String {
-//                        dayCell.dayLabel.text = dow
-//                    }
-//                    
-//                    let iconURL = forecastDayData["icon_url"] as! String
-//                    
-//                    dayCell.iconImageView!.image = self.weatherInfo.imageFor(iconURL)
-//                }
-//            }
-            
-            
         } else if indexPath.section == 3 {
-            
             // "WAForecastDescriptionCell"
-            
             configureDisplayForecastDescriptionCell(cell, forRowAtIndexPath: indexPath)
             
-//            if let descriptionCell = cell as? WAForecastDescriptionCell {
-//
-//                var descriptionText = ""
-//
-//                if forecastPeriods.count > 0 {
-//                    
-//                    let forecastPeriodFirstDay = forecastPeriods[0]
-//                    let forecastPeriodFirstNight = forecastPeriods[1]
-//                    
-//                    if let fcText = forecastPeriodFirstDay["fcttext"] as? String {
-//                        descriptionText += fcText
-//                    }
-//                    
-//                    if let fcText = forecastPeriodFirstNight["fcttext"] as? String {
-//                        descriptionText += " " + fcText
-//                    }
-//                }
-////                else {
-////                    print("no forecastPeriods")
-////                }
-//                
-//                descriptionCell.descriptionLabel.text = descriptionText
-//            }
-            
         } else if indexPath.section == 4 {
-            
             // "WAHomeDataCell"
-            
             configureDisplayHomeDataCell(cell, forRowAtIndexPath: indexPath)
-//            let conditionItem = conditionItems[indexPath.row]
-//            cell.textLabel!.text = conditionItem
-//            
-//            if let detailText = currentConditionsDict?[conditionItem] as? String {
-//                cell.detailTextLabel!.text = detailText
-//            } else {
-//                if let detailValue = currentConditionsDict?[conditionItem] as? Double {
-//                    cell.detailTextLabel!.text = "\(detailValue)"
-//                } else {
-//                    cell.detailTextLabel!.text = nil
-//                }
-//            }
         }
         
     }
