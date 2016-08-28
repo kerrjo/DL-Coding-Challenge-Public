@@ -18,7 +18,8 @@ protocol WADataStoreDelegate : class {
     
     func dataStore(controller: WADataStore, primaryLocationTitle:String)
     func dataStore(controller: WADataStore, updateForIconImage iconName:String)
-    func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
+    
+    //func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]], forecastDataPeriods:[[String : AnyObject]])
 
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage)
@@ -263,16 +264,77 @@ class WADataStore: WAWeatherInfoDelegate {
         
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+//        
+//        let forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
+//            let v1 = item1["period"] as! Int
+//            let v2 = item2["period"] as! Int
+//            return v1 < v2
+//        })
+//
+//        delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods)
+//
+//        for result in forecastPeriods {
+//            let icon = result["icon"] as! String
+//            let iconURLString = result["icon_url"] as! String
+//            
+//            self.imageFor(icon, imageURLString: iconURLString)
+//            
+//            //print(result)
+//        }
+//        
+//    }
+//    
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
+//                     forecastDataPeriods:[[String : AnyObject]])
+//    {
+//        let forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
+//            let v1 = item1["period"] as! Int
+//            let v2 = item2["period"] as! Int
+//            return v1 < v2
+//        })
+//        
+//        //delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods)
+//        
+//        for result in forecastPeriods {
+//            let icon = result["icon"] as! String
+//            let iconURLString = result["icon_url"] as! String
+//            
+//            self.imageFor(icon, imageURLString: iconURLString)
+//            
+//            //print(result)
+//        }
+//        
+//        delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods, forecastDataPeriods: forecastDataPeriods)
+//    
+//    }
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject]) {
         
-        let forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
+        // forecast = responseData["forecast"] as? [String : AnyObject]
+        
+        var txtForecastDayPeriods = [[String : AnyObject]]()
+        var simpleForecastDayPeriods = [[String : AnyObject]]()
+        
+        if let txtForecastDict = forecast["txt_forecast"] as? [String : AnyObject],
+            forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
+        {
+            txtForecastDayPeriods = forecastPeriods
+        }
+        
+        if let simpleForecastDict = forecast["simpleforecast"] as? [String : AnyObject],
+            simpleForecastPeriods = simpleForecastDict["forecastday"] as? [[String : AnyObject]]
+        {
+            simpleForecastDayPeriods = simpleForecastPeriods
+        }
+        
+        
+        let forecastPeriods = txtForecastDayPeriods.sort({ (item1, item2) -> Bool in
             let v1 = item1["period"] as! Int
             let v2 = item2["period"] as! Int
             return v1 < v2
         })
-
-        delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods)
-
+        
         for result in forecastPeriods {
             let icon = result["icon"] as! String
             let iconURLString = result["icon_url"] as! String
@@ -281,31 +343,20 @@ class WADataStore: WAWeatherInfoDelegate {
             
             //print(result)
         }
-        
-    }
-    
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
-                     forecastDataPeriods:[[String : AnyObject]])
-    {
-        let forecastPeriods = dayPeriods.sort({ (item1, item2) -> Bool in
-            let v1 = item1["period"] as! Int
-            let v2 = item2["period"] as! Int
-            return v1 < v2
-        })
-        
-        //delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods)
-        
-        for result in forecastPeriods {
-            let icon = result["icon"] as! String
-            let iconURLString = result["icon_url"] as! String
-            
-            self.imageFor(icon, imageURLString: iconURLString)
-            
-            //print(result)
-        }
-        
-        delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods, forecastDataPeriods: forecastDataPeriods)
-    
+
+        print(txtForecastDayPeriods.count)
+        let txtForecastDayPeriod = txtForecastDayPeriods[0]
+        let fieldKeys1 = Array(txtForecastDayPeriod.keys)
+        print(fieldKeys1)
+
+        print(simpleForecastDayPeriods.count)
+        let simpleForecastPeriod = simpleForecastDayPeriods[0]
+        let fieldKeys2 = Array(simpleForecastPeriod.keys)
+        print(fieldKeys2)
+        //                    print(simpleForecastPeriod)
+
+        delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods, forecastDataPeriods: simpleForecastDayPeriods)
+
     }
 
     

@@ -11,9 +11,11 @@ import UIKit
 
 protocol WAWeatherInfoDelegate : class {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject])
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
-                     forecastDataPeriods:[[String : AnyObject]])
+    
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
+//                     forecastDataPeriods:[[String : AnyObject]])
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
 
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
     func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
@@ -27,10 +29,14 @@ extension WAWeatherInfoDelegate {
     func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
     {}
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
-                     forecastDataPeriods:[[String : AnyObject]])
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
+//    {}
+//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
+//                     forecastDataPeriods:[[String : AnyObject]])
+//    {}
+    
+    func WeatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
     {}
-
 }
 
 
@@ -134,50 +140,56 @@ class WAWeatherInfo {
 //                    let fieldKeys = Array(forecastDict.keys)
 //                    print(fieldKeys)
 //                }
-
-                var txtForecastDayPeriods = [[String : AnyObject]]()
-                var simpleForecastDayPeriods = [[String : AnyObject]]()
                 
-                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-                    txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
-                    forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
+                if let forecastDict = responseData["forecast"] as? [String : AnyObject]
                 {
-                    print(forecastPeriods.count)
-
-                    txtForecastDayPeriods = forecastPeriods
-                    
-                    //self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
+                    self.delegate?.WeatherInfo(self, didReceiveForecast:forecastDict)
                 }
-
-                
-                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-                    simpleForecastDict = forecastDict["simpleforecast"] as? [String : AnyObject],
-                    simpleForecastPeriods = simpleForecastDict["forecastday"] as? [[String : AnyObject]]
-                {
-                    
-                    print(simpleForecastPeriods.count)
-                    let simpleForecastPeriod = simpleForecastPeriods[0]
-                    
-                    let fieldKeys = Array(simpleForecastPeriod.keys)
-                    print(fieldKeys)
-//                    print(simpleForecastPeriod)
-                    
-                    
-                    simpleForecastDayPeriods = simpleForecastPeriods
-                    
-                    //self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
-                }
-                
-                self.delegate?.WeatherInfo(self, didReceiveDayForecast:txtForecastDayPeriods,
-                            forecastDataPeriods:simpleForecastDayPeriods)
-
-                
                 
             } catch {
                 print("Error processing JSON \(error)")
             }
         }
     }
+    
+    
+    //                var txtForecastDayPeriods = [[String : AnyObject]]()
+    //                var simpleForecastDayPeriods = [[String : AnyObject]]()
+    //
+    //                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
+    //                    txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
+    //                    forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
+    //                {
+    //                    print(forecastPeriods.count)
+    //
+    //                    txtForecastDayPeriods = forecastPeriods
+    //
+    //                    //self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
+    //                }
+    //
+    //
+    //                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
+    //                    simpleForecastDict = forecastDict["simpleforecast"] as? [String : AnyObject],
+    //                    simpleForecastPeriods = simpleForecastDict["forecastday"] as? [[String : AnyObject]]
+    //                {
+    //
+    //                    print(simpleForecastPeriods.count)
+    //                    let simpleForecastPeriod = simpleForecastPeriods[0]
+    //
+    //                    let fieldKeys = Array(simpleForecastPeriod.keys)
+    //                    print(fieldKeys)
+    ////                    print(simpleForecastPeriod)
+    //
+    //
+    //                    simpleForecastDayPeriods = simpleForecastPeriods
+    //
+    //                    //self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
+    //                }
+    //
+    //                self.delegate?.WeatherInfo(self, didReceiveDayForecast:txtForecastDayPeriods,
+    //                            forecastDataPeriods:simpleForecastDayPeriods)
+    //
+
 
     // MARK: -
 
