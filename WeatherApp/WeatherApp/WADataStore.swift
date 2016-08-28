@@ -82,7 +82,7 @@ class WADataStore: WAWeatherInfoDelegate {
     
     // MARK: - WAWeatherInfoDelegate
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]]) {
 
         var dayPeriods:[[String : AnyObject]]
         var tenDayPeriods:[[[String : AnyObject]]] = []
@@ -176,7 +176,7 @@ class WADataStore: WAWeatherInfoDelegate {
     }
     
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
         
         delegate?.dataStore(self, didReceiveHourly:hourPeriods)
   
@@ -188,7 +188,7 @@ class WADataStore: WAWeatherInfoDelegate {
     }
 
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
         
         let currentConditionsDict = conditions
         
@@ -309,7 +309,7 @@ class WADataStore: WAWeatherInfoDelegate {
 //    
 //    }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject]) {
         
         // forecast = responseData["forecast"] as? [String : AnyObject]
         
@@ -360,11 +360,11 @@ class WADataStore: WAWeatherInfoDelegate {
     }
 
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
         // Empty impl
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
         delegate?.dataStore(self, didReceiveSatteliteImage:image)
     }
     

@@ -31,19 +31,19 @@ class ViewController: UIViewController, WAWeatherInfoDelegate {
 
     // MARK: WAWeatherInfoDelegate
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject]) {
         // Empty impl
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]]) {
         // Empty impl
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject]) {
         // Empty impl
     }
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
+    func weatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage) {
         // Empty impl
     }
 

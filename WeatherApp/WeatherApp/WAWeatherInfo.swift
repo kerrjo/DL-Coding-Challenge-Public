@@ -10,23 +10,23 @@ import Foundation
 import UIKit
 
 protocol WAWeatherInfoDelegate : class {
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject])
     
 //    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
 //    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
 //                     forecastDataPeriods:[[String : AnyObject]])
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
 
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
+    func weatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
 }
 
 extension WAWeatherInfoDelegate {
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
     {}
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
     {}
     
 //    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
@@ -35,7 +35,7 @@ extension WAWeatherInfoDelegate {
 //                     forecastDataPeriods:[[String : AnyObject]])
 //    {}
     
-    func WeatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
+    func weatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
     {}
 }
 
@@ -67,7 +67,7 @@ class WAWeatherInfo {
 //                    let fieldKeys = Array(currentConditionsDict.keys)
 //                    print(fieldKeys)
 
-                    self.delegate?.WeatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+                    self.delegate?.weatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
                 }
                 
             } catch {
@@ -88,7 +88,7 @@ class WAWeatherInfo {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
                 if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    self.delegate?.WeatherInfo(self, didReceiveHourly:hourlyItems)
+                    self.delegate?.weatherInfo(self, didReceiveHourly:hourlyItems)
                 }
                 
             } catch {
@@ -108,7 +108,7 @@ class WAWeatherInfo {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
                 if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    self.delegate?.WeatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
+                    self.delegate?.weatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
                 }
                 
             } catch {
@@ -141,9 +141,8 @@ class WAWeatherInfo {
 //                    print(fieldKeys)
 //                }
                 
-                if let forecastDict = responseData["forecast"] as? [String : AnyObject]
-                {
-                    self.delegate?.WeatherInfo(self, didReceiveForecast:forecastDict)
+                if let forecastDict = responseData["forecast"] as? [String : AnyObject] {
+                    self.delegate?.weatherInfo(self, didReceiveForecast:forecastDict)
                 }
                 
             } catch {
@@ -226,7 +225,7 @@ class WAWeatherInfo {
         
         commonSubmit(wiURL, cacheResponse:false, failure:nil) { (imageData) in
             if let satImage = UIImage(data: imageData) {
-                self.delegate?.WeatherInfo(self, didReceiveSatteliteImage: satImage)
+                self.delegate?.weatherInfo(self, didReceiveSatteliteImage: satImage)
             }
         }
     }
