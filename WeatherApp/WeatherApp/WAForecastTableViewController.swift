@@ -28,7 +28,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     var refreshForecastInProgress = false
     var refreshHourlyInProgress = false
 
-    var revealRow: Int?
+    var revealHourlyRow: Int?
 
     var firstLoad = true
     
@@ -115,7 +115,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         selectPeriod()
         
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
             
             if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
@@ -156,7 +156,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     // MARK: Helper
     
     func selectPeriod() {
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             var dayIndex = 0
             dayIndex = revealIndex / 2
             if let hourlyTenItems = hourlyTenPeriods {
@@ -184,7 +184,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
     func revealHourlyCell() {
 
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             if let _ = hourlyTenPeriods {
                 selectPeriod()
             } else {
@@ -202,9 +202,9 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     func dismissHourlyCell(animated:Bool) {
         
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
-            revealRow = nil
+            revealHourlyRow = nil
             self.tableView.beginUpdates()
             self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: animated ? .Top : .None)
             self.tableView.endUpdates()
@@ -216,9 +216,9 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         let deleteIndexPath = NSIndexPath(forRow: fromIndex, inSection: 0)
         let insertIndexPath = NSIndexPath(forRow: toIndex, inSection: 0)
         self.tableView.beginUpdates()
-        revealRow = nil
+        revealHourlyRow = nil
         self.tableView.deleteRowsAtIndexPaths([deleteIndexPath], withRowAnimation: .Automatic)
-        revealRow = toIndex - 1
+        revealHourlyRow = toIndex - 1
         selectPeriod()
         self.tableView.insertRowsAtIndexPaths([insertIndexPath], withRowAnimation: .Automatic)
         self.tableView.endUpdates()
@@ -232,7 +232,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
                 var normalizedRow = indexPath.row
                 var standardCell = true
                 
-                if let revealIndex = revealRow {
+                if let revealIndex = revealHourlyRow {
                     if normalizedRow > revealIndex + 1 {
                         normalizedRow -= 1
                     } else if normalizedRow == revealIndex + 1  {
@@ -271,7 +271,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
 
         var standardCell = true
         
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             if normalizedRow > revealIndex + 1 {
                 normalizedRow -= 1
             } else if normalizedRow == revealIndex + 1  {
@@ -295,7 +295,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             
             cell.imageView!.image = self.weatherInfo.imageFor(iconURL)
             
-            if let revealIndex = revealRow {
+            if let revealIndex = revealHourlyRow {
                 if indexPath.row == revealIndex {
                     let selectIndexPath = NSIndexPath(forRow: revealIndex, inSection: 0)
                     self.tableView.selectRowAtIndexPath(selectIndexPath, animated: false, scrollPosition: .None)
@@ -305,7 +305,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         } else {
             
             var isNight = false
-            if let revealIndex = revealRow {
+            if let revealIndex = revealHourlyRow {
                 isNight = isNightForRow(revealIndex)
             }
 
@@ -330,7 +330,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             
             if indexPath.row == revealIndex {
                 tableView.deselectRowAtIndexPath(indexPath, animated: true)
@@ -349,21 +349,21 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
             }
             
         } else {
-            revealRow = indexPath.row
+            revealHourlyRow = indexPath.row
             revealHourlyCell()
         }
         
     }
     
     //                dismissHourlyCell(false)
-    //                revealRow = normalizedRow
+    //                revealHourlyRow = normalizedRow
     //                revealHourlyCell()
 
     
     override func tableView(tableView: UITableView,
                               heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var result = 64.0
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             if indexPath.row == revealIndex + 1 {
                 result = 100.0
             }
@@ -382,7 +382,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var resultCount = forecastPeriods.count
-        if let _ = revealRow {
+        if let _ = revealHourlyRow {
             resultCount += 1
         }
 
@@ -393,7 +393,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
         
         var reuseIdentifier = "WAForecastPeriodCell"
 
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             if indexPath.row == revealIndex + 1 {
                 reuseIdentifier = "WAForecastRevealCell"
             }
@@ -440,7 +440,7 @@ class WAForecastTableViewController: UITableViewController, WADataStoreDelegate,
     
     func updateCollectionForIconImage(iconName:String) {
         
-        if let revealIndex = revealRow {
+        if let revealIndex = revealHourlyRow {
             let indexPath = NSIndexPath(forRow: revealIndex + 1, inSection: 0)
             if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAForecastRevealCell {
                 
