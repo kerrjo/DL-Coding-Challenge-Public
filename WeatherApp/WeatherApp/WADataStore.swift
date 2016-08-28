@@ -108,11 +108,11 @@ class WADataStore: WAWeatherInfoDelegate {
                     // New day
                     tenDayPeriods += [dayPeriods]
 
-                    for period in dayPeriods {
-                        let icon = period["icon"] as! String
-                        let iconURLString = period["icon_url"] as! String
-                        self.imageFor(icon, imageURLString: iconURLString)
-                    }
+//                    for period in dayPeriods {
+//                        let icon = period["icon"] as! String
+//                        let iconURLString = period["icon_url"] as! String
+//                        self.imageFor(icon, imageURLString: iconURLString)
+//                    }
 
                     dayPeriods = []
                     currentYday = yday
@@ -126,7 +126,24 @@ class WADataStore: WAWeatherInfoDelegate {
 
         tenDayPeriods += [dayPeriods]
     
-        delegate?.dataStore(self, didReceiveHourlyTen:tenDayPeriods)
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.delegate?.dataStore(self, didReceiveHourlyTen:tenDayPeriods)
+        }
+        
+        
+        for tenDayPeriod in tenDayPeriods {
+
+            for period in tenDayPeriod {
+                let icon = period["icon"] as! String
+                let iconURLString = period["icon_url"] as! String
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    self.imageFor(icon, imageURLString: iconURLString)
+                }
+            }
+        }
+
+
         
     }
 
@@ -185,7 +202,10 @@ class WADataStore: WAWeatherInfoDelegate {
         for period in hourPeriods {
             let icon = period["icon"] as! String
             let iconURLString = period["icon_url"] as! String
-            self.imageFor(icon, imageURLString: iconURLString)
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                self.imageFor(icon, imageURLString: iconURLString)
+            }
+            
         }
     }
 
@@ -230,7 +250,6 @@ class WADataStore: WAWeatherInfoDelegate {
         let icon = currentConditionsDict["icon"] as! String
         let iconURLString = currentConditionsDict["icon_url"] as! String
         
-        self.imageFor(icon, imageURLString: iconURLString)
         
         if let displayLocationDict = currentConditionsDict["display_location"] as? [String:AnyObject],
             let cityName = displayLocationDict["city"],
@@ -265,6 +284,12 @@ class WADataStore: WAWeatherInfoDelegate {
                                      primaryDict:primaryConditionsDict
             )
         }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            self.imageFor(icon, imageURLString: iconURLString)
+        }
+
+
 
         //  displayLocationDict["full"],
         
@@ -341,23 +366,6 @@ class WADataStore: WAWeatherInfoDelegate {
             return v1 < v2
         })
         
-        for result in forecastPeriods {
-            let icon = result["icon"] as! String
-            let iconURLString = result["icon_url"] as! String
-            
-            self.imageFor(icon, imageURLString: iconURLString)
-            
-            //print(result)
-        }
-
-        for result in simpleForecastDayPeriods {
-            let icon = result["icon"] as! String
-            let iconURLString = result["icon_url"] as! String
-            
-            self.imageFor(icon, imageURLString: iconURLString)
-            
-            //print(result)
-        }
         
 //        print(txtForecastDayPeriods.count)
 //        let txtForecastDayPeriod = txtForecastDayPeriods[0]
@@ -371,9 +379,31 @@ class WADataStore: WAWeatherInfoDelegate {
         //print(simpleForecastPeriod)
 
         dispatch_async(dispatch_get_main_queue()) {
-
             self.delegate?.dataStore(self, didReceiveDayForecast:forecastPeriods, forecastDataPeriods: simpleForecastDayPeriods)
         }
+        
+        
+        for result in forecastPeriods {
+            let icon = result["icon"] as! String
+            let iconURLString = result["icon_url"] as! String
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                self.imageFor(icon, imageURLString: iconURLString)
+            }
+            
+            //print(result)
+        }
+        
+        for result in simpleForecastDayPeriods {
+            let icon = result["icon"] as! String
+            let iconURLString = result["icon_url"] as! String
+
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                self.imageFor(icon, imageURLString: iconURLString)
+            }
+            //print(result)
+        }
+
 
     }
 
@@ -409,11 +439,11 @@ class WADataStore: WAWeatherInfoDelegate {
         
         var pending = false
         
-        dispatch_sync(imagePendingLockQueue) {
+        //dispatch_sync(imagePendingLockQueue) {
             if let _ = self.pendingImage[imageURLString] {
                 pending = true
             }
-        }
+        //}
 
         if !pending {
             pendingImage[imageURLString] = iconName
@@ -446,9 +476,9 @@ class WADataStore: WAWeatherInfoDelegate {
                 
                 if let iconImage = image {
                     
-                    dispatch_sync(self.imagePendingLockQueue) {
+                    //dispatch_sync(self.imagePendingLockQueue) {
                         self.pendingImage.removeValueForKey(imageURLString)
-                    }
+                    //}
                     self.imageCache.setObject(iconImage, forKey: imageURLString)
                     self.delegate?.dataStore(self, updateForIconImage:imageURLString)
                 }

@@ -113,7 +113,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
     
     func checkRefreshFinished() {
-        print(#function)
+        //print(#function)
+        print("\(#function) Conditions \(refreshConditionsInProgress) Forecast \(refreshForecastInProgress) Hourly \(refreshHourlyInProgress)")
         if !refreshConditionsInProgress && !refreshForecastInProgress && !refreshHourlyInProgress {
             
             print("\(#function) finished!")

@@ -11,12 +11,7 @@ import UIKit
 
 protocol WAWeatherInfoDelegate : class {
     func weatherInfo(controller: WAWeatherInfo, didReceiveCurrentConditions conditions:[String : AnyObject])
-    
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
-//                     forecastDataPeriods:[[String : AnyObject]])
     func weatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
-
     func weatherInfo(controller: WAWeatherInfo, didReceiveSattelite imageURLs:[String : AnyObject])
     func weatherInfo(controller: WAWeatherInfo, didReceiveSatteliteImage image:UIImage)
     func weatherInfo(controller: WAWeatherInfo, didReceiveHourly hourPeriods:[[String : AnyObject]])
@@ -28,13 +23,6 @@ extension WAWeatherInfoDelegate {
     {}
     func weatherInfo(controller: WAWeatherInfo, didReceiveHourlyTen hourTenPeriods:[[String : AnyObject]])
     {}
-    
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
-//    {}
-//    func WeatherInfo(controller: WAWeatherInfo, didReceiveDayForecast dayPeriods:[[String : AnyObject]],
-//                     forecastDataPeriods:[[String : AnyObject]])
-//    {}
-    
     func weatherInfo(controller: WAWeatherInfo, didReceiveForecast forecast:[String : AnyObject])
     {}
 }
@@ -63,10 +51,6 @@ class WAWeatherInfo {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
                 
                 if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
-
-//                    let fieldKeys = Array(currentConditionsDict.keys)
-//                    print(fieldKeys)
-
                     self.delegate?.weatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
                 }
                 
@@ -76,7 +60,10 @@ class WAWeatherInfo {
         }
         
     }
- 
+
+    //                    let fieldKeys = Array(currentConditionsDict.keys)
+    //                    print(fieldKeys)
+
     // MARK: -
 
     func getHourly () {
@@ -146,50 +133,7 @@ class WAWeatherInfo {
         }
     }
 
-    //                if let forecastDict = responseData["forecast"] as? [String : AnyObject] {
-    //                    let fieldKeys = Array(forecastDict.keys)
-    //                    print(fieldKeys)
-    //                }
-
-    
-    //                var txtForecastDayPeriods = [[String : AnyObject]]()
-    //                var simpleForecastDayPeriods = [[String : AnyObject]]()
-    //
-    //                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-    //                    txtForecastDict = forecastDict["txt_forecast"] as? [String : AnyObject],
-    //                    forecastPeriods = txtForecastDict["forecastday"] as? [[String : AnyObject]]
-    //                {
-    //                    print(forecastPeriods.count)
-    //
-    //                    txtForecastDayPeriods = forecastPeriods
-    //
-    //                    //self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
-    //                }
-    //
-    //
-    //                if let forecastDict = responseData["forecast"] as? [String : AnyObject],
-    //                    simpleForecastDict = forecastDict["simpleforecast"] as? [String : AnyObject],
-    //                    simpleForecastPeriods = simpleForecastDict["forecastday"] as? [[String : AnyObject]]
-    //                {
-    //
-    //                    print(simpleForecastPeriods.count)
-    //                    let simpleForecastPeriod = simpleForecastPeriods[0]
-    //
-    //                    let fieldKeys = Array(simpleForecastPeriod.keys)
-    //                    print(fieldKeys)
-    ////                    print(simpleForecastPeriod)
-    //
-    //
-    //                    simpleForecastDayPeriods = simpleForecastPeriods
-    //
-    //                    //self.delegate?.WeatherInfo(self, didReceiveDayForecast:forecastPeriods)
-    //                }
-    //
-    //                self.delegate?.WeatherInfo(self, didReceiveDayForecast:txtForecastDayPeriods,
-    //                            forecastDataPeriods:simpleForecastDayPeriods)
-    //
-
-
+ 
     // MARK: -
 
     func getSattelite () {
