@@ -49,21 +49,15 @@ class WAWeatherInfo {
             
             do {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
                 if let currentConditionsDict = responseData["current_observation"] as? [String : AnyObject] {
-                    //dispatch_async(dispatch_get_main_queue()) {
-                        self.delegate?.weatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
+                    self.delegate?.weatherInfo(self, didReceiveCurrentConditions:currentConditionsDict)
                 }
                 
             } catch {
                 print("Error processing JSON \(error)")
             }
         }
-        
     }
-
-    //                    let fieldKeys = Array(currentConditionsDict.keys)
-    //                    print(fieldKeys)
 
     // MARK: -
 
@@ -74,10 +68,8 @@ class WAWeatherInfo {
             
             do {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
                 if let hourlyItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    //dispatch_async(dispatch_get_main_queue()) {
-                        self.delegate?.weatherInfo(self, didReceiveHourly:hourlyItems)
+                    self.delegate?.weatherInfo(self, didReceiveHourly:hourlyItems)
                 }
                 
             } catch {
@@ -95,10 +87,8 @@ class WAWeatherInfo {
 
             do {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
                 if let hourlyTenItems = responseData["hourly_forecast"] as? [[String : AnyObject]] {
-                    // dispatch_async(dispatch_get_main_queue()) {
-                        self.delegate?.weatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
+                    self.delegate?.weatherInfo(self, didReceiveHourlyTen:hourlyTenItems)
                 }
                 
             } catch {
@@ -125,10 +115,8 @@ class WAWeatherInfo {
 
             do {
                 let responseData = try NSJSONSerialization.JSONObjectWithData(jsonResponse, options:[] ) as! [String : AnyObject]
-                
                 if let forecastDict = responseData["forecast"] as? [String : AnyObject] {
-                    // dispatch_async(dispatch_get_main_queue()) {
-                        self.delegate?.weatherInfo(self, didReceiveForecast:forecastDict)
+                    self.delegate?.weatherInfo(self, didReceiveForecast:forecastDict)
                 }
                 
             } catch {
@@ -136,7 +124,6 @@ class WAWeatherInfo {
             }
         }
     }
-
  
     // MARK: -
 
@@ -173,9 +160,7 @@ class WAWeatherInfo {
         
         commonSubmit(wiURL, cacheResponse:false, failure:nil) { (imageData) in
             if let satImage = UIImage(data: imageData) {
-                // dispatch_async(dispatch_get_main_queue()) {
-
-                    self.delegate?.weatherInfo(self, didReceiveSatteliteImage: satImage)
+                self.delegate?.weatherInfo(self, didReceiveSatteliteImage: satImage)
             }
         }
     }
@@ -215,7 +200,6 @@ class WAWeatherInfo {
         task.resume()
     }
     
-
     private func serviceRequest(service: String, processResponse:((data:NSData) -> Void)? ) {
         
         let urlString = "http://api.wunderground.com/api/\(apiKey)/\(service)/q/\(currentState)/\(currentCity).json"
@@ -239,9 +223,11 @@ class WAWeatherInfo {
         }
         
     }
-
     
 }
 
+
+//                    let fieldKeys = Array(currentConditionsDict.keys)
+//                    print(fieldKeys)
 
 
