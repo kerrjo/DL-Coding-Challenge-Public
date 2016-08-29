@@ -68,7 +68,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     @IBOutlet weak var tableHeaderHighLabel: UILabel!
     @IBOutlet weak var tableHeaderPrimaryLabel: UILabel!
     @IBOutlet weak var tableHeaderImageView: UIImageView!
-    
+    @IBOutlet weak var tableHeaderTodayLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +84,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         tableHeaderHighLabel.text = ""
         tableHeaderLowLabel.text = ""
         tableHeaderPrimaryLabel.text = ""
+        tableHeaderTodayLabel.text = ""
     }
 
     override func didReceiveMemoryWarning() {
@@ -140,6 +141,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         
         if forecastDaysData.count > 0 {
             
+            // First day data = Today
+            
             let forecastDayData = forecastDaysData[0]
             
             if let highData = forecastDayData["high"],
@@ -152,12 +155,12 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                 tableHeaderLowLabel.text = tempf
             }
             
-            //    if let dateInfo = forecastDayData["date"],
-            //    let dow = dateInfo["weekday"] as? String {
-            //    dayCell.dayLabel.text = dow
-            //    }
-            
+            if let dateInfo = forecastDayData["date"],
+                let dow = dateInfo["weekday"] as? String {
+                tableHeaderTodayLabel.text = dow
+            }
         }
+        
         if let tempf = currentConditionsDict?["temp_f"] as? Int {
             tableHeaderPrimaryLabel.text = "\(tempf)"
         }
@@ -247,9 +250,9 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                 
                 // Update section 2 items
                 if indexPath.section == 2 {
-                    if indexPath.row < self.forecastDaysData.count {
+                    if indexPath.row < self.forecastDaysData.count - 1 {
                         
-                        let forecastPeriod = forecastDaysData[indexPath.row]
+                        let forecastPeriod = forecastDaysData[indexPath.row + 1] // Ignore first one
                         
                         let iconURL = forecastPeriod["icon_url"] as! String
                         if iconURL == iconName {
@@ -298,7 +301,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         //WAForecastDayCell
         if let dayCell = cell as? WAForecastDayCell where forecastDaysData.count > 0 {
             
-            let forecastDayData = forecastDaysData[indexPath.row]
+            let forecastDayData = forecastDaysData[indexPath.row + 1] // Ignore first one
             
             if let highData = forecastDayData["high"],
                 let tempf = highData["fahrenheit"] as? String {
@@ -454,7 +457,9 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         } else if section == 1 {
             return 1
         } else if section == 2 {
-            return forecastDaysData.count
+            if forecastDaysData.count > 0 {
+               return forecastDaysData.count - 1  // do not include today
+            }
         } else if section == 3 {
             return 1
         } else if section == 4 {
