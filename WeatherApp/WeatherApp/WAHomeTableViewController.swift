@@ -441,7 +441,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         } else if indexPath.section == 3 {
             result = 102.0 // forecastdescription
         } else if indexPath.section == 4 {
-            result = 40.0 // secondary
+            result = 32.0 // secondary
         }
         
         return CGFloat(result)
