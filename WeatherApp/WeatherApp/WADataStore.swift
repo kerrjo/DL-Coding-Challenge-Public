@@ -12,11 +12,6 @@ import UIKit
 protocol WADataStoreDelegate : class {
     
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
-        conditionsDict:[String : AnyObject],
-        primaryItems:[String],
-        primaryDict:[String : AnyObject])
-
-    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
                    conditionsDict:[String : AnyObject],
                    primaryItems:[String],
                    primaryDict:[String : AnyObject],
@@ -42,18 +37,10 @@ extension WADataStoreDelegate {
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
                    conditionsDict:[String : AnyObject],
                    primaryItems:[String],
-                   primaryDict:[String : AnyObject])
-    {}
-
-    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
-                   conditionsDict:[String : AnyObject],
-                   primaryItems:[String],
                    primaryDict:[String : AnyObject],
                    secondaryItems:[String],
                    secondaryDict:[String : AnyObject])
     {}
-
-
 }
 
 
