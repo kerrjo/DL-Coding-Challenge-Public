@@ -189,9 +189,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
         refreshConditionsInProgress = false
         checkRefreshFinished()
-        
     }
-    
     
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
                    conditionsDict:[String : AnyObject],
@@ -200,7 +198,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                    secondaryItems:[String],
                    secondaryDict:[String : AnyObject])
     {
-
         self.currentConditionsDict = conditionsDict
         self.conditionItems = conditionItems
         self.primaryItems = primaryItems
@@ -213,28 +210,19 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         
         refreshConditionsInProgress = false
         checkRefreshFinished()
-
     }
-
-    
-    //        refreshInProgress = false
-    //        self.refreshControl?.endRefreshing()
-
     
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]], forecastDataPeriods:[[String : AnyObject]]) {
         
         forecastPeriods = dayPeriods
         forecastDaysData = forecastDataPeriods
-        
         refreshForecastInProgress = false
         checkRefreshFinished()
     }
 
-    
     func dataStore(controller: WADataStore, didReceiveHourly hourPeriods:[[String : AnyObject]]) {
 
         hourlyCollectionData.hourlyPeriods = hourPeriods
-
         refreshHourlyInProgress = false
         checkRefreshFinished()
     }
