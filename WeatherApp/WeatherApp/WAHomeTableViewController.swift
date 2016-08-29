@@ -14,7 +14,6 @@ protocol WAHomeTableDelegate : class {
 }
 
 class WAForecastDayCell: UITableViewCell {
-    
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var highTempLabel: UILabel!
     @IBOutlet weak var lowTempLabel: UILabel!
@@ -31,9 +30,7 @@ class WAForecastDescriptionCell: UITableViewCell {
 }
 
 class WAHomeSecondaryCell: UITableViewCell {
-    
     @IBOutlet weak var keyLabel: UILabel!
-    
     @IBOutlet weak var valueLabel: UILabel!
 }
 
@@ -100,6 +97,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         }
     }
     
+    
     func refreshTable(control:AnyObject?) {
         
         if !refreshInProgress {
@@ -120,13 +118,11 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         }
     }
 
-    
     func checkRefreshFinished() {
-        //print(#function)
-        print("\(#function) Conditions \(refreshConditionsInProgress) Forecast \(refreshForecastInProgress) Hourly \(refreshHourlyInProgress)")
+        
         if !refreshConditionsInProgress && !refreshForecastInProgress && !refreshHourlyInProgress {
             
-            print("\(#function) finished!")
+            //print("\(#function) finished!")
 
             refreshInProgress = false
             
@@ -169,25 +165,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     
     
     // MARK: - WADataStoreDelegate
-    
-    func dataStore(controller: WADataStore, didReceiveCurrentConditions
-        conditionItems:[String],
-        conditionsDict:[String : AnyObject],
-        primaryItems:[String],
-        primaryDict:[String : AnyObject]
-        )
-    {
-        self.currentConditionsDict = conditionsDict
-        self.conditionItems = conditionItems
-        self.primaryItems = primaryItems
-        self.primaryConditionsDict = primaryDict
-        
-        primaryTitle = currentConditionsDict?["weather"] as! String
-        optionTitle = "Other items"
-
-        refreshConditionsInProgress = false
-        checkRefreshFinished()
-    }
     
     func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
                    conditionsDict:[String : AnyObject],
@@ -269,6 +246,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         if let visible = self.tableView.indexPathsForVisibleRows {
             for indexPath in visible {
                 
+                // Update section 2 items
                 if indexPath.section == 2 {
                     if indexPath.row < self.forecastDaysData.count {
                         
@@ -284,18 +262,16 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                             
                         }
                     }
-                } else {
-                    //print("non standard cell")
                 }
             }
         }  // let visible
     }
     
     
-    
     // MARK: - Configure Cells Methods
 
     func configureDisplayPrimaryCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
         //WAHomePrimaryCell
         let conditionItem = primaryItems[indexPath.row]
         cell.textLabel!.text = conditionItem
@@ -308,6 +284,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     }
 
     func configureDisplayHourlyCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
         //WAHourlyCell
         if let hourlyCell = cell as? WAHourlyCell {
             hourlyCell.collectionView?.reloadData()
@@ -371,6 +348,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     }
 
     func configureDisplayHomeSecondaryCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
         //WAHomeSecondaryCell
         if let secondaryCell = cell as? WAHomeSecondaryCell {
             let conditionItem = secondaryItems[indexPath.row]
@@ -383,6 +361,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     }
 
     func configureDisplayHomeDataCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
         //WAHomeDataCell
         let conditionItem = conditionItems[indexPath.row]
         cell.textLabel!.text = conditionItem
@@ -490,12 +469,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-// WAHomePrimaryCell
-// WAHomeDataCell
-// WAForecastDayCell
-// WAHourlyCell
-// WAForecastDescriptionCell
-        
         var reuseIdentifier = "WAHomeDataCell"
         
         if indexPath.section == 0 {
@@ -512,7 +485,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             reuseIdentifier = "WAHomeDataCell"
         }
         
-        
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath)
         
         if reuseIdentifier == "WAHourlyCell" {
@@ -521,7 +493,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                 hourlyCell.collectionView.delegate = hourlyCollectionData
             }
         }
-
 
         return cell
     }
@@ -564,3 +535,4 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
 
 
+//  print("\(#function) Conditions \(refreshConditionsInProgress) Forecast \(refreshForecastInProgress) Hourly \(refreshHourlyInProgress)")
