@@ -69,7 +69,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     @IBOutlet weak var tableHeaderPrimaryLabel: UILabel!
     @IBOutlet weak var tableHeaderImageView: UIImageView!
     @IBOutlet weak var tableHeaderTodayLabel: UILabel!
-    
+    @IBOutlet weak var tableHeaderTodayKeyLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -85,6 +85,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         tableHeaderLowLabel.text = ""
         tableHeaderPrimaryLabel.text = ""
         tableHeaderTodayLabel.text = ""
+        tableHeaderTodayKeyLabel.hidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -159,6 +160,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                 let dow = dateInfo["weekday"] as? String {
                 tableHeaderTodayLabel.text = dow
             }
+            
+            tableHeaderTodayKeyLabel.hidden = false
         }
         
         if let tempf = currentConditionsDict?["temp_f"] as? Int {

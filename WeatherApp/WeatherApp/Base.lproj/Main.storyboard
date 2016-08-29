@@ -977,6 +977,7 @@
                         <outlet property="tableHeaderImageView" destination="g6n-oe-A5l" id="toF-K7-QHp"/>
                         <outlet property="tableHeaderLowLabel" destination="rdV-jA-Atr" id="bXd-L0-6GC"/>
                         <outlet property="tableHeaderPrimaryLabel" destination="tMF-C9-OYO" id="fLz-pX-1HH"/>
+                        <outlet property="tableHeaderTodayKeyLabel" destination="Bvn-E2-kQ2" id="R9N-zI-G8L"/>
                         <outlet property="tableHeaderTodayLabel" destination="Aj6-Mo-Opi" id="bAW-Ye-vws"/>
                     </connections>
                 </tableViewController>
