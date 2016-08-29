@@ -557,34 +557,3 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
 
 
-// Uncomment the following line to preserve selection between presentations
-// self.clearsSelectionOnViewWillAppear = false
-
-// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-// self.navigationItem.rightBarButtonItem = self.editButtonItem()
-
-
-//            let indexPath = NSIndexPath(forRow: 0, inSection: 1)
-//            if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAHourlyCell {
-//
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    cell.collectionView?.reloadData()
-//                    cell.activity.stopAnimating()
-//                }
-//            }
-
-
-//        hourlyPeriods = hourPeriods
-//        let indexPath = NSIndexPath(forRow: 0, inSection: 1)
-//        if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAHourlyCell {
-//
-//            dispatch_async(dispatch_get_main_queue()) {
-//                cell.collectionView?.reloadData()
-//                cell.activity.stopAnimating()
-//            }
-//        }
-
-//        refreshInProgress = false
-
-
-
