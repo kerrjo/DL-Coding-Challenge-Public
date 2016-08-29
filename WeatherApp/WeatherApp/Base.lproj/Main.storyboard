@@ -657,6 +657,13 @@
                             <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuL-U9-pil" userLabel="Separator View">
+                                    <rect key="frame" x="6" y="69" width="588" height="1"/>
+                                    <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="hx7-ni-ILY"/>
+                                    </constraints>
+                                </view>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g6n-oe-A5l">
                                     <rect key="frame" x="10" y="-14" width="60" height="98"/>
                                     <constraints>
@@ -688,10 +695,13 @@
                                 <constraint firstAttribute="trailing" secondItem="SuS-j0-phG" secondAttribute="trailing" constant="8" id="1DB-8W-UhI"/>
                                 <constraint firstItem="g6n-oe-A5l" firstAttribute="top" secondItem="gcj-GH-mA1" secondAttribute="top" constant="-14" id="E33-x6-FsE"/>
                                 <constraint firstAttribute="bottom" secondItem="g6n-oe-A5l" secondAttribute="bottom" constant="-14" id="LXM-7X-WEK"/>
+                                <constraint firstItem="VuL-U9-pil" firstAttribute="width" secondItem="gcj-GH-mA1" secondAttribute="width" constant="-12" id="NbM-go-ROs"/>
+                                <constraint firstItem="VuL-U9-pil" firstAttribute="centerX" secondItem="gcj-GH-mA1" secondAttribute="centerX" id="QXJ-dX-Yhn"/>
                                 <constraint firstItem="g6n-oe-A5l" firstAttribute="leading" secondItem="gcj-GH-mA1" secondAttribute="leading" constant="10" id="TTo-6h-rJl"/>
                                 <constraint firstAttribute="bottom" secondItem="rdV-jA-Atr" secondAttribute="bottom" constant="8" id="aAL-AF-fq9"/>
                                 <constraint firstItem="tMF-C9-OYO" firstAttribute="centerX" secondItem="gcj-GH-mA1" secondAttribute="centerX" id="g1w-2q-72w"/>
                                 <constraint firstItem="tMF-C9-OYO" firstAttribute="centerY" secondItem="gcj-GH-mA1" secondAttribute="centerY" id="rMm-eg-SOL"/>
+                                <constraint firstAttribute="bottom" secondItem="VuL-U9-pil" secondAttribute="bottom" id="vkn-gP-2kJ"/>
                                 <constraint firstItem="SuS-j0-phG" firstAttribute="top" secondItem="gcj-GH-mA1" secondAttribute="top" constant="8" id="xQJ-No-5Cd"/>
                             </constraints>
                         </view>

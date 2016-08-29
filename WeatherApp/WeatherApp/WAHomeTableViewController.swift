@@ -200,7 +200,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     {
         self.currentConditionsDict = conditionsDict
         self.conditionItems = conditionItems
-        self.primaryItems = primaryItems
+        //self.primaryItems = primaryItems
+        self.primaryItems = []
         self.primaryConditionsDict = primaryDict
         self.secondaryItems = secondaryItems
         self.secondaryConditionsDict = secondaryDict
