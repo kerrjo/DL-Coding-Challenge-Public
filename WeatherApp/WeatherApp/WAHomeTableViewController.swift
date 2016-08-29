@@ -87,8 +87,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         tableHeaderHighLabel.text = ""
         tableHeaderLowLabel.text = ""
         tableHeaderPrimaryLabel.text = ""
-        
-
     }
 
     override func didReceiveMemoryWarning() {
