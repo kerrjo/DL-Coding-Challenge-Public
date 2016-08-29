@@ -27,7 +27,6 @@ protocol WADataStoreDelegate : class {
     func dataStore(controller: WADataStore, primaryLocationTitle:String)
     func dataStore(controller: WADataStore, updateForIconImage iconName:String)
     
-    //func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]])
     func dataStore(controller: WADataStore, didReceiveDayForecast dayPeriods:[[String : AnyObject]], forecastDataPeriods:[[String : AnyObject]])
 
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage)
