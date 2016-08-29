@@ -252,20 +252,18 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             for indexPath in visible {
                 
                 // Update section 2 items
-                if indexPath.section == 2 {
-                    if indexPath.row < self.forecastDaysData.count - 1 {
-                        
-                        let forecastPeriod = forecastDaysData[indexPath.row + 1] // Ignore first one
-                        
-                        let iconURL = forecastPeriod["icon_url"] as! String
-                        if iconURL == iconName {
-                            dispatch_async(dispatch_get_main_queue()) {
-                                self.tableView.beginUpdates()
-                                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                                self.tableView.endUpdates()
-                            }
-                            
+                if indexPath.section == 2 && indexPath.row < self.forecastDaysData.count - 1 {
+                    
+                    let forecastPeriod = forecastDaysData[indexPath.row + 1] // Ignore first one
+                    
+                    let iconURL = forecastPeriod["icon_url"] as! String
+                    if iconURL == iconName {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.tableView.beginUpdates()
+                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                            self.tableView.endUpdates()
                         }
+                        
                     }
                 }
             }
