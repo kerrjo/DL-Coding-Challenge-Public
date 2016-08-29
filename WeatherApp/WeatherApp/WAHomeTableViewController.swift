@@ -206,7 +206,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     func dataStore(controller: WADataStore, primaryLocationTitle:String) {
         dispatch_async(dispatch_get_main_queue()) {
             self.delegate?.homeTable(self, primaryLocationTitle: primaryLocationTitle)
-            
         }
     }
     
