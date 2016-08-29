@@ -132,13 +132,6 @@ class WADataStore: WAWeatherInfoDelegate {
                 } else {
                     // New day
                     tenDayPeriods += [dayPeriods]
-
-//                    for period in dayPeriods {
-//                        let icon = period["icon"] as! String
-//                        let iconURLString = period["icon_url"] as! String
-//                        self.imageFor(icon, imageURLString: iconURLString)
-//                    }
-
                     dayPeriods = []
                     currentYday = yday
                 }
