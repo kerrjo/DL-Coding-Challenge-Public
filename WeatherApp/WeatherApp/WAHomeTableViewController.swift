@@ -296,7 +296,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     // MARK: - Configure Cells Methods
 
     func configureDisplayPrimaryCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-
+        //WAHomePrimaryCell
         let conditionItem = primaryItems[indexPath.row]
         cell.textLabel!.text = conditionItem
         
@@ -308,7 +308,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     }
 
     func configureDisplayHourlyCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
+        //WAHourlyCell
         if let hourlyCell = cell as? WAHourlyCell {
             hourlyCell.collectionView?.reloadData()
             if !refreshInProgress {
@@ -319,6 +319,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
     func configureDisplayForecastDayCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
+        //WAForecastDayCell
         if let dayCell = cell as? WAForecastDayCell where forecastDaysData.count > 0 {
             
             let forecastDayData = forecastDaysData[indexPath.row]
@@ -346,6 +347,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
     func configureDisplayForecastDescriptionCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
+        //WAForecastDescriptionCell
         if let descriptionCell = cell as? WAForecastDescriptionCell {
             
             var descriptionText = ""
@@ -363,16 +365,13 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                     descriptionText += " " + fcText
                 }
             }
-            //                else {
-            //                    print("no forecastPeriods")
-            //                }
             
             descriptionCell.descriptionLabel.text = descriptionText
         }
     }
 
     func configureDisplayHomeSecondaryCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
+        //WAHomeSecondaryCell
         if let secondaryCell = cell as? WAHomeSecondaryCell {
             let conditionItem = secondaryItems[indexPath.row]
             secondaryCell.keyLabel!.text = conditionItem
@@ -384,7 +383,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     }
 
     func configureDisplayHomeDataCell(cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
+        //WAHomeDataCell
         let conditionItem = conditionItems[indexPath.row]
         cell.textLabel!.text = conditionItem
         
@@ -449,6 +448,14 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     
     // MARK: - Table view data source
     
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 1 {
+            return primaryTitle
+        }
+        
+        return ""
+    }
+
     /*
      section 0  - primary
      section 1  - hourly

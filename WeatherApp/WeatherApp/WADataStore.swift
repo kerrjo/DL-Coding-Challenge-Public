@@ -338,6 +338,13 @@ class WADataStore: WAWeatherInfoDelegate {
         var secondaryConditionsDict = [String : AnyObject]()
         var secondaryItems:[String] = []
         
+        var uvValue = ""
+        if let uvData =  currentConditionsDict["UV"] as? String {
+            uvValue += uvData
+        }
+        secondaryItems += ["UV"]
+        secondaryConditionsDict["UV"] = uvValue
+        
         var feelsLikeValue = ""
         if let feelsLikeData =  currentConditionsDict["feelslike_f"] as? String {
             feelsLikeValue += "\(feelsLikeData)"
@@ -382,14 +389,6 @@ class WADataStore: WAWeatherInfoDelegate {
         }
         secondaryItems += ["Precipitation"]
         secondaryConditionsDict["Precipitation"] = precipValue
-
-        var uvValue = ""
-        if let uvData =  currentConditionsDict["UV"] as? String {
-            uvValue += uvData
-        }
-        secondaryItems += ["UV"]
-        secondaryConditionsDict["UV"] = uvValue
-
         
 //        print(secondaryItems)
 //        print(secondaryConditionsDict)
