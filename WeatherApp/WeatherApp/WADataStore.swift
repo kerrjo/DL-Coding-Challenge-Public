@@ -372,11 +372,10 @@ class WADataStore: WAWeatherInfoDelegate {
 
         var humidityValue = ""
         if let humidityPercent =  currentConditionsDict["relative_humidity"] as? String {
-            humidityValue += "\(humidityPercent) mi"
+            humidityValue += "\(humidityPercent)"
         }
         secondaryItems += ["Humidity"]
         secondaryConditionsDict["Humidity"] = humidityValue
-
         
         var pressureValue = ""
         if let pressureData =  currentConditionsDict["pressure_in"] as? String {
