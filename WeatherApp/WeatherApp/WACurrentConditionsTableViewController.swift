@@ -82,6 +82,19 @@ class WACurrentConditionsTableViewController: UITableViewController, WADataStore
         self.refreshControl?.endRefreshing()
     }
     
+    
+    func dataStore(controller: WADataStore, didReceiveCurrentConditions conditionItems:[String],
+                   conditionsDict:[String : AnyObject],
+                   primaryItems:[String],
+                   primaryDict:[String : AnyObject],
+                   secondaryItems:[String],
+                   secondaryDict:[String : AnyObject])
+    {
+        dataStore(controller, didReceiveCurrentConditions: conditionItems, conditionsDict: conditionsDict, primaryItems: primaryItems, primaryDict: primaryDict)
+    }
+    
+
+    
     func dataStore(controller: WADataStore, primaryLocationTitle:String) {
         dispatch_async(dispatch_get_main_queue()) {
             self.locationLabel.text = primaryLocationTitle
