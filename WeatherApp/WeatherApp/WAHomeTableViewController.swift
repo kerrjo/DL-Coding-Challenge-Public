@@ -42,7 +42,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
 
     weak var delegate:WAHomeTableDelegate?
     
-    var optionTitle = ""
     var primaryTitle = ""
     
     var primaryItems:[String] = []
@@ -188,7 +187,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         self.secondaryConditionsDict = secondaryDict
 
         primaryTitle = currentConditionsDict?["weather"] as! String
-        optionTitle = "Other items"
         
         refreshConditionsInProgress = false
         checkRefreshFinished()
