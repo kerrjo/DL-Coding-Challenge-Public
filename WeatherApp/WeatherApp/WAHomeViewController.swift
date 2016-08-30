@@ -11,9 +11,9 @@ import UIKit
 class WAHomeViewController: UIViewController, WAHomeTableDelegate {
 
     @IBOutlet weak var locationLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         locationLabel.text = ""
     }
 
@@ -28,15 +28,11 @@ class WAHomeViewController: UIViewController, WAHomeTableDelegate {
     //WAEmbedHomeTableSegue
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
         
         if segue.identifier == "WAEmbedHomeTableSegue" {
             if let vc = segue.destinationViewController as? WAHomeTableViewController {
                 vc.delegate = self
-                
             }
         }
     }
