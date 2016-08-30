@@ -158,7 +158,9 @@ class WAWeatherInfo {
                 return
         }
         
-        commonSubmit(wiURL, cacheResponse:false, failure:nil) { (imageData) in
+        commonSubmit(wiURL, cacheResponse:false, failure:nil) {
+            (imageData) in
+            
             if let satImage = UIImage(data: imageData) {
                 self.delegate?.weatherInfo(self, didReceiveSatteliteImage: satImage)
             }
