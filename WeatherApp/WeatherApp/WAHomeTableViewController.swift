@@ -9,10 +9,6 @@
 import UIKit
 
 
-protocol WAHomeTableDelegate : class {
-    func homeTable(controller:WAHomeTableViewController, primaryLocationTitle title:String)
-}
-
 class WAForecastDayCell: UITableViewCell {
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var highTempLabel: UILabel!
@@ -34,7 +30,19 @@ class WAHomeSecondaryCell: UITableViewCell {
     @IBOutlet weak var valueLabel: UILabel!
 }
 
+/**
+ Protocol to communicate the location back to the delegate
+ */
 
+protocol WAHomeTableDelegate : class {
+    func homeTable(controller:WAHomeTableViewController, primaryLocationTitle title:String)
+}
+
+
+/**
+ Primary home view tableViewController to display current conditions as well as
+ forecast and hourly data
+ */
 
 class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WAHourlyCollectionDataDelegate{
 
@@ -69,6 +77,10 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     @IBOutlet weak var tableHeaderImageView: UIImageView!
     @IBOutlet weak var tableHeaderTodayLabel: UILabel!
     @IBOutlet weak var tableHeaderTodayKeyLabel: UILabel!
+    
+    
+    // MARK: Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -98,6 +110,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         }
     }
     
+    
+    // MARK: Refresh 
     
     func refreshTable(control:AnyObject?) {
         
@@ -227,7 +241,6 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
             updateTableForIconImage(iconName)
             updateCollectionForIconImage(iconName)
         }
-
     }
     
     func dataStore(controller: WADataStore, didReceiveSatteliteImage image:UIImage) {
@@ -247,6 +260,7 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
     func updateTableForIconImage(iconName:String) {
         
         if let visible = self.tableView.indexPathsForVisibleRows {
+            
             for indexPath in visible {
                 
                 // Update section 2 items
@@ -254,14 +268,12 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                     
                     let forecastPeriod = forecastDaysData[indexPath.row + 1] // Ignore first one
                     
-                    let iconURL = forecastPeriod["icon_url"] as! String
-                    if iconURL == iconName {
+                    if let iconURL = forecastPeriod["icon_url"] as? String where iconURL == iconName {
                         dispatch_async(dispatch_get_main_queue()) {
                             self.tableView.beginUpdates()
                             self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
                             self.tableView.endUpdates()
                         }
-                        
                     }
                 }
             }
@@ -300,7 +312,8 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         //WAForecastDayCell
         if let dayCell = cell as? WAForecastDayCell where forecastDaysData.count > 0 {
             
-            let forecastDayData = forecastDaysData[indexPath.row + 1] // Ignore first one
+            let forecastDayData = forecastDaysData[indexPath.row + 1] // +1 Ignore first one
+            
             
             if let highData = forecastDayData["high"],
                 let tempf = highData["fahrenheit"] as? String {
@@ -317,9 +330,9 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
                 dayCell.dayLabel.text = dow
             }
             
-            let iconURL = forecastDayData["icon_url"] as! String
-            
-            dayCell.iconImageView!.image = self.weatherInfo.imageFor(iconURL)
+            if let iconURL = forecastDayData["icon_url"] as? String {
+                dayCell.iconImageView!.image = self.weatherInfo.imageFor(iconURL)
+            }
         }
     }
 
@@ -500,32 +513,22 @@ class WAHomeTableViewController: UITableViewController, WADataStoreDelegate , WA
         return cell
     }
 
-  
-    /*
-    // MARK: - Navigation
+    
+    // MARK: collectionView for hourly
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    
     func updateCollectionForIconImage(iconName:String) {
         
-        let indexPath = NSIndexPath(forRow: 0, inSection: 1)
-        if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? WAHourlyCell {
+        let hourlyCellIndexPath = NSIndexPath(forRow: 0, inSection: 1)
+        
+        if let cell = self.tableView.cellForRowAtIndexPath(hourlyCellIndexPath) as? WAHourlyCell,
+            let visible = cell.collectionView?.indexPathsForVisibleItems() {
             
-            if let visible = cell.collectionView?.indexPathsForVisibleItems() {
-                for indexPath in visible {
-                    if indexPath.row < hourlyCollectionData.hourlyPeriods.count {
-                        let hourItem = hourlyCollectionData.hourlyPeriods[indexPath.row]
-                        let iconURL = hourItem["icon_url"] as! String
-                        if iconURL == iconName {
-                            dispatch_async(dispatch_get_main_queue()) {
-                                cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
-                            }
+            for indexPath in visible {
+                if indexPath.row < hourlyCollectionData.hourlyPeriods.count {
+                    let hourItem = hourlyCollectionData.hourlyPeriods[indexPath.row]
+                    if let iconURL = hourItem["icon_url"] as? String where iconURL == iconName {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            cell.collectionView?.reloadItemsAtIndexPaths([indexPath])
                         }
                     }
                 }
