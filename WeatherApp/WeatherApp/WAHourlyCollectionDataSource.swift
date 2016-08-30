@@ -10,6 +10,14 @@ import Foundation
 import UIKit
 
 
+class WAHourlyCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var topLabel: UILabel!
+    @IBOutlet weak var bottomLabel: UILabel!
+}
+
+
+
 protocol WAHourlyCollectionDataDelegate: class {
     func hourlyCollection(controller:WAHourlyCollectionData, imageForIcon iconName:String) -> UIImage?
 }
