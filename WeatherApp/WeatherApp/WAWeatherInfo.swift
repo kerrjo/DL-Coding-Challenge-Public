@@ -217,7 +217,8 @@ class WAWeatherInfo {
                 responseMethod(data: cacheResponse)
             }
         } else {
-            commonSubmit(wiURL, cacheResponse: true, failure:nil) { (jsonResponse) in
+            commonSubmit(wiURL, cacheResponse: true, failure:nil) {
+                (jsonResponse) in
                 if let responseMethod = processResponse {
                     responseMethod(data: jsonResponse)
                 }
